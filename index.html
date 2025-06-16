@@ -37,24 +37,25 @@
 <body>
     <div class="container">
         <header class="frosted-header">
-            <h1>2048</h1>
-            <nav>
-                <a href="how-to-play.html" class="nav-link">How to Play</a>
-            </nav>
-        </header>
-
-        <div class="game-container">
-            <div class="score-container frosted-panel">
-                <div class="score-box">
-                    <span>Score</span>
+            <div class="header-left">
+                <h1>2048</h1>
+                <nav>
+                    <a href="how-to-play.html" class="nav-link">How to Play</a>
+                </nav>
+            </div>
+            <div class="score-container">
+                <div class="score-box frosted-panel">
+                    <span>当前分数</span>
                     <span id="score">0</span>
                 </div>
-                <div class="score-box">
-                    <span>Best</span>
+                <div class="score-box frosted-panel">
+                    <span>最高分数</span>
                     <span id="best-score">0</span>
                 </div>
             </div>
+        </header>
 
+        <div class="game-container">
             <div class="game-board frosted-panel" id="game-board">
                 <!-- Game tiles will be generated here -->
             </div>
