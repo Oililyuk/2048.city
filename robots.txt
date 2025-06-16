@@ -1,8 +1,17 @@
 User-agent: *
 Allow: /
-Sitemap: https://yourdomain.com/sitemap.xml
+Allow: /sitemap.xml
+Allow: /how-to-play.html
+
+# Disallow access to system files
+Disallow: /.git/
+Disallow: /.env
+Disallow: /node_modules/
 
 # Disallow any potential future admin or private directories
 Disallow: /admin/
 Disallow: /private/
-Disallow: /temp/ 
+Disallow: /temp/
+
+# Sitemap location
+Sitemap: https://yourdomain.com/sitemap.xml 
