@@ -27,7 +27,7 @@ class Game2048 {
         document.addEventListener('keydown', this.handleKeyPress.bind(this));
         this.newGameButton.addEventListener('click', () => this.newGame());
         this.undoButton.addEventListener('click', () => this.undo());
-        this.messageDisplay.querySelector('button').addEventListener('click', () => this.newGame());
+        document.getElementById('try-again').addEventListener('click', () => this.newGame());
         
         // Touch events
         let touchStartX, touchStartY;

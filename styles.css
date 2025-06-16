@@ -89,6 +89,7 @@ body {
     flex-direction: column;
     gap: var(--spacing);
     align-items: center;
+    margin-bottom: 80px; /* Add space for footer */
 }
 
 .score-container {
@@ -151,6 +152,12 @@ body {
     display: flex;
     gap: var(--spacing);
     justify-content: center;
+    position: sticky;
+    bottom: 0;
+    background: var(--primary-color);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 10;
 }
 
 .frosted-button {
