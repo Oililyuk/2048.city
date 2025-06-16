@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Sitemap: https://yourdomain.com/sitemap.xml
+
+# Disallow any potential future admin or private directories
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/ 

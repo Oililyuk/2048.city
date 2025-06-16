@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 Frosted Edition - Play the Classic Puzzle Game</title>
+    <meta name="description" content="Play 2048 with a beautiful iOS-style frosted glass interface. Combine tiles, reach 2048, and challenge your strategic thinking. Free online puzzle game.">
+    <meta name="keywords" content="2048 game, puzzle game, online 2048, free 2048, frosted glass UI, iOS style game">
+    <meta name="author" content="2048 Frosted Edition">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/">
+    <meta property="og:title" content="2048 Frosted Edition - Play the Classic Puzzle Game">
+    <meta property="og:description" content="Play 2048 with a beautiful iOS-style frosted glass interface. Combine tiles, reach 2048, and challenge your strategic thinking.">
+    <meta property="og:image" content="https://yourdomain.com/images/2048-preview.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourdomain.com/">
+    <meta property="twitter:title" content="2048 Frosted Edition - Play the Classic Puzzle Game">
+    <meta property="twitter:description" content="Play 2048 with a beautiful iOS-style frosted glass interface. Combine tiles, reach 2048, and challenge your strategic thinking.">
+    <meta property="twitter:image" content="https://yourdomain.com/images/2048-preview.jpg">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://yourdomain.com/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="frosted-header">
+            <h1>2048 Frosted Edition</h1>
+            <nav>
+                <a href="how-to-play.html" class="nav-link">How to Play</a>
+            </nav>
+        </header>
+
+        <div class="game-container">
+            <div class="score-container frosted-panel">
+                <div class="score-box">
+                    <span>Score</span>
+                    <span id="score">0</span>
+                </div>
+                <div class="score-box">
+                    <span>Best</span>
+                    <span id="best-score">0</span>
+                </div>
+            </div>
+
+            <div class="game-board frosted-panel" id="game-board">
+                <!-- Game tiles will be generated here -->
+            </div>
+
+            <div class="controls frosted-panel">
+                <button id="undo" class="frosted-button" disabled>Undo</button>
+                <button id="new-game" class="frosted-button">New Game</button>
+            </div>
+        </div>
+
+        <div id="game-message" class="game-message frosted-panel hidden">
+            <p></p>
+            <div class="share-buttons">
+                <button class="share-button twitter" onclick="shareToTwitter()">
+                    Share on X
+                </button>
+                <button class="share-button reddit" onclick="shareToReddit()">
+                    Share on Reddit
+                </button>
+            </div>
+            <button class="frosted-button">Try Again</button>
+        </div>
+    </div>
+
+    <footer class="frosted-footer">
+        <p>&copy; 2024 2048 Frosted Edition. All rights reserved.</p>
+    </footer>
+
+    <script src="game.js"></script>
+</body>
+</html> 
