@@ -11,6 +11,14 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
 }
 
 body {
@@ -19,12 +27,17 @@ body {
     min-height: 100vh;
     color: var(--text-color);
     line-height: 1.5;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: var(--spacing);
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Frosted Glass Effects */
@@ -43,6 +56,25 @@ body {
     align-items: center;
     padding: var(--spacing);
     margin-bottom: var(--spacing);
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.frosted-header h1 {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    line-height: 1.2;
+    margin: 0;
+    background: linear-gradient(135deg, var(--accent-color), #5856D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    width: 100%;
+}
+
+.frosted-header nav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .frosted-footer {
@@ -214,6 +246,10 @@ body {
 
     .score-container {
         flex-direction: column;
+    }
+
+    .frosted-header {
+        padding: 10px;
     }
 }
 
