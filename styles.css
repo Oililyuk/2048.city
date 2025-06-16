@@ -16,15 +16,14 @@
 
 html, body {
     height: 100%;
+    width: 100%;
     overflow: hidden;
     position: fixed;
-    width: 100%;
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    min-height: 100vh;
     color: var(--text-color);
     line-height: 1.5;
     overscroll-behavior: none;
@@ -32,64 +31,41 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 500px;
     margin: 0 auto;
     padding: var(--spacing);
     height: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Frosted Glass Effects */
-.frosted-panel {
-    background: var(--primary-color);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
 .frosted-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--spacing);
+    text-align: center;
     margin-bottom: var(--spacing);
-    flex-wrap: wrap;
-    gap: 10px;
 }
 
 .frosted-header h1 {
-    font-size: clamp(1.5rem, 5vw, 2.5rem);
-    line-height: 1.2;
+    font-size: 3.5rem;
+    font-weight: bold;
     margin: 0;
     background: linear-gradient(135deg, var(--accent-color), #5856D6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-align: center;
-    width: 100%;
 }
 
 .frosted-header nav {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+    margin-top: 10px;
 }
 
-.frosted-footer {
-    text-align: center;
-    padding: var(--spacing);
-    margin-top: var(--spacing);
-}
-
-/* Game Board Styles */
 .game-container {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: var(--spacing);
     align-items: center;
-    margin-bottom: 80px; /* Add space for footer */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: var(--spacing);
 }
 
 .score-container {
@@ -97,7 +73,6 @@ body {
     gap: var(--spacing);
     padding: var(--spacing);
     width: 100%;
-    max-width: 500px;
 }
 
 .score-box {
@@ -110,13 +85,26 @@ body {
 
 .game-board {
     width: 100%;
-    max-width: 500px;
     aspect-ratio: 1;
     padding: 10px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 10px;
     background: var(--secondary-color);
+}
+
+.controls {
+    width: 100%;
+    padding: var(--spacing);
+    text-align: center;
+    display: flex;
+    gap: var(--spacing);
+    justify-content: center;
+    background: var(--primary-color);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--border-radius);
+    margin-top: auto;
 }
 
 .tile {
@@ -143,23 +131,23 @@ body {
 .tile[data-value="1024"] { background: #FFA500; }
 .tile[data-value="2048"] { background: #FF0000; }
 
-/* Controls */
-.controls {
-    width: 100%;
-    max-width: 500px;
-    padding: var(--spacing);
-    text-align: center;
-    display: flex;
-    gap: var(--spacing);
-    justify-content: center;
-    position: sticky;
-    bottom: 0;
+/* Frosted Glass Effects */
+.frosted-panel {
     background: var(--primary-color);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    z-index: 10;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
+.frosted-footer {
+    text-align: center;
+    padding: var(--spacing);
+    margin-top: var(--spacing);
+}
+
+/* Controls */
 .frosted-button {
     background: var(--accent-color);
     color: white;
