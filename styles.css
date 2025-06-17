@@ -1,3 +1,15 @@
+/* Add favicon */
+@import url('icon.jpg');
+
+/* Rotating background animation */
+@keyframes backgroundRotation {
+    0% { background-image: url('bg1.jpg'); }
+    25% { background-image: url('bg2.jpg'); }
+    50% { background-image: url('bg3.jpg'); }
+    75% { background-image: url('bg4.jpg'); }
+    100% { background-image: url('bg1.jpg'); }
+}
+
 :root {
     --primary-color: rgba(255, 255, 255, 0.8);
     --secondary-color: rgba(255, 255, 255, 0.6);
@@ -19,12 +31,14 @@
 html {
     height: 100%;
     width: 100%;
-    background: url('background.jpg') no-repeat center center fixed;
+    background: url('bg1.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
     overflow: hidden;
+    animation: backgroundRotation 20s infinite;
+    animation-timing-function: ease-in-out;
 }
 
 body {
