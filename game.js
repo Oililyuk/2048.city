@@ -12,7 +12,14 @@ class Game2048 {
         this.newGameButton = document.getElementById('new-game');
         this.undoButton = document.getElementById('undo');
         
+        this.setRandomBackground();
         this.init();
+    }
+
+    setRandomBackground() {
+        const backgrounds = ['bg1.jpg', 'bg2.jpg', 'bg3.jpg', 'bg4.jpg'];
+        const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+        document.documentElement.style.backgroundImage = `url('${randomBg}')`;
     }
 
     init() {
