@@ -269,14 +269,14 @@ class Game2048 {
 // Social sharing functions
 function shareToTwitter() {
     const score = document.getElementById('score').textContent;
-    const text = `I scored ${score} points in 2048 Frosted Edition! Can you beat my score? Play now: `;
+    const text = `I scored ${score} points in Wicked 2048 - Frosted Edition! Play wicked, win smarter! `;
     const url = encodeURIComponent(window.location.href);
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}`);
 }
 
 function shareToReddit() {
     const score = document.getElementById('score').textContent;
-    const title = `I scored ${score} points in 2048 Frosted Edition!`;
+    const title = `I scored ${score} points in Wicked 2048 - Frosted Edition! Play wicked, win smarter! `;
     const url = encodeURIComponent(window.location.href);
     window.open(`https://www.reddit.com/submit?title=${encodeURIComponent(title)}&url=${url}`);
 }
