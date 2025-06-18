@@ -200,7 +200,7 @@ body::before {
 
 h1 {
     color: rgba(255, 255, 255, 0.9);
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bold;
     margin: 0;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -876,7 +876,7 @@ h1 {
     }
     
     h1 {
-        font-size: 35px; /* 进一步减小标题字体 */
+        font-size: 20px; /* 进一步减小标题字体 */
     }
     
     .score-container {
@@ -898,7 +898,7 @@ h1 {
     }
     
     .score, .best-score {
-        font-size: 18px; /* 减小分数字体 */
+        font-size: 10px; /* 减小分数字体 */
     }
     
     .controls {
@@ -953,7 +953,7 @@ h1 {
     }
     
     .instructions {
-        font-size: 13px;
+        font-size: 12px;
         padding: 10px;
         margin-top: 15px;
     }
@@ -969,7 +969,7 @@ h1 {
 /* 针对iPhone等更小屏幕的特殊优化 */
 @media screen and (max-width: 400px) {
     h1 {
-        font-size: 32px;
+        font-size: 20px;
     }
     
     .score-box {
@@ -985,7 +985,7 @@ h1 {
     }
     
     .score, .best-score {
-        font-size: 16px;
+        font-size: 9px;
     }
 }
 
@@ -1075,7 +1075,7 @@ h1 {
     color: rgba(255, 255, 255, 0.9);
     padding: 8px 16px;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 10px;
     font-weight: 600;
     animation: undo-reward 1s ease-in-out;
     z-index: 30;
@@ -1187,7 +1187,7 @@ h1 {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 15px;
   color: rgba(255,255,255,0.95);
-  font-size: 16px;
+  font-size: 12px;
   text-align: center;
   padding: 24px 18px 18px 18px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.25);
@@ -1204,7 +1204,7 @@ h1 {
   background: rgba(255,255,255,0.12);
   border: none;
   color: #fff;
-  font-size: 2rem;
+  font-size: 12px;
   border-radius: 50%;
   width: 36px;
   height: 36px;
@@ -1222,7 +1222,7 @@ h1 {
 .btn-howto .liquidGlass-content {
   color: rgba(255, 255, 255, 0.9);
   font-weight: 600;
-  font-size: 16px;
+  font-size: 12px;
   text-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 
@@ -1233,7 +1233,7 @@ h1 {
   background: rgba(255,255,255,0.15);
   color: #fff;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 12px;
   border-radius: 8px;
   text-decoration: none;
   border: 1px solid rgba(255,255,255,0.18);
