@@ -188,7 +188,7 @@ class Game2048 {
                 }
                 if (e.keyCode === 48) { // "0" key
                     e.preventDefault();
-                    this.showMessage('无路可走!', 'game-stuck');
+                    this.showMessage('Game Over!', 'game-stuck');
                 }
             };
         }
@@ -538,7 +538,7 @@ class Game2048 {
                         this.showMessage('游戏结束', 'game-over');
                     } else {
                         // 如果还有Undo次数，给用户提示
-                        this.showMessage('无路可走!', 'game-stuck');
+                        this.showMessage('Game Over!', 'game-stuck');
                     }
                 }
             });
@@ -1125,7 +1125,7 @@ class Game2048 {
 
         this.messageContainer.className = 'game-message ' + className;
         
-        // 当游戏卡住时，显示"Undo"和"再来一局"两个按钮
+        // 当游戏卡住时，显示"Undo"和"Try Again"两个按钮
         if (className === 'game-stuck') {
             const buttonContainer = document.createElement('div');
             buttonContainer.className = 'message-buttons';
@@ -1140,7 +1140,7 @@ class Game2048 {
             
             const restartButton = document.createElement('button');
             restartButton.className = 'restart-button';
-            restartButton.textContent = '再来一局';
+            restartButton.textContent = 'Try Again';
             restartButton.onclick = () => game.restart();
             
             buttonContainer.appendChild(undoButton);
@@ -1150,13 +1150,13 @@ class Game2048 {
         } else if (className !== 'game-won' && className !== 'game-over') {
             const restartButton = document.createElement('button');
             restartButton.className = 'restart-button';
-            restartButton.textContent = '再来一局';
+            restartButton.textContent = 'Try Again';
             restartButton.onclick = () => game.restart();
             this.messageContainer.appendChild(restartButton);
         } else {
              const restartButton = document.createElement('button');
             restartButton.className = 'restart-button';
-            restartButton.textContent = '再来一局';
+            restartButton.textContent = 'Try Again';
             restartButton.onclick = () => game.restart();
             this.messageContainer.appendChild(restartButton);
         }
@@ -1615,7 +1615,7 @@ class Game2048 {
                     if (this.undoCount === 0) {
                         this.showMessage('游戏结束', 'game-over');
                     } else {
-                        this.showMessage('无路可走!', 'game-stuck');
+                        this.showMessage('Game Over!', 'game-stuck');
                     }
                 }
             });
