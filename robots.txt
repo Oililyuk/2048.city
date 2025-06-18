@@ -14,4 +14,4 @@ Disallow: /private/
 Disallow: /temp/
 
 # Sitemap location
-Sitemap: https://yourdomain.com/sitemap.xml 
+Sitemap: https://wicked.today/sitemap.xml 

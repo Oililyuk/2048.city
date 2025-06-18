@@ -1,120 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
     
-    <!-- Primary Meta Tags -->
-    <title>Wicked 2048 – Frosted Edition | Play Free Online Puzzle Game</title>
-    <meta name="title" content="Wicked 2048 – Frosted Edition | Play Free Online Puzzle Game">
-    <meta name="description" content="Play Wicked 2048 with a stunning frosted glass interface. Challenge your mind with this modern take on the classic puzzle game. Free to play, no download needed.">
-    <meta name="keywords" content="wicked 2048, 2048 game, puzzle game, online 2048, free 2048, frosted glass UI, iOS style game, brain game, number puzzle, strategy game, wicked.today">
-    <meta name="author" content="Wicked.today">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="English">
-    <meta name="revisit-after" content="7 days">
-    
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Facebook / Telegram -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://wicked.today/">
-    <meta property="og:title" content="Wicked 2048 – Frosted Edition | Play Free Online Puzzle Game">
-    <meta property="og:description" content="Play Wicked 2048 with a stunning frosted glass interface. Challenge your mind with this modern take on the classic puzzle game. Free to play, no download needed.">
-    <meta property="og:image" content="https://wicked.today/images/2048-preview.jpg">
+    <meta property="og:url" content="https://wicked.today">
+    <meta property="og:title" content="Wicked 2048">
+    <meta property="og:description" content="A beautiful and elegant 2048 game with iOS-style liquid glass effect.">
+    <meta property="og:image" content="https://wicked.todayasset/preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="Wicked 2048">
-    <meta property="og:locale" content="en_US">
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://wicked.today/">
-    <meta property="twitter:title" content="Wicked 2048 – Frosted Edition | Play Free Online Puzzle Game">
-    <meta property="twitter:description" content="Play Wicked 2048 with a stunning frosted glass interface. Challenge your mind with this modern take on the classic puzzle game. Free to play, no download needed.">
-    <meta property="twitter:image" content="https://wicked.today/images/2048-preview.jpg">
-    <meta property="twitter:creator" content="@wickedtoday">
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://wicked.today/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://wicked.today">
+    <meta name="twitter:domain" content="wicked.today">
+    <meta name="twitter:title" content="Wicked 2048">
+    <meta name="twitter:description" content="A beautiful and elegant 2048 game with iOS-style liquid glass effect.">
+    <meta name="twitter:image" content="https://wicked.today/asset/preview.png">
+    <meta name="twitter:image:alt" content="Wicked 2048 preview">
     
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="icon.png" sizes="16x16">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Wicked 2048 – Frosted Edition",
-        "description": "Play Wicked 2048 with a stunning frosted glass interface. Challenge your mind with this modern take on the classic puzzle game.",
-        "url": "https://wicked.today",
-        "applicationCategory": "Game",
-        "genre": "Puzzle",
-        "operatingSystem": "Any",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Wicked.today",
-            "url": "https://wicked.today"
-        }
-    }
-    </script>
+    <title>Wicked 2048</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- SVG滤镜定义 -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <defs>
+            <!-- 液态玻璃效果滤镜 - 完全遵循示例 -->
+            <filter id="glass-distortion">
+                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="1" seed="5" result="turbulence"/>
+                <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap"/>
+                <feSpecularLighting in="softMap" surfaceScale="5" specularConstant="1" specularExponent="100" lighting-color="white" result="specLight">
+                    <fePointLight x="-200" y="-200" z="300"/>
+                </feSpecularLighting>
+                <feComposite in="specLight" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litImage"/>
+                <feDisplacementMap in="SourceGraphic" in2="softMap" scale="15" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+            
+            <!-- 合并时的爆发效果 -->
+            <filter id="liquid-burst" x="-100%" y="-100%" width="300%" height="300%">
+                <feTurbulence 
+                    type="fractalNoise" 
+                    baseFrequency="0.015" 
+                    numOctaves="4" 
+                    result="turbulence" />
+                    
+                <feDisplacementMap 
+                    in="SourceGraphic" 
+                    in2="turbulence" 
+                    scale="40" 
+                    xChannelSelector="R" 
+                    yChannelSelector="G" />
+                    
+                <feGaussianBlur stdDeviation="0.8" />
+            </filter>
+        </defs>
+    </svg>
+    
     <div class="container">
-        <header class="frosted-header">
-            <div class="header-left">
-                <h1>Wicked 2048</h1>
-            </div>
+        <header class="header">
+            <h1>Wicked 2048</h1>
             <div class="score-container">
-                <div class="score-box frosted-panel">
-                    <span>Score</span>
-                    <span id="score">0</span>
+                <div class="score-box ui-liquid-wrapper">
+                    <div class="liquidGlass-effect"></div>
+                    <div class="liquidGlass-tint"></div>
+                    <div class="liquidGlass-shine"></div>
+                    <div class="liquidGlass-content">
+                        <div class="score-label">Score</div>
+                        <div class="score" id="score">0</div>
+                    </div>
                 </div>
-                <div class="score-box frosted-panel">
-                    <span>Best</span>
-                    <span id="best-score">0</span>
+                <div class="score-box ui-liquid-wrapper">
+                    <div class="liquidGlass-effect"></div>
+                    <div class="liquidGlass-tint"></div>
+                    <div class="liquidGlass-shine"></div>
+                    <div class="liquidGlass-content">
+                        <div class="score-label">Best</div>
+                        <div class="best-score" id="best-score">0</div>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <div class="game-container">
-            <div class="game-board frosted-panel" id="game-board">
-                <!-- Game tiles will be generated here -->
+        <main class="main-content">
+            <div class="game-message" id="game-message">
+                <p></p>
+                <button class="restart-button" onclick="game.restart()">Try Again</button>
             </div>
+            
+            <div class="game-container">
+                <!-- 液态玻璃效果层 -->
+                <div class="liquid-glass-effect"></div>
+                <div class="grid-container">
+                    <!-- 4x4的网格背景 -->
+                    <div class="grid-row">
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                    </div>
+                </div>
+                
+                <div class="tile-container" id="tile-container">
+                    <!-- 数字方块将动态生成在这里 -->
+                </div>
+            </div>
+        </main>
 
+        <footer class="footer">
             <div class="controls">
-                <button id="hint" class="frosted-button" onclick="window.location.href='how-to-play.html'">Hint</button>
-                <button id="undo" class="frosted-button" disabled>Undo</button>
-                <button id="new-game" class="frosted-button">New Game</button>
-            </div>
-        </div>
-
-        <div id="game-message" class="game-message frosted-panel hidden">
-            <p></p>
-            <div class="share-buttons">
-                <button class="share-button twitter" onclick="shareToTwitter()">
-                    Share on X
+                <button class="btn-howto ui-liquid-wrapper" id="howto-btn" type="button">
+                    <span class="liquidGlass-effect"></span>
+                    <span class="liquidGlass-tint"></span>
+                    <span class="liquidGlass-shine"></span>
+                    <span class="liquidGlass-content">How to play</span>
                 </button>
-                <button class="share-button reddit" onclick="shareToReddit()">
-                    Share on Reddit
+                <button class="btn-new ui-liquid-wrapper" onclick="game.restart()">
+                    <span class="liquidGlass-effect"></span>
+                    <span class="liquidGlass-tint"></span>
+                    <span class="liquidGlass-shine"></span>
+                    <span class="liquidGlass-content">New Game</span>
+                </button>
+                <button class="btn-undo ui-liquid-wrapper" onclick="game.undo()">
+                    <span class="liquidGlass-effect"></span>
+                    <span class="liquidGlass-tint"></span>
+                    <span class="liquidGlass-shine"></span>
+                    <span class="liquidGlass-content">Undo</span>
                 </button>
             </div>
-            <button id="try-again" class="frosted-button">Try Again</button>
-        </div>
+            <div class="footer-text">
+                <p>&copy; 2024 Wicked.today — Play wicked, win smarter.</p>
+            </div>
+        </footer>
     </div>
-
-    <footer class="frosted-footer">
-        <p>&copy; 2024 Wicked.today — Play wicked, win smarter.</p>
-    </footer>
-
-    <script src="game.js"></script>
+    
+    <script src="script.js"></script>
+    <script>
+    // How to play 弹窗功能
+    document.addEventListener('DOMContentLoaded', function() {
+      const howtoBtn = document.getElementById('howto-btn');
+      if (!howtoBtn) return;
+      // 创建弹窗
+      let modal = null;
+      howtoBtn.addEventListener('click', function() {
+        if (modal) return;
+        modal = document.createElement('div');
+        modal.className = 'howto-modal';
+        modal.innerHTML = `
+          <div class="howto-modal-content">
+            <button class="howto-modal-close">&times;</button>
+            <div class="howto-modal-message">Use the arrow keys (or swipe on mobile devices) to move all tiles in that direction.<a href=how-to-play.html>Read More</a></div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        document.body.classList.add('howto-modal-open');
+        modal.querySelector('.howto-modal-close').onclick = function() {
+          modal.remove();
+          modal = null;
+          document.body.classList.remove('howto-modal-open');
+        };
+      });
+    });
+    </script>
 </body>
 </html> 
