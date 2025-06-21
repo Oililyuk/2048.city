@@ -1257,15 +1257,23 @@ h1 {
   transform: translateY(-1px);
 }
 
-/* 桌面与大屏适配 */
+/* 桌面与大屏：全屏背景+内容磨砂 */
 @media (min-width: 768px) {
+  body::before {
+    background-image: var(--wicked-bg, url('bg1.jpg'));
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: none;
+  }
   .container {
-    max-width: 700px;
-    margin: 40px auto;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-    border-radius: 18px;
-    padding: 32px 40px;
     background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    position: relative;
+    z-index: 1;
   }
   .main-content {
     padding: 32px 0;
@@ -1283,19 +1291,6 @@ h1 {
   }
   h1, h2 {
     font-size: 2.2em;
-  }
-  body::before {
-    background: none !important;
-  }
-  .container {
-    background-image: var(--wicked-bg, url('bg1.jpg'));
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-    position: relative;
-    z-index: 1;
   }
 }
 
