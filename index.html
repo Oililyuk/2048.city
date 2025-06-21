@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -29,10 +29,10 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- SVG滤镜定义 -->
+    <!-- SVG filter definitions -->
     <svg style="position: absolute; width: 0; height: 0;">
         <defs>
-            <!-- 液态玻璃效果滤镜 - 完全遵循示例 -->
+            <!-- Liquid glass effect filter - strictly follows the example -->
             <filter id="glass-distortion">
                 <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="1" seed="5" result="turbulence"/>
                 <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap"/>
@@ -43,7 +43,7 @@
                 <feDisplacementMap in="SourceGraphic" in2="softMap" scale="15" xChannelSelector="R" yChannelSelector="G"/>
             </filter>
             
-            <!-- 合并时的爆发效果 -->
+            <!-- Burst effect on merge -->
             <filter id="liquid-burst" x="-100%" y="-100%" width="300%" height="300%">
                 <feTurbulence 
                     type="fractalNoise" 
@@ -95,10 +95,10 @@
             </div>
             
             <div class="game-container">
-                <!-- 液态玻璃效果层 -->
+                <!-- Liquid glass effect layer -->
                 <div class="liquid-glass-effect"></div>
                 <div class="grid-container">
-                    <!-- 4x4的网格背景 -->
+                    <!-- 4x4 grid background -->
                     <div class="grid-row">
                         <div class="grid-cell"></div>
                         <div class="grid-cell"></div>
@@ -126,7 +126,7 @@
                 </div>
                 
                 <div class="tile-container" id="tile-container">
-                    <!-- 数字方块将动态生成在这里 -->
+                    <!-- Number tiles will be dynamically generated here -->
                 </div>
             </div>
         </main>
@@ -160,11 +160,11 @@
     
     <script src="script.js"></script>
     <script>
-    // How to play 弹窗功能
+    // How to play popup functionality
     document.addEventListener('DOMContentLoaded', function() {
       const howtoBtn = document.getElementById('howto-btn');
       if (!howtoBtn) return;
-      // 创建弹窗
+      // Create popup
       let modal = null;
       howtoBtn.addEventListener('click', function() {
         if (modal) return;

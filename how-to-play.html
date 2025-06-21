@@ -135,7 +135,7 @@
   const idx = Math.floor(Math.random() * bgs.length);
   document.addEventListener('DOMContentLoaded', function() {
     document.body.style.setProperty('--wicked-bg', `url('${bgs[idx]}')`);
-    // 兼容body::before
+    // Compatible with body::before
     const style = document.createElement('style');
     style.innerHTML = `body::before { background-image: var(--wicked-bg) !important; }`;
     document.head.appendChild(style);
