@@ -770,7 +770,7 @@ h1 {
     }
 }
 
-/* 游戏结束/通关画面 */
+/* Try Again/通关画面 */
 .game-message {
     display: none;
     position: absolute;
@@ -1283,6 +1283,19 @@ h1 {
   }
   h1, h2 {
     font-size: 2.2em;
+  }
+  body::before {
+    background: none !important;
+  }
+  .container {
+    background-image: var(--wicked-bg, url('bg1.jpg'));
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    position: relative;
+    z-index: 1;
   }
 }
 

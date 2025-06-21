@@ -167,13 +167,18 @@ body::before {
 
 /* 桌面与大屏适配 */
 @media (min-width: 768px) {
+  body::before {
+    background: none !important;
+  }
   .container {
-    max-width: 700px;
-    margin: 40px auto;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    background-image: var(--wicked-bg, url('bg1.jpg'));
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     border-radius: 18px;
-    padding: 32px 40px;
-    background: rgba(255,255,255,0.85);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    position: relative;
+    z-index: 1;
   }
   .frosted-panel {
     padding: 32px 40px;

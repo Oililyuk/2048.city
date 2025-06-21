@@ -535,7 +535,7 @@ class Game2048 {
                 } else if (this.checkGameOver()) {
                     // 只有在没有Undo次数时才真正结束游戏
                     if (this.undoCount === 0) {
-                        this.showMessage('游戏结束', 'game-over');
+                        this.showMessage('Try Again', 'game-over');
                     } else {
                         // 如果还有Undo次数，给用户提示
                         this.showMessage('Game Over!', 'game-stuck');
@@ -1613,7 +1613,7 @@ class Game2048 {
                     this.showMessage('你赢了!', 'game-won');
                 } else if (this.checkGameOver()) {
                     if (this.undoCount === 0) {
-                        this.showMessage('游戏结束', 'game-over');
+                        this.showMessage('Try Again', 'game-over');
                     } else {
                         this.showMessage('Game Over!', 'game-stuck');
                     }
