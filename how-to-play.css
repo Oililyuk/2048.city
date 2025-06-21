@@ -165,23 +165,25 @@ body::before {
   -webkit-overflow-scrolling: touch;
 }
 
-/* 桌面与大屏：全屏背景+内容磨砂 */
+/* 桌面与大屏：全屏渐变背景+内容区白色磨砂卡片 */
 @media (min-width: 768px) {
+  body {
+    background: linear-gradient(135deg, #e0e7ef 0%, #f5f7fa 100%);
+  }
   body::before {
-    background-image: var(--wicked-bg, url('bg1.jpg'));
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    filter: none;
+    background: none !important;
   }
   .container {
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.98);
     border-radius: 18px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    max-width: 480px;
+    margin: 48px auto;
+    padding: 32px 32px 24px 32px;
     position: relative;
     z-index: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
   .frosted-panel {
     padding: 32px 40px;
