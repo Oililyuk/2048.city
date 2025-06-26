@@ -1,138 +1,46 @@
-.tile .liquidGlass-effect {
-    position: absolute;
-    z-index: 0;
-    inset: 0;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-    filter: url(#glass-distortion);
-    /* Removed backdrop-filter and SVG filter for performance on individual tiles */
-    /* backdrop-filter: blur(3px); */
-    /* -webkit-backdrop-filter: blur(3px); */
-    /* filter: url(#glass-distortion); */
-    overflow: hidden;
-    isolation: isolate;
-    display: block !important;
-    Unchanged lines position: absolute;
-    inset: 0;
-    border-radius: var(--tile-border-radius);
-    transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
-}
-
-.tile .liquidGlass-shine {
-    Unchanged lines
-
-    /* 不同数字的颜色 - 只应用到 tint 层 */
-    .tile-2 .liquidGlass-tint {
-        background: rgba(238, 228, 218, 0.25);
-        background: rgba(238, 228, 218, 0.4);
-        /* Increased opacity */
+/* 不支持backdrop-filter的浏览器降级方案 */
+@supports not (backdrop-filter: blur(1px)) {
+    .tile {
+        /* These rules are now redundant as .tile .liquidGlass-effect is modified */
+        /* backdrop-filter: none !important; */
+        /* -webkit-backdrop-filter: none !important; */
+        /* background: rgba(255, 255, 255, 0.15) !important; */
     }
 
-    .tile-4 .liquidGlass-tint {
-        background: rgba(237, 224, 200, 0.25);
-        background: rgba(237, 224, 200, 0.4);
-        /* Increased opacity */
-    }
+    /* Ensure fallback for UI elements if backdrop-filter is not supported */
+    .score-box .liquidGlass-effect,
+    .btn-new .liquidGlass-effect,
+    .btn-undo .liquidGlass-effect {
 
-    .tile-8 .liquidGlass-tint {
-        background: rgba(242, 177, 121, 0.35);
-        background: rgba(242, 177, 121, 0.5);
-        /* Increased opacity */
-    }
+        /* When backdrop-filter is not supported, disable the effect layer */
+        .ui-liquid-wrapper>.liquidGlass-effect,
+        .game-message {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
 
-    .tile-16 .liquidGlass-tint {
-        background: rgba(245, 149, 99, 0.45);
-        background: rgba(245, 149, 99, 0.6);
-        /* Increased opacity */
-    }
+        .score-box .liquidGlass-tint,
+        .btn-new .liquidGlass-tint,
+        .btn-undo .liquidGlass-tint,
+        .game-container::before,
+        /* The game container's frosted background */
+        .instructions {
+            /* The how-to-play instructions box */
 
-    .tile-32 .liquidGlass-tint {
-        background: rgba(246, 124, 95, 0.55);
-        background: rgba(246, 124, 95, 0.7);
-        /* Increased opacity */
-    }
-
-    .tile-64 .liquidGlass-tint {
-        background: rgba(246, 94, 59, 0.65);
-        background: rgba(246, 94, 59, 0.8);
-        /* Increased opacity */
-    }
-
-    .tile-128 .liquidGlass-tint {
-        Unchanged lines
-
-        /* 不支持backdrop-filter的浏览器降级方案 */
-        @supports not (backdrop-filter: blur(1px)) {
-            .tile {
+            /* Provide a solid, dark background for all UI elements as a fallback */
+            .ui-liquid-wrapper>.liquidGlass-tint,
+            /* Buttons and score boxes */
+            .game-container::before,
+            /* The main game board background */
+            .instructions,
+            /* The how-to-play instructions box */
+            .game-message {
+                /* The game over/win message */
+                background: rgba(30, 30, 30, 0.8) !important;
+                /* A solid, dark background */
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background: rgba(255, 255, 255, 0.15) !important;
-                /* These rules are now redundant as .tile .liquidGlass-effect is modified */
-                /* backdrop-filter: none !important; */
-                /* -webkit-backdrop-filter: none !important; */
-                /* background: rgba(255, 255, 255, 0.15) !important; */
             }
+        }
 
-            .score-box .liquidGlass-tint,
-            .btn-new .liquidGlass-tint,
-            .btn-undo .liquidGlass-tint {
-                background: rgba(30, 30, 30, 0.9) !important;
-
-                /* Ensure fallback for UI elements if backdrop-filter is not supported */
-                .score-box .liquidGlass-effect,
-                .btn-new .liquidGlass-effect,
-                .btn-undo .liquidGlass-effect {
-                    backdrop-filter: none !important;
-                    -webkit-backdrop-filter: none !important;
-                }
-
-                .game-container,
-                .instructions {
-                    backdrop-filter: none !important;
-                    -webkit-backdrop-filter: none !important;
-                    background: rgba(30, 30, 30, 0.9) !important;
-
-                    .score-box .liquidGlass-tint,
-                    .btn-new .liquidGlass-tint,
-                    .btn-undo .liquidGlass-tint,
-                    .game-container::before,
-                    /* The game container's frosted background */
-                    .instructions {
-                        /* The how-to-play instructions box */
-                        background: rgba(30, 30, 30, 0.8) !important;
-                        /* A solid, dark background */
-                        backdrop-filter: none !important;
-                        -webkit-backdrop-filter: none !important;
-                    }
-                }
-
-                Unchanged lines
-            }
-
-            /* Low Performance Mode: simplify effects for older phones */
-            .low-performance .ui-liquid-wrapper>.liquidGlass-effect,
-            .low-performance .tile .liquidGlass-effect,
-            .low-performance .game-message {
-
-                .low-performance .ui-liquid-wrapper>.liquidGlass-effect,
-                .low-performance .tile .liquidGlass-effect,
-                /* This rule is now less critical for tiles */
-                .low-performance .game-message {
-                    /* The game over/win message */
-                    backdrop-filter: none !important;
-                    -webkit-backdrop-filter: none !important;
-                }
-
-                .low-performance .ui-liquid-wrapper>.liquidGlass-tint {
-                    .low-performance .ui-liquid-wrapper>.liquidGlass-tint {
-                        background: rgba(30, 30, 30, 0.8) !important;
-                    }
-
-                    Unchanged lines animation: none !important;
-                }
-
-                .low-performance .tile.dragging .liquidGlass-effect {
-                    .low-performance .tile.dragging .liquidGlass-effect {
-                        /* This rule is now less critical for tiles */
-                        filter: none !important;
-                    }
+        /* 减少动画模式 */
