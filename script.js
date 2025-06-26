@@ -273,6 +273,14 @@ class Game2048 {
         }, { passive: false });
 
         document.addEventListener('touchend', (e) => {
+            // 防御性检查：如果一个动画正在进行中，则不处理此次滑动结束事件
+            // 这可以防止在极端情况下发生竞态条件
+            if (this.isAnimating) {
+                this.isDragging = false;
+                this.resetTileTransforms(); // 清理视觉效果
+                return;
+            }
+
             if (!this.isDragging) return;
 
             this.isDragging = false;
@@ -378,6 +386,14 @@ class Game2048 {
         });
 
         document.addEventListener('mouseup', (e) => {
+            // 防御性检查：与 touchend 类似
+            if (this.isAnimating) {
+                mouseDown = false;
+                this.isDragging = false;
+                this.resetTileTransforms();
+                return;
+            }
+
             if (!mouseDown) return;
 
             mouseDown = false;
@@ -1105,6 +1121,12 @@ class Game2048 {
     }
 
     restart() {
+        // 关键修复：强制重置动画状态，确保 "New Game" 按钮总能解决卡死问题
+        if (this._animationTimeout) clearTimeout(this._animationTimeout);
+        this.isAnimating = false;
+        this.isDragging = false;
+        this.tileContainer.classList.remove('dragging-active');
+
         // 清空方块
         this.tileContainer.innerHTML = '';
         this.tiles = {};
