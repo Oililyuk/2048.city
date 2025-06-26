@@ -35,9 +35,9 @@ body::before {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url('bg1.jpg'); /* 可根据index.html的随机背景策略手动切换 */
+  right: 0; /* Ensure full coverage */
+  bottom: 0; /* Ensure full coverage */
+  background-image: var(--wicked-bg, url('bg1.jpg')); /* Use CSS variable for consistency, fallback to bg1.jpg */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -1,8 +1,6 @@
 User-agent: *
 Allow: /
-Allow: /sitemap.xml
-Allow: /how-to-play.html
-
+# Allow: /sitemap.xml and /how-to-play.html are covered by Allow: /
 # Disallow access to system files
 Disallow: /.git/
 Disallow: /.env
