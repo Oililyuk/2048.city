@@ -68,7 +68,7 @@ body::before {
 /* 暗黑模式背景 */
 @media (prefers-color-scheme: dark) {
     body::before {
-        background-image: url('asset/wallpaper/macos_26_wallpaper_dark.webp');
+        background-image: url('asset/wallpaper/bg1.jpg');
     }
 }
 
