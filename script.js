@@ -513,6 +513,7 @@ class Game2048 {
         if (moved) {
             // 设置动画标志
             this.isAnimating = true;
+            this.resetAnimationStateFallback(); // Add fallback
             
             // 更新网格
             this.grid = newGrid;
@@ -528,6 +529,7 @@ class Game2048 {
                 
                 // 清除动画标志
                 this.isAnimating = false;
+                if (this._animationTimeout) clearTimeout(this._animationTimeout);
                 
                 // 游戏状态检查
                 if (this.checkWin()) {
@@ -936,8 +938,8 @@ class Game2048 {
         
         // 检查是否有Undo次数和历史记录
         if (this.undoCount > 0 && this.stateHistory.length > 1) {
-            // 设置动画标志
             this.isAnimating = true;
+            this.resetAnimationStateFallback(); // Add fallback
             
             // 保存当前游戏状态的快照，用于计算动画
             const currentGridSnapshot = JSON.parse(JSON.stringify(this.grid));
@@ -970,10 +972,23 @@ class Game2048 {
                 
                 // 清除动画标志
                 this.isAnimating = false;
+                if (this._animationTimeout) clearTimeout(this._animationTimeout);
             });
         }
     }
     
+    // Add a fallback to reset isAnimating if animation callback fails
+    resetAnimationStateFallback() {
+        if (this._animationTimeout) clearTimeout(this._animationTimeout);
+        this._animationTimeout = setTimeout(() => {
+            if (this.isAnimating) {
+                this.isAnimating = false;
+                console.error('Animation fallback triggered: isAnimating reset.');
+                this.updateDisplay();
+            }
+        }, 1000); // 1 second fallback
+    }
+
     calculateUndoAnimations(currentGrid, previousGrid) {
         const animations = {
             movements: [],      // 方块移动
@@ -1595,4 +1610,12 @@ class Game2048 {
 }
 
 // Initialize the game
-const game = new Game2048(); 
+const game = new Game2048();
+
+// Add global error handler for debugging
+window.addEventListener('error', function(e) {
+    console.error('Global error:', e.message, e.filename, e.lineno);
+});
+window.addEventListener('unhandledrejection', function(e) {
+    console.error('Unhandled promise rejection:', e.reason);
+});
