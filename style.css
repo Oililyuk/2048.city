@@ -36,7 +36,8 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    height: calc(var(--vh, 1vh) * 100); /* 使用自定义视口高度 */
+    height: calc(var(--vh, 1vh) * 100);
+    /* 使用自定义视口高度 */
     overflow: hidden;
     /* 使用flex布局实现垂直居中 */
     display: flex;
@@ -77,62 +78,63 @@ body::before {
         color: rgba(0, 0, 0, 0.85);
         text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
-    
+
     .score-label {
         color: rgba(0, 0, 0, 0.6);
     }
-    
-    .score, .best-score {
+
+    .score,
+    .best-score {
         color: rgba(0, 0, 0, 0.85);
-        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
-    
+
     .score-box .liquidGlass-tint {
         background: rgba(0, 0, 0, 0.06);
     }
-    
+
     .btn-new .liquidGlass-tint,
     .btn-undo .liquidGlass-tint {
         background: rgba(0, 0, 0, 0.06);
     }
-    
+
     .btn-new .liquidGlass-content,
     .btn-undo .liquidGlass-content {
         color: rgba(0, 0, 0, 0.85);
-        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
-    
+
     .btn-new:hover .liquidGlass-tint,
     .btn-undo:hover .liquidGlass-tint {
         background: rgba(0, 0, 0, 0.1);
     }
-    
+
     .btn-undo.disabled .liquidGlass-tint {
         background: rgba(0, 0, 0, 0.03);
     }
-    
+
     .btn-undo.disabled:hover .liquidGlass-tint {
         background: rgba(0, 0, 0, 0.03);
     }
-    
+
     .game-container::before {
         background: rgba(0, 0, 0, 0.08);
     }
-    
+
     .game-container::after {
-        box-shadow: 
+        box-shadow:
             inset 2px 2px 4px rgba(255, 255, 255, 0.5),
             inset -2px -2px 4px rgba(0, 0, 0, 0.05);
     }
-    
+
     .instructions {
         color: rgba(0, 0, 0, 0.6);
         background: rgba(0, 0, 0, 0.04);
         border: 1px solid rgba(0, 0, 0, 0.08);
     }
-    
+
     .liquidGlass-shine {
-        box-shadow: 
+        box-shadow:
             inset 0 1px 1px rgba(255, 255, 255, 0.8),
             inset 1px 0 1px rgba(255, 255, 255, 0.8),
             inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.3);
@@ -158,7 +160,8 @@ body::before {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative; /* 用于game-message定位 */
+    position: relative;
+    /* 用于game-message定位 */
 }
 
 .header {
@@ -167,13 +170,15 @@ body::before {
     align-items: center;
     width: 100%;
     flex-shrink: 0;
-    padding: 0 10px; /* 为header添加一些内边距 */
+    padding: 0 10px;
+    /* 为header添加一些内边距 */
 }
 
 .header .score-container {
     flex-grow: 1;
     display: flex;
-    justify-content: flex-end; /* 将分数框推到右边 */
+    justify-content: flex-end;
+    /* 将分数框推到右边 */
     gap: 15px;
 }
 
@@ -183,7 +188,8 @@ body::before {
     justify-content: center;
     align-items: center;
     gap: 15px;
-    flex-shrink: 0; /* 防止footer被压缩 */
+    flex-shrink: 0;
+    /* 防止footer被压缩 */
 }
 
 .footer .controls {
@@ -193,9 +199,10 @@ body::before {
     width: 100%;
 }
 
-.footer .btn-new, 
+.footer .btn-new,
 .footer .btn-undo {
-    margin-right: 0; /* 移除旧的右边距 */
+    margin-right: 0;
+    /* 移除旧的右边距 */
 }
 
 h1 {
@@ -262,19 +269,22 @@ h1 {
     text-transform: uppercase;
 }
 
-.score, .best-score {
+.score,
+.best-score {
     font-size: 25px;
     font-weight: bold;
     color: white;
     margin-top: 5px;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .controls {
-    display: none; /* 隐藏旧的controls容器 */
+    display: none;
+    /* 隐藏旧的controls容器 */
 }
 
-.btn-new, .btn-undo {
+.btn-new,
+.btn-undo {
     position: relative;
     display: inline-block;
     margin-right: 10px;
@@ -295,7 +305,7 @@ h1 {
 }
 
 /* 修复：按钮使用inline-flex而不是flex，以保持水平排列 */
-.btn-new.liquidGlass-wrapper, 
+.btn-new.liquidGlass-wrapper,
 .btn-undo.liquidGlass-wrapper {
     display: inline-flex;
 }
@@ -326,7 +336,7 @@ h1 {
     color: rgba(255, 255, 255, 0.9);
     font-weight: 600;
     font-size: 12px;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .btn-new:hover .liquidGlass-tint,
@@ -366,7 +376,8 @@ h1 {
     padding: 10px;
     overflow: visible;
     flex: 0 0 auto;
-    aspect-ratio: 1; /* 保持1:1的宽高比 */
+    aspect-ratio: 1;
+    /* 保持1:1的宽高比 */
 }
 
 /* 移除旧的液态玻璃效果层 */
@@ -392,7 +403,7 @@ h1 {
     inset: 0;
     z-index: 2;
     border-radius: 20px;
-    box-shadow: 
+    box-shadow:
         inset 2px 2px 4px rgba(255, 255, 255, 0.2),
         inset -2px -2px 4px rgba(0, 0, 0, 0.1);
     pointer-events: none;
@@ -410,7 +421,8 @@ h1 {
     grid-template-rows: repeat(4, 1fr);
     gap: 10px;
     padding: 10px;
-    z-index: 3;  /* 在液态效果层之上 */
+    z-index: 3;
+    /* 在液态效果层之上 */
 }
 
 .grid-row {
@@ -429,11 +441,13 @@ h1 {
     left: 10px;
     right: 10px;
     bottom: 10px;
-    z-index: 4;  /* 在网格之上 */
+    z-index: 4;
+    /* 在网格之上 */
 }
 
 /* 统一的液态玻璃容器样式 */
-.ui-liquid-wrapper { /* Renamed for consistency */
+.ui-liquid-wrapper {
+    /* Renamed for consistency */
     position: relative;
     display: inline-flex;
     justify-content: center;
@@ -448,34 +462,34 @@ h1 {
 }
 
 /* 统一的内部图层样式 */
-.ui-liquid-wrapper > .liquidGlass-effect,
-.ui-liquid-wrapper > .liquidGlass-tint,
-.ui-liquid-wrapper > .liquidGlass-shine,
-.ui-liquid-wrapper > .liquidGlass-content {
+.ui-liquid-wrapper>.liquidGlass-effect,
+.ui-liquid-wrapper>.liquidGlass-tint,
+.ui-liquid-wrapper>.liquidGlass-shine,
+.ui-liquid-wrapper>.liquidGlass-content {
     position: absolute;
     inset: 0;
     border-radius: var(--ui-border-radius, 10px);
 }
 
-.ui-liquid-wrapper > .liquidGlass-effect {
+.ui-liquid-wrapper>.liquidGlass-effect {
     z-index: 0;
     backdrop-filter: blur(5px) saturate(120%);
     -webkit-backdrop-filter: blur(5px) saturate(120%);
     filter: url(#glass-distortion);
 }
 
-.ui-liquid-wrapper > .liquidGlass-tint {
+.ui-liquid-wrapper>.liquidGlass-tint {
     z-index: 1;
     background: rgba(255, 255, 255, 0.08);
     transition: background 0.3s;
 }
 
-.ui-liquid-wrapper > .liquidGlass-shine {
+.ui-liquid-wrapper>.liquidGlass-shine {
     z-index: 2;
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), inset 1px 0 1px rgba(255, 255, 255, 0.6), inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.15);
 }
 
-.ui-liquid-wrapper > .liquidGlass-content {
+.ui-liquid-wrapper>.liquidGlass-content {
     position: relative;
     z-index: 3;
     display: flex;
@@ -486,12 +500,24 @@ h1 {
 }
 
 /* 移除旧的、分散的样式 */
-.score-box, .btn-new, .btn-undo {
+.score-box,
+.btn-new,
+.btn-undo {
     /* 样式已由 .liquidGlass-wrapper 统一处理 */
 }
-.score-box .liquidGlass-effect, .score-box .liquidGlass-tint, .score-box .liquidGlass-shine, .score-box .liquidGlass-content,
-.btn-new .liquidGlass-effect, .btn-new .liquidGlass-tint, .btn-new .liquidGlass-shine, .btn-new .liquidGlass-content,
-.btn-undo .liquidGlass-effect, .btn-undo .liquidGlass-tint, .btn-undo .liquidGlass-shine, .btn-undo .liquidGlass-content {
+
+.score-box .liquidGlass-effect,
+.score-box .liquidGlass-tint,
+.score-box .liquidGlass-shine,
+.score-box .liquidGlass-content,
+.btn-new .liquidGlass-effect,
+.btn-new .liquidGlass-tint,
+.btn-new .liquidGlass-shine,
+.btn-new .liquidGlass-content,
+.btn-undo .liquidGlass-effect,
+.btn-undo .liquidGlass-tint,
+.btn-undo .liquidGlass-shine,
+.btn-undo .liquidGlass-content {
     /* 不再需要单独定义 */
 }
 
@@ -501,16 +527,16 @@ h1 {
     width: calc((100% - 30px) / 4);
     height: calc((100% - 30px) / 4);
     /* 分离不同属性的过渡效果 */
-    transition: 
+    transition:
         top 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
         left 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
         transform 0.08s ease-out,
         border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
-    
+
     /* 定义并使用CSS变量来统一控制圆角 */
     --tile-border-radius: 18px;
     border-radius: var(--tile-border-radius);
-    
+
     /* 继承自 liquidGlass-wrapper 的样式 */
     display: flex;
     font-weight: 600;
@@ -522,8 +548,9 @@ h1 {
     /* 移除旧样式 */
     background: transparent;
     border: none;
-    line-height: 1; /* 确保flex生效 */
-    
+    line-height: 1;
+    /* 确保flex生效 */
+
     /* 启用硬件加速 */
     will-change: transform;
     -webkit-transform: translateZ(0);
@@ -538,7 +565,7 @@ h1 {
 
 /* 移动时的特殊样式 - 使用与键盘操作相同的时间 */
 .tile.moving {
-    transition: 
+    transition:
         top 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
         left 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
         transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
@@ -551,11 +578,12 @@ h1 {
 
 /* 移动设备上的性能优化 */
 @media (max-width: 520px) {
+
     /* 在移动设备上简化动画 */
     .tile.dragging {
         transition: none !important;
     }
-    
+
     /* 移除拖动时的阴影效果 */
     .tile.dragging .liquidGlass-effect {
         filter: url(#glass-distortion);
@@ -577,7 +605,7 @@ h1 {
 }
 
 .tile.dragging .liquidGlass-shine {
-    box-shadow: 
+    box-shadow:
         inset 0 1px 2px rgba(255, 255, 255, 0.8),
         inset 1px 0 2px rgba(255, 255, 255, 0.8),
         inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.3);
@@ -585,61 +613,64 @@ h1 {
 
 /* 游戏方块的内部图层样式 */
 .tile .liquidGlass-effect {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  filter: url(#glass-distortion);
-  overflow: hidden;
-  isolation: isolate;
-  display: block !important;
-  border-radius: var(--tile-border-radius);
-  transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    filter: url(#glass-distortion);
+    overflow: hidden;
+    isolation: isolate;
+    display: block !important;
+    border-radius: var(--tile-border-radius);
+    transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
 }
 
 .tile .liquidGlass-tint {
-  z-index: 1;
-  position: absolute;
-  inset: 0;
-  border-radius: var(--tile-border-radius);
-  transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+    z-index: 1;
+    position: absolute;
+    inset: 0;
+    border-radius: var(--tile-border-radius);
+    transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
 }
 
 .tile .liquidGlass-shine {
-  position: absolute;
-  inset: 0; /* Changed back to 0 to ensure full coverage */
-  z-index: 2;
-  overflow: hidden;
-  /* Asymmetrical highlight mimicking a top-left light source */
-  box-shadow: 
-    /* Separate highlights for top and left edges for better corner rendering */
-    inset 0 1px 1px rgba(255, 255, 255, 0.6), /* Top edge highlight */
-    inset 1px 0 1px rgba(255, 255, 255, 0.6), /* Left edge highlight */
-    /* Faint highlight from bottom-right */
-    inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.15);
-  border-radius: var(--tile-border-radius);
-  transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+    position: absolute;
+    inset: 0;
+    /* Changed back to 0 to ensure full coverage */
+    z-index: 2;
+    overflow: hidden;
+    /* Asymmetrical highlight mimicking a top-left light source */
+    box-shadow:
+        /* Separate highlights for top and left edges for better corner rendering */
+        inset 0 1px 1px rgba(255, 255, 255, 0.6),
+        /* Top edge highlight */
+        inset 1px 0 1px rgba(255, 255, 255, 0.6),
+        /* Left edge highlight */
+        /* Faint highlight from bottom-right */
+        inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.15);
+    border-radius: var(--tile-border-radius);
+    transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
 }
 
 /* This gradient conflicts with the new asymmetrical lighting, so it's removed. */
 .tile .liquidGlass-shine::before {
-  display: none;
+    display: none;
 }
 
 .tile .liquidGlass-text {
-  z-index: 3;
-  font-size: 55px;
-  font-weight: bold;
-  color: white;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-  border-radius: var(--tile-border-radius);
-  transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+    z-index: 3;
+    font-size: 55px;
+    font-weight: bold;
+    color: white;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    border-radius: var(--tile-border-radius);
+    transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
 }
 
 /* 移除悬停效果 */
@@ -657,17 +688,49 @@ h1 {
 }
 
 /* 不同数字的颜色 - 只应用到 tint 层 */
-.tile-2 .liquidGlass-tint { background: rgba(238, 228, 218, 0.25); }
-.tile-4 .liquidGlass-tint { background: rgba(237, 224, 200, 0.25); }
-.tile-8 .liquidGlass-tint { background: rgba(242, 177, 121, 0.35); }
-.tile-16 .liquidGlass-tint { background: rgba(245, 149, 99, 0.45); }
-.tile-32 .liquidGlass-tint { background: rgba(246, 124, 95, 0.55); }
-.tile-64 .liquidGlass-tint { background: rgba(246, 94, 59, 0.65); }
-.tile-128 .liquidGlass-tint { background: rgba(237, 207, 114, 0.45); }
-.tile-256 .liquidGlass-tint { background: rgba(237, 204, 97, 0.55); }
-.tile-512 .liquidGlass-tint { background: rgba(237, 200, 80, 0.65); }
-.tile-1024 .liquidGlass-tint { background: rgba(237, 197, 63, 0.75); }
-.tile-2048 .liquidGlass-tint { background: rgba(237, 194, 46, 0.85); }
+.tile-2 .liquidGlass-tint {
+    background: rgba(238, 228, 218, 0.25);
+}
+
+.tile-4 .liquidGlass-tint {
+    background: rgba(237, 224, 200, 0.25);
+}
+
+.tile-8 .liquidGlass-tint {
+    background: rgba(242, 177, 121, 0.35);
+}
+
+.tile-16 .liquidGlass-tint {
+    background: rgba(245, 149, 99, 0.45);
+}
+
+.tile-32 .liquidGlass-tint {
+    background: rgba(246, 124, 95, 0.55);
+}
+
+.tile-64 .liquidGlass-tint {
+    background: rgba(246, 94, 59, 0.65);
+}
+
+.tile-128 .liquidGlass-tint {
+    background: rgba(237, 207, 114, 0.45);
+}
+
+.tile-256 .liquidGlass-tint {
+    background: rgba(237, 204, 97, 0.55);
+}
+
+.tile-512 .liquidGlass-tint {
+    background: rgba(237, 200, 80, 0.65);
+}
+
+.tile-1024 .liquidGlass-tint {
+    background: rgba(237, 197, 63, 0.75);
+}
+
+.tile-2048 .liquidGlass-tint {
+    background: rgba(237, 194, 46, 0.85);
+}
 
 /* 为高数值方块设置浅色文字 */
 .tile-8 .liquidGlass-text,
@@ -688,16 +751,27 @@ h1 {
 .tile-512 .liquidGlass-text {
     font-size: 45px;
 }
+
 .tile-1024 .liquidGlass-text,
 .tile-2048 .liquidGlass-text {
     font-size: 35px;
 }
 
 /* 移除旧的颜色定义 */
-.tile-2, .tile-4, .tile-8, .tile-16, .tile-32, .tile-64,
-.tile-128, .tile-256, .tile-512, .tile-1024, .tile-2048 {
+.tile-2,
+.tile-4,
+.tile-8,
+.tile-16,
+.tile-32,
+.tile-64,
+.tile-128,
+.tile-256,
+.tile-512,
+.tile-1024,
+.tile-2048 {
     background: none;
-    color: transparent; /* 文字颜色由 .liquidGlass-text 控制 */
+    color: transparent;
+    /* 文字颜色由 .liquidGlass-text 控制 */
     text-shadow: none;
 }
 
@@ -711,6 +785,7 @@ h1 {
         opacity: 0;
         transform: scale(0.5);
     }
+
     100% {
         opacity: 1;
         transform: scale(1);
@@ -726,9 +801,11 @@ h1 {
     0% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.15);
     }
+
     100% {
         transform: scale(1);
     }
@@ -744,6 +821,7 @@ h1 {
         opacity: 1;
         transform: scale(1);
     }
+
     100% {
         opacity: 0;
         transform: scale(0.5);
@@ -760,10 +838,12 @@ h1 {
         opacity: 0;
         transform: scale(1.2) rotate(180deg);
     }
+
     50% {
         opacity: 0.8;
         transform: scale(0.9) rotate(90deg);
     }
+
     100% {
         opacity: 1;
         transform: scale(1) rotate(0deg);
@@ -784,8 +864,10 @@ h1 {
     z-index: 100;
     text-align: center;
     border-radius: 20px;
-    max-width: none; /* 移除最大宽度限制 */
-    max-height: none; /* 移除最大高度限制 */
+    max-width: none;
+    /* 移除最大宽度限制 */
+    max-height: none;
+    /* 移除最大高度限制 */
 }
 
 .game-message p {
@@ -798,7 +880,8 @@ h1 {
 }
 
 .game-message.game-won {
-    background: rgba(237, 194, 46, 0.1); /* 更淡的金色 */
+    background: rgba(237, 194, 46, 0.1);
+    /* 更淡的金色 */
     backdrop-filter: blur(25px) saturate(160%);
     -webkit-backdrop-filter: blur(25px) saturate(160%);
     color: #ffd400;
@@ -806,19 +889,22 @@ h1 {
 
 .game-message.game-over,
 .game-message.game-stuck {
-    background: rgba(30, 40, 60, 0.15); /* 更淡的深色背景 */
+    background: rgba(30, 40, 60, 0.15);
+    /* 更淡的深色背景 */
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     color: rgba(255, 255, 255, 0.9);
 }
 
 .game-message.game-stuck .restart-button {
-    display: inline-block; /* 确保按钮可见 */
+    display: inline-block;
+    /* 确保按钮可见 */
 }
 
 .message-buttons {
     display: flex;
-    gap: 15px; /* 按钮之间的间距 */
+    gap: 15px;
+    /* 按钮之间的间距 */
     margin-top: 20px;
 }
 
@@ -858,7 +944,8 @@ h1 {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     padding: 15px;
-    flex-shrink: 0; /* 不要收缩 */
+    flex-shrink: 0;
+    /* 不要收缩 */
 }
 
 /* 响应式设计 */
@@ -868,96 +955,105 @@ h1 {
         padding-left: max(10px, env(safe-area-inset-left));
         padding-right: max(10px, env(safe-area-inset-right));
     }
-    
+
     .header {
         flex-wrap: wrap;
         justify-content: center;
         gap: 15px;
     }
-    
+
     h1 {
-        font-size: 20px; /* 进一步减小标题字体 */
+        font-size: 20px;
+        /* 进一步减小标题字体 */
     }
-    
+
     .score-container {
-        gap: 8px; /* 减小分数框之间的间距 */
+        gap: 8px;
+        /* 减小分数框之间的间距 */
     }
-    
+
     .score-box {
         margin-left: 0;
         --ui-border-radius: 8px;
-        width: 85px; /* 减小分数框宽度 */
-    }
-    
-    .score-box .liquidGlass-content {
-        padding: 6px 10px; /* 减小内边距 */
-    }
-    
-    .score-label {
-        font-size: 10px; /* 减小标签字体 */
-    }
-    
-    .score, .best-score {
-        font-size: 12px; /* 减小分数字体 */
-    }
-    
-    .controls {
-        margin-bottom: 15px; /* 减小底部间距 */
+        width: 85px;
+        /* 减小分数框宽度 */
     }
 
-    .btn-new, .btn-undo {
+    .score-box .liquidGlass-content {
+        padding: 6px 10px;
+        /* 减小内边距 */
+    }
+
+    .score-label {
+        font-size: 10px;
+        /* 减小标签字体 */
+    }
+
+    .score,
+    .best-score {
+        font-size: 12px;
+        /* 减小分数字体 */
+    }
+
+    .controls {
+        margin-bottom: 15px;
+        /* 减小底部间距 */
+    }
+
+    .btn-new,
+    .btn-undo {
         margin-right: 5px;
         --ui-border-radius: 8px;
         min-width: 100px;
     }
-    
+
     .btn-new .liquidGlass-content,
     .btn-undo .liquidGlass-content {
         padding: 8px 15px;
         font-size: 14px;
     }
-    
+
     .game-container {
         padding: 8px;
     }
-    
+
     .grid-container {
         gap: 8px;
     }
-    
+
     .tile {
         width: calc((100% - 24px) / 4);
         height: calc((100% - 24px) / 4);
         /* 在移动端使用较小的圆角 */
         --tile-border-radius: 12px;
     }
-    
+
     .liquidGlass-text {
         font-size: 35px;
     }
-    
+
     .tile-128 .liquidGlass-text,
     .tile-256 .liquidGlass-text,
     .tile-512 .liquidGlass-text {
         font-size: 30px;
     }
-    
+
     .tile-1024 .liquidGlass-text,
     .tile-2048 .liquidGlass-text {
         font-size: 25px;
     }
-    
+
     .game-message p {
         font-size: 40px;
         margin-top: 150px;
     }
-    
+
     .instructions {
         font-size: 12px;
         padding: 10px;
         margin-top: 15px;
     }
-    
+
     /* 在更小的屏幕上隐藏游戏说明 */
     @media screen and (max-height: 700px) {
         .instructions {
@@ -971,31 +1067,33 @@ h1 {
     h1 {
         font-size: 20px;
     }
-    
+
     .score-box {
         width: 80px;
     }
-    
+
     .score-box .liquidGlass-content {
         padding: 5px 8px;
     }
-    
+
     .score-label {
         font-size: 9px;
     }
-    
-    .score, .best-score {
+
+    .score,
+    .best-score {
         font-size: 11px;
     }
 }
 
 /* 触摸设备优化 */
 @media (hover: none) {
+
     .btn-new:hover .liquidGlass-tint,
     .btn-undo:hover .liquidGlass-tint {
         background: rgba(255, 255, 255, 0.08);
     }
-    
+
     .btn-new:hover,
     .btn-undo:hover {
         transform: none;
@@ -1009,13 +1107,13 @@ h1 {
         -webkit-backdrop-filter: none !important;
         background: rgba(255, 255, 255, 0.15) !important;
     }
-    
+
     .score-box .liquidGlass-tint,
     .btn-new .liquidGlass-tint,
     .btn-undo .liquidGlass-tint {
         background: rgba(30, 30, 30, 0.9) !important;
     }
-    
+
     .game-container,
     .instructions {
         backdrop-filter: none !important;
@@ -1033,14 +1131,14 @@ h1 {
 }
 
 /* Low Performance Mode: simplify effects for older phones */
-.low-performance .ui-liquid-wrapper > .liquidGlass-effect,
+.low-performance .ui-liquid-wrapper>.liquidGlass-effect,
 .low-performance .tile .liquidGlass-effect,
 .low-performance .game-message {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
 
-.low-performance .ui-liquid-wrapper > .liquidGlass-tint {
+.low-performance .ui-liquid-wrapper>.liquidGlass-tint {
     background: rgba(30, 30, 30, 0.8) !important;
 }
 
@@ -1079,6 +1177,7 @@ h1 {
         opacity: 1;
         transform: translateY(0);
     }
+
     100% {
         opacity: 0;
         transform: translateY(-50px);
@@ -1109,14 +1208,17 @@ h1 {
         opacity: 0;
         transform: translateY(20px);
     }
+
     20% {
         opacity: 1;
         transform: translateY(0);
     }
+
     80% {
         opacity: 1;
         transform: translateY(0);
     }
+
     100% {
         opacity: 0;
         transform: translateY(-20px);
@@ -1128,9 +1230,11 @@ h1 {
     0% {
         transform: scale(1) rotate(0deg);
     }
+
     50% {
         transform: scale(1.3) rotate(180deg);
     }
+
     100% {
         transform: scale(1) rotate(360deg);
     }
@@ -1151,34 +1255,34 @@ h1 {
     transition: all 0.3s;
 }
 
-.ui-liquid-wrapper > .liquidGlass-effect,
-.ui-liquid-wrapper > .liquidGlass-tint,
-.ui-liquid-wrapper > .liquidGlass-shine,
-.ui-liquid-wrapper > .liquidGlass-content {
+.ui-liquid-wrapper>.liquidGlass-effect,
+.ui-liquid-wrapper>.liquidGlass-tint,
+.ui-liquid-wrapper>.liquidGlass-shine,
+.ui-liquid-wrapper>.liquidGlass-content {
     position: absolute;
     inset: 0;
     border-radius: var(--ui-border-radius, 10px);
 }
 
-.ui-liquid-wrapper > .liquidGlass-effect {
+.ui-liquid-wrapper>.liquidGlass-effect {
     z-index: 0;
     backdrop-filter: blur(5px) saturate(120%);
     -webkit-backdrop-filter: blur(5px) saturate(120%);
     filter: url(#glass-distortion);
 }
 
-.ui-liquid-wrapper > .liquidGlass-tint {
+.ui-liquid-wrapper>.liquidGlass-tint {
     z-index: 1;
     background: rgba(255, 255, 255, 0.08);
     transition: background 0.3s;
 }
 
-.ui-liquid-wrapper > .liquidGlass-shine {
+.ui-liquid-wrapper>.liquidGlass-shine {
     z-index: 2;
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), inset 1px 0 1px rgba(255, 255, 255, 0.6), inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.15);
 }
 
-.ui-liquid-wrapper > .liquidGlass-content {
+.ui-liquid-wrapper>.liquidGlass-content {
     position: relative;
     z-index: 3;
     display: flex;
@@ -1194,140 +1298,159 @@ h1 {
 }
 
 .howto-modal {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.55);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
 .howto-modal-content {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  color: rgba(255,255,255,0.95);
-  font-size: 12px;
-  text-align: center;
-  padding: 24px 18px 18px 18px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-  max-width: 90vw;
-  max-height: 80vh;
-  overflow-y: auto;
-  position: relative;
-  min-width: 280px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 12px;
+    text-align: center;
+    padding: 24px 18px 18px 18px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    min-width: 280px;
 }
+
 .howto-modal-close {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  background: rgba(255,255,255,0.12);
-  border: none;
-  color: #fff;
-  font-size: 12px;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
-  z-index: 2;
-  transition: background 0.2s;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    z-index: 2;
+    transition: background 0.2s;
 }
+
 .howto-modal-close:hover {
-  background: rgba(255,255,255,0.25);
+    background: rgba(255, 255, 255, 0.25);
 }
+
 .howto-modal-open {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .btn-howto .liquidGlass-content {
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 600;
-  font-size: 12px;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    font-size: 12px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .howto-modal-readmore {
-  display: inline-block;
-  margin-top: 24px;
-  padding: 10px 28px;
-  background: rgba(255,255,255,0.15);
-  color: #fff;
-  font-weight: 600;
-  font-size: 12px;
-  border-radius: 8px;
-  text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transition: background 0.2s, color 0.2s;
+    display: inline-block;
+    margin-top: 24px;
+    padding: 10px 28px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-weight: 600;
+    font-size: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: background 0.2s, color 0.2s;
 }
+
 .howto-modal-readmore:hover {
-  background: rgba(255,255,255,0.28);
-  color: #222;
+    background: rgba(255, 255, 255, 0.28);
+    color: #222;
 }
 
 .btn-howto .liquidGlass-tint {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: var(--ui-border-radius);
-  transition: background 0.3s;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: var(--ui-border-radius);
+    transition: background 0.3s;
 }
+
 .btn-howto:hover .liquidGlass-tint {
-  background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.12);
 }
+
 .btn-howto:hover {
-  transform: translateY(-1px);
+    transform: translateY(-1px);
 }
 
 /* 桌面与大屏：全屏渐变背景+内容区白色磨砂卡片 */
 @media (min-width: 768px) {
-  body {
-    background: #222;
-  }
-  body::before {
-    background-image: var(--wicked-bg, url('bg1.jpg'));
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    filter: blur(0px);
-    opacity: 1;
-  }
-  .container {
-    background: rgba(255,255,255,0.18);
-    border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-    max-width: 480px;
-    margin: 48px auto;
-    padding: 32px 32px 24px 32px;
-    position: relative;
-    z-index: 1;
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-  }
-  .main-content {
-    padding: 32px 0;
-  }
-  .header {
-    padding: 32px 40px 16px 40px;
-    border-radius: 16px 16px 0 0;
-  }
-  .footer {
-    padding: 24px 40px;
-    border-radius: 0 0 16px 16px;
-  }
-  body {
-    font-size: 20px;
-  }
-  h1, h2 {
-    font-size: 2.2em;
-  }
+    body {
+        background: #222;
+    }
+
+    body::before {
+        background-image: var(--wicked-bg, url('bg1.jpg'));
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(0px);
+        opacity: 1;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.18);
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+        max-width: 480px;
+        margin: 48px auto;
+        padding: 32px 32px 24px 32px;
+        position: relative;
+        z-index: 1;
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+    }
+
+    .main-content {
+        padding: 32px 0;
+    }
+
+    .header {
+        padding: 32px 40px 16px 40px;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .footer {
+        padding: 24px 40px;
+        border-radius: 0 0 16px 16px;
+    }
+
+    body {
+        font-size: 20px;
+    }
+
+    h1,
+    h2 {
+        font-size: 2.2em;
+    }
 }
 
 @media (min-width: 1200px) {
-  .container {
-    max-width: 900px;
-  }
-  body {
-    font-size: 22px;
-  }
-} 
+    .container {
+        max-width: 900px;
+    }
+
+    body {
+        font-size: 22px;
+    }
+}

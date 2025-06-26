@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#000000">
-    
+
     <!-- Open Graph / Facebook / Telegram -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://wicked.today">
@@ -23,46 +25,42 @@
     <meta name="twitter:description" content="A beautiful and elegant 2048 game with iOS-style liquid glass effect.">
     <meta name="twitter:image" content="https://wicked.today/asset/preview.png">
     <meta name="twitter:image:alt" content="Wicked 2048 preview">
-    
+
     <link rel="icon" type="image/png" href="icon.png" sizes="16x16">
     <title>Wicked 2048</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- SVG filter definitions -->
     <svg style="position: absolute; width: 0; height: 0;">
         <defs>
             <!-- Liquid glass effect filter - strictly follows the example -->
             <filter id="glass-distortion">
-                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="1" seed="5" result="turbulence"/>
-                <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap"/>
-                <feSpecularLighting in="softMap" surfaceScale="5" specularConstant="1" specularExponent="100" lighting-color="white" result="specLight">
-                    <fePointLight x="-200" y="-200" z="300"/>
+                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="1" seed="5"
+                    result="turbulence" />
+                <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap" />
+                <feSpecularLighting in="softMap" surfaceScale="5" specularConstant="1" specularExponent="100"
+                    lighting-color="white" result="specLight">
+                    <fePointLight x="-200" y="-200" z="300" />
                 </feSpecularLighting>
-                <feComposite in="specLight" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litImage"/>
-                <feDisplacementMap in="SourceGraphic" in2="softMap" scale="15" xChannelSelector="R" yChannelSelector="G"/>
+                <feComposite in="specLight" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litImage" />
+                <feDisplacementMap in="SourceGraphic" in2="softMap" scale="15" xChannelSelector="R"
+                    yChannelSelector="G" />
             </filter>
-            
+
             <!-- Burst effect on merge -->
             <filter id="liquid-burst" x="-100%" y="-100%" width="300%" height="300%">
-                <feTurbulence 
-                    type="fractalNoise" 
-                    baseFrequency="0.015" 
-                    numOctaves="4" 
-                    result="turbulence" />
-                    
-                <feDisplacementMap 
-                    in="SourceGraphic" 
-                    in2="turbulence" 
-                    scale="40" 
-                    xChannelSelector="R" 
+                <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="4" result="turbulence" />
+
+                <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="40" xChannelSelector="R"
                     yChannelSelector="G" />
-                    
+
                 <feGaussianBlur stdDeviation="0.8" />
             </filter>
         </defs>
     </svg>
-    
+
     <div class="container">
         <header class="header">
             <h1>Wicked 2048</h1>
@@ -93,7 +91,7 @@
                 <p></p>
                 <button class="restart-button" onclick="game.restart()">Try Again</button>
             </div>
-            
+
             <div class="game-container">
                 <!-- Liquid glass effect layer -->
                 <div class="liquid-glass-effect"></div>
@@ -124,7 +122,7 @@
                         <div class="grid-cell"></div>
                     </div>
                 </div>
-                
+
                 <div class="tile-container" id="tile-container">
                     <!-- Number tiles will be dynamically generated here -->
                 </div>
@@ -157,7 +155,8 @@
             </div>
         </footer>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
-</html> 
+
+</html>
