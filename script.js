@@ -651,15 +651,6 @@ class Game2048 {
     }
 
     animateMovements(movements, merges, callback) {
-        const animationPromises = [];
-        // 先清除所有砖块的transform，确保从当前位置平滑过渡
-        Object.values(this.tiles).forEach(tile => {
-            if (tile.style.transform) {
-                // 保持原有的transition以确保平滑过渡
-                tile.style.transform = '';
-            }
-        });
-
         // 移动所有方块
         movements.forEach(movement => {
             const tile = this.tiles[movement.tile.id];
@@ -667,25 +658,20 @@ class Game2048 {
                 const { top, left } = this.getPosition(movement.to.row, movement.to.col);
                 tile.style.top = top;
                 tile.style.left = left;
-
-                animationPromises.push(new Promise(resolve => {
-                    tile.addEventListener('transitionend', function onEnd(event) {
-                        if (event.propertyName === 'top' || event.propertyName === 'left') {
-                            tile.removeEventListener('transitionend', onEnd);
-                            resolve();
-                        }
-                    }, { once: true });
-                }));
             }
         });
 
-        // Wait for all movements to finish before processing merges
-        Promise.all(animationPromises).then(() => {
+        // 使用固定的超时来处理合并和后续逻辑，这比监听多个 transitionend 事件更可靠
+        // 时间略长于CSS中的 transition-duration (0.12s)
+        setTimeout(() => {
             merges.forEach(merge => {
                 // 移除被合并的方块
                 merge.tiles.forEach(tile => {
                     if (this.tiles[tile.id]) {
-                        this.tiles[tile.id].remove();
+                        const tileElement = this.tiles[tile.id];
+                        if (tileElement && tileElement.parentNode) {
+                            tileElement.remove();
+                        }
                         delete this.tiles[tile.id];
                     }
                 });
@@ -713,9 +699,14 @@ class Game2048 {
                 localStorage.setItem('bestScore', this.bestScore);
             }
 
-            // 再等待一小段时间后执行回调
-            setTimeout(callback, 50); // Allow merge animation to be seen
-        });
+            // 强制重置所有方块位置以确保同步，这是防止卡死的关键保险
+            this.forceResetAllTiles();
+
+            // 执行回调
+            if (callback) {
+                callback();
+            }
+        }, 150); // 150ms timeout
     }
 
     addNewTile() {
@@ -1057,67 +1048,50 @@ class Game2048 {
     }
 
     animateUndo(animations, callback) {
-        this.isAnimating = true;
-        this.resetAnimationStateFallback();
-
-        const animationPromises = [];
-
-        // 1. Animate disappearing tiles (newly generated or merged results)
+        // 1. 让需要消失的方块（新生成的或合并结果）消失
         animations.disappears.forEach(item => {
             const tile = this.tiles[item.tile.id];
             if (tile) {
                 tile.classList.add('tile-disappear');
-                animationPromises.push(new Promise(resolve => {
-                    tile.addEventListener('animationend', function onEnd() {
-                        tile.removeEventListener('animationend', onEnd);
-                        tile.remove(); // Remove from DOM after animation
-                        delete this.tiles[item.tile.id]; // Remove from map
-                        resolve();
-                    }.bind(this), { once: true });
-                }));
             }
         });
 
-        // 2. Animate movements of existing tiles
+        // 2. 移动需要移动的方块
         animations.movements.forEach(movement => {
             const tile = this.tiles[movement.tile.id];
             if (tile) {
                 const { top, left } = this.getPosition(movement.to.row, movement.to.col);
-                // Ensure transition is active for movement
                 tile.style.transition = 'top 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94), left 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                 tile.style.top = top;
                 tile.style.left = left;
-                // Remove any lingering transform from drag preview
                 tile.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
-
-                animationPromises.push(new Promise(resolve => {
-                    tile.addEventListener('transitionend', function onEnd(event) {
-                        // Only resolve for position transitions to avoid multiple calls
-                        if (event.propertyName === 'top' || event.propertyName === 'left') {
-                            tile.removeEventListener('transitionend', onEnd);
-                            resolve();
-                        }
-                    }, { once: true });
-                }));
             }
         });
 
-        // 3. Wait for all disappearing and moving animations to complete
-        Promise.all(animationPromises).then(() => {
-            // 4. Create/re-create tiles that "reappear" (were merged away)
+        // 3. 使用固定的超时来处理后续逻辑，以提高可靠性
+        setTimeout(() => {
+            // 移除消失的方块
+            animations.disappears.forEach(item => {
+                const tile = this.tiles[item.tile.id];
+                if (tile && tile.parentNode) {
+                    tile.remove();
+                }
+                delete this.tiles[item.tile.id];
+            });
+
+            // 创建/重新创建“出现”的方块（之前被合并的）
             animations.appears.forEach(item => {
-                // Ensure the tile doesn't already exist
                 if (!this.tiles[item.tile.id]) {
                     this.createTileElement(item.position.row, item.position.col, item.tile, false, false, true); // isReappear = true
                 }
             });
 
-            // 5. Final cleanup and callback
+            // 最终清理和回调
             this.forceResetAllTiles();
             if (callback) {
                 callback();
             }
-        });
+        }, 150); // 150ms timeout
     }
 
     restart() {
@@ -1511,41 +1485,21 @@ class Game2048 {
         }
 
         // 设置动画标志
-        this.isAnimating = true;
-        const animationPromises = [];
+        // this.isAnimating = true; // isAnimating is set inside move()
 
-        for (let r = 0; r < this.size; r++) {
-            for (let c = 0; c < this.size; c++) {
-                if (this.grid[r][c] && this.canTileMove(r, c, direction)) {
-                    const movement = this.calculateMovement(r, c, direction);
-                    if (movement && this.tiles[this.grid[r][c].id]) {
-                        const element = this.tiles[this.grid[r][c].id];
-                        animationPromises.push(new Promise(resolve => {
-                            const { top, left } = this.getPosition(movement.to.row, movement.to.col);
-
-                            element.style.transition = 'top 0.1s ease-out, left 0.1s ease-out, transform 0.1s ease-out';
-                            element.style.top = top;
-                            element.style.left = left;
-                            element.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
-
-                            element.addEventListener('transitionend', function onEnd(event) {
-                                if (event.propertyName === 'transform' || event.propertyName === 'top' || event.propertyName === 'left') {
-                                    element.removeEventListener('transitionend', onEnd);
-                                    resolve();
-                                }
-                            }, { once: true });
-                        }));
-                    }
-                }
-            }
-        }
-
-        Promise.all(animationPromises).then(() => {
-            this.move(direction);
-            this.isAnimating = false;
-            if (this._animationTimeout) clearTimeout(this._animationTimeout);
-            if (callback) callback();
+        // 立即重置所有 transform，让 move() 函数来处理动画
+        // 这可以防止拖动预览的 transform 状态干扰 move() 的动画
+        Object.values(this.tiles).forEach(tile => {
+            tile.classList.remove('dragging');
+            tile.style.transition = 'none'; // 临时禁用过渡
+            tile.style.transform = '';
         });
+
+        // 强制浏览器重绘以应用 transform 的重置
+        void this.tileContainer.offsetHeight;
+
+        // 调用核心的 move 函数，它现在拥有更可靠的动画逻辑
+        this.move(direction);
     }
 
     canMoveInDirection(direction) {
