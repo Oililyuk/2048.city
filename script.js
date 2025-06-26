@@ -1,39 +1,44 @@
+// Global variables
+let touchStartX = null;
+let touchStartY = null;
+let animationId = null;
+
 class Game2048 {
     constructor() {
         this.size = 4;
         this.grid = [];
         this.score = 0;
         this.bestScore = localStorage.getItem('bestScore') || 0;
-
-        // 撤销系统
-        this.stateHistory = []; // 历史状态栈
-        this.maxHistorySize = 100; // 最多保存100个历史状态
-        this.initialUndoCount = 3; // 初始撤销次数
-        this.undoCount = this.initialUndoCount; // 当前可用撤销次数
-        this.maxUndoCount = 10; // 最大累计撤销次数
-        this.undoRewardValue = 256; // 每合成256的倍数获得撤销次数
-
+        
+        // Undo system
+        this.stateHistory = []; // History stack
+        this.maxHistorySize = 100; // Max 100 history states
+        this.initialUndoCount = 3; // Initial undo count
+        this.undoCount = this.initialUndoCount; // Current available undo count
+        this.maxUndoCount = 10; // Max accumulated undo count
+        this.undoRewardValue = 256; // Get an undo chance for every 256-multiple tile merged
+        
         this.tileContainer = document.getElementById('tile-container');
         this.scoreDisplay = document.getElementById('score');
         this.bestScoreDisplay = document.getElementById('best-score');
         this.messageContainer = document.getElementById('game-message');
-
+        
         this.startX = 0;
         this.startY = 0;
         this.endX = 0;
         this.endY = 0;
-
-        this.tiles = {}; // 保存方块DOM元素的引用
-        this.tileId = 0; // 用于生成唯一的方块ID
-
-        // 随机数生成器
-        this.randomSeed = Date.now(); // 初始种子
+        
+        this.tiles = {}; // References to tile DOM elements
+        this.tileId = 0; // Used to generate unique tile IDs
+        
+        // Random number generator
+        this.randomSeed = Date.now(); // Initial seed
         this.random = this.createSeededRandom(this.randomSeed);
-
-        // 动画状态标志
+        
+        // Animation state flag
         this.isAnimating = false;
-
-        // 拖动预览相关
+        
+        // Drag preview related
         this.isDragging = false;
         this.dragStartX = 0;
         this.dragStartY = 0;
@@ -42,165 +47,164 @@ class Game2048 {
         this.dragDirection = null;
         this.dragDistance = 0;
         this.previewOffset = { x: 0, y: 0 };
-        this.rafId = null; // For requestAnimationFrame management
-        this.minDragDistance = 30; // 触发移动的最小距离
-        this.dragThreshold = 3; // 开始显示拖动效果的阈值，降低以提高响应速度
-
-        // 快速滑动检测
+        this.minDragDistance = 30; // Min distance to trigger a move
+        this.dragThreshold = 3; // Threshold to start showing drag effect, lowered for better responsiveness
+        
+        // Quick swipe detection
         this.dragStartTime = 0;
-        this.quickSwipeThreshold = 300; // 增加到300ms，让更多滑动被识别为快速滑动
+        this.quickSwipeThreshold = 300; // Increased to 300ms to recognize more swipes as quick swipes
         this.quickSwipeEnabled = true;
         this.lastTouchMoveTime = 0;
-        this.touchMoveThrottle = 32; // 约30fps的节流，减少性能开销
-
-        // 拖动预览开关（可以在低端设备上禁用）
+        this.touchMoveThrottle = 32; // Throttled at ~30fps to reduce performance overhead
+        
+        // Drag preview switch (can be disabled on low-end devices)
         this.dragPreviewEnabled = true;
-
+        // Detect if it is a mobile device
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        // Drag preview is disabled by default on older devices
+        if (isMobile && window.innerWidth <= 400) {
+            this.dragPreviewEnabled = true; // Keep it on, but can be set to false if needed
+        }
+        
         this.setup();
         this.updateDisplay();
-
-        // 防止页面滚动
+        
+        // Prevent page scrolling
         this.preventPageScroll();
-
-        // 修复iOS视口高度问题
+        
+        // Fix iOS viewport height issue
         this.fixViewportHeight();
-
-        // Detect and adapt for low-performance devices
-        this.detectLowPerformance();
+        
+        // Random background switch
+        (function() {
+            const bgs = ['bg1.jpg', 'bg2.jpg', 'bg3.jpg', 'bg4.jpg'];
+            const idx = Math.floor(Math.random() * bgs.length);
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.style.setProperty('--wicked-bg', `url('${bgs[idx]}')`);
+                // Compatible with body::before
+                const style = document.createElement('style');
+                style.innerHTML = `body::before { background-image: var(--wicked-bg) !important; }`;
+                document.head.appendChild(style);
+            });
+        })();
     }
-
+    
     preventPageScroll() {
-        // Prevent page scrolling on touch devices when interacting with the game
-        document.body.addEventListener('touchmove', (e) => {
-            // Only prevent default if the touch is inside the game container
-            if (e.target.closest('.game-container')) {
-                e.preventDefault();
-            }
-        }, { passive: false }); // Use passive: false to allow preventDefault
+        // Temporarily commented out, might affect iOS full-screen display
+        // document.body.addEventListener('touchmove', (e) => {
+        //     e.preventDefault();
+        // }, { passive: false });
     }
-
+    
     fixViewportHeight() {
-        // 设置正确的视口高度，修复iOS上的问题
+        // Set correct viewport height to fix issues on iOS
         const setVH = () => {
             const vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
         };
-
-        // 初始设置
+        
+        // Initial setup
         setVH();
-
-        // 监听窗口大小变化
+        
+        // Listen for window resize
         window.addEventListener('resize', setVH);
         window.addEventListener('orientationchange', setVH);
     }
-
+    
     setup() {
-        // 初始化网格
+        // Initialize grid
         for (let i = 0; i < this.size; i++) {
             this.grid[i] = [];
             for (let j = 0; j < this.size; j++) {
                 this.grid[i][j] = null;
             }
         }
-
-        // 添加两个初始方块
+        
+        // Add two initial tiles
         this.addNewTile();
         this.addNewTile();
-
-        // 保存初始状态
+        
+        // Save initial state
         this.saveState();
-
-        // 设置事件监听器
+        
+        // Set up event listeners
         this.setupEventListeners();
-
-        // 更新最高分显示
+        
+        // Update best score display
         this.bestScoreDisplay.textContent = this.bestScore;
-
-        // 更新撤销按钮
+        
+        // Update Undo button
         this.updateUndoButton();
-
-        // 设置 "How to Play" 弹窗
-        this.setupHowToModal();
+        
+        // Start liquid glass animation
+        this.startLiquidAnimation();
     }
-
-    detectLowPerformance() {
-        // Simple check for older/slower devices
-        const isLowEnd = (
-            (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
-            (window.innerWidth < 768 && /Android|iPhone|iPod/.test(navigator.userAgent))
-        );
-
-        if (isLowEnd) {
-            document.body.classList.add('low-performance');
-            this.dragPreviewEnabled = false; // Disable intensive drag preview
-        }
-    }
-
+    
     createSeededRandom(seed) {
-        // 创建基于种子的伪随机数生成器
+        // Create a seed-based pseudo-random number generator
         let currentSeed = seed;
-
+        
         return {
-            // 生成0到1之间的随机数
+            // Generate a random number between 0 and 1
             random: () => {
-                // 使用线性同余生成器（LCG）算法
+                // Using Linear Congruential Generator (LCG) algorithm
                 currentSeed = (currentSeed * 1664525 + 1013904223) % 2147483647;
                 return currentSeed / 2147483647;
             },
-            // 获取当前种子
+            // Get current seed
             getSeed: () => currentSeed,
-            // 设置新种子
+            // Set new seed
             setSeed: (newSeed) => {
                 currentSeed = newSeed;
             }
         };
     }
-
+    
     setupEventListeners() {
-        // 避免重复绑定，先存储事件处理器
+        // Avoid duplicate bindings, store the event handler first
         if (!this.keydownHandler) {
             this.keydownHandler = (e) => {
                 const keyMap = {
-                    'ArrowLeft': 'left',
-                    'a': 'left',
-                    'ArrowUp': 'up',
-                    'w': 'up',
-                    'ArrowRight': 'right',
-                    'd': 'right',
-                    'ArrowDown': 'down',
-                    's': 'down'
+                    37: 'left',  // Left arrow
+                    65: 'left',  // A
+                    38: 'up',    // Up arrow
+                    87: 'up',    // W
+                    39: 'right', // Right arrow
+                    68: 'right', // D
+                    40: 'down',  // Down arrow
+                    83: 'down'   // S
                 };
-
-                const direction = keyMap[e.key.toLowerCase()]; // Use e.key and convert to lowercase
+                
+                const direction = keyMap[e.keyCode];
                 if (direction) {
                     e.preventDefault();
                     this.move(direction);
                 }
 
-                // Test shortcuts (using e.key)
-                if (e.key === '9') {
+                // Test shortcuts
+                if (e.keyCode === 57) { // "9" key
                     e.preventDefault();
                     this.showMessage('You Win!', 'game-won');
                 }
-                if (e.key === '0') {
+                if (e.keyCode === 48) { // "0" key
                     e.preventDefault();
                     this.showMessage('Game Over!', 'game-stuck');
                 }
             };
         }
-
-        // 移除可能存在的旧监听器，然后添加新的
+        
+        // Remove any existing old listeners, then add the new one
         document.removeEventListener('keydown', this.keydownHandler);
         document.addEventListener('keydown', this.keydownHandler);
-
-        // 触摸事件 - 实现拖动预览效果
+        
+        // Touch events - for implementing drag preview effect
         document.addEventListener('touchstart', (e) => {
-            // 排除按钮点击
+            // Exclude button clicks
             if (e.target.closest('button')) return;
-
-            // 如果还在动画中，不开始新的拖动
+            
+            // If still animating, don't start a new drag
             if (this.isAnimating) return;
-
+            
             this.isDragging = true;
             this.dragStartX = e.touches[0].clientX;
             this.dragStartY = e.touches[0].clientY;
@@ -208,50 +212,50 @@ class Game2048 {
             this.currentDragY = this.dragStartY;
             this.dragDirection = null;
             this.dragDistance = 0;
-            this.dragStartTime = Date.now(); // 记录开始时间
-
-            // 只在必要时重置砖块状态
-            // 检查是否有砖块还有残留的transform
+            this.dragStartTime = Date.now(); // Record start time
+            
+            // Only reset tile state when necessary
+            // Check if any tiles have residual transforms
             const needsReset = Object.values(this.tiles).some(tile => {
                 const transform = tile.style.transform;
                 return transform && transform !== '' && transform !== 'translate(0, 0) scale(1) rotate(0deg)';
             });
-
+            
             if (needsReset) {
                 this.forceResetAllTiles();
             }
-
-            // 添加拖动状态类到游戏容器
+            
+            // Add dragging state class to the game container
             this.tileContainer.classList.add('dragging-active');
         }, { passive: true });
-
+        
         document.addEventListener('touchmove', (e) => {
             if (!this.isDragging || this.isAnimating) return;
-
+            
             const currentTime = Date.now();
-
-            // 节流处理，减少更新频率
+            
+            // Throttle to reduce update frequency
             if (currentTime - this.lastTouchMoveTime < this.touchMoveThrottle) {
                 return;
             }
             this.lastTouchMoveTime = currentTime;
-
+            
             const currentX = e.touches[0].clientX;
             const currentY = e.touches[0].clientY;
             const diffX = currentX - this.dragStartX;
             const diffY = currentY - this.dragStartY;
-
+            
             this.currentDragX = currentX;
             this.currentDragY = currentY;
-
+            
             // 计算拖动方向和距离
             const absDiffX = Math.abs(diffX);
             const absDiffY = Math.abs(diffY);
-
+            
             // 只有超过阈值才开始显示拖动效果
             if (absDiffX > this.dragThreshold || absDiffY > this.dragThreshold) {
                 e.preventDefault(); // 防止页面滚动
-
+                
                 // 确定主要拖动方向
                 if (absDiffX > absDiffY) {
                     this.dragDirection = diffX > 0 ? 'right' : 'left';
@@ -260,41 +264,33 @@ class Game2048 {
                     this.dragDirection = diffY > 0 ? 'down' : 'up';
                     this.dragDistance = absDiffY;
                 }
-
+                
                 // 检测是否是快速滑动
                 const dragDuration = currentTime - this.dragStartTime;
                 const isQuickSwipe = dragDuration < this.quickSwipeThreshold && this.dragDistance > this.minDragDistance;
-
+                
                 // 只有在慢速拖动且启用了拖动预览时才更新预览效果
                 if (!isQuickSwipe && this.quickSwipeEnabled && this.dragPreviewEnabled) {
                     this.updateDragPreview(diffX, diffY);
                 }
             }
         }, { passive: false });
-
+        
         document.addEventListener('touchend', (e) => {
-            // 防御性检查：如果一个动画正在进行中，则不处理此次滑动结束事件
-            // 这可以防止在极端情况下发生竞态条件
-            if (this.isAnimating) {
-                this.isDragging = false;
-                this.resetTileTransforms(); // 清理视觉效果
-                return;
-            }
-
             if (!this.isDragging) return;
-
+            
             this.isDragging = false;
-
+            
             // 移除拖动状态类
             this.tileContainer.classList.remove('dragging-active');
-
+            
             // 计算滑动时长
             const dragDuration = Date.now() - this.dragStartTime;
             const isQuickSwipe = dragDuration < this.quickSwipeThreshold;
-
+            
             // 对于快速滑动，降低移动阈值
             const effectiveMinDistance = isQuickSwipe ? this.minDragDistance * 0.5 : this.minDragDistance;
-
+            
             // 执行移动动画
             if (this.dragDirection && this.dragDistance > effectiveMinDistance) {
                 if (isQuickSwipe && this.quickSwipeEnabled) {
@@ -326,7 +322,7 @@ class Game2048 {
                 }
             }
         }, { passive: true });
-
+        
         // 处理触摸取消事件
         document.addEventListener('touchcancel', (e) => {
             if (this.isDragging) {
@@ -335,16 +331,16 @@ class Game2048 {
                 this.resetTileTransforms();
             }
         }, { passive: true });
-
+        
         // 鼠标事件支持（桌面端）
         let mouseDown = false;
-
+        
         document.addEventListener('mousedown', (e) => {
             if (e.target.closest('button')) return;
-
+            
             // 如果还在动画中，不开始新的拖动
             if (this.isAnimating) return;
-
+            
             mouseDown = true;
             this.isDragging = true;
             this.dragStartX = e.clientX;
@@ -354,24 +350,24 @@ class Game2048 {
             this.dragDirection = null;
             this.dragDistance = 0;
             this.dragStartTime = Date.now(); // 记录开始时间
-
+            
             // 确保所有砖块都在正确的位置
             this.forceResetAllTiles();
             this.tileContainer.classList.add('dragging-active');
         });
-
+        
         document.addEventListener('mousemove', (e) => {
             if (!mouseDown || !this.isDragging || this.isAnimating) return;
-
+            
             const diffX = e.clientX - this.dragStartX;
             const diffY = e.clientY - this.dragStartY;
-
+            
             this.currentDragX = e.clientX;
             this.currentDragY = e.clientY;
-
+            
             const absDiffX = Math.abs(diffX);
             const absDiffY = Math.abs(diffY);
-
+            
             if (absDiffX > this.dragThreshold || absDiffY > this.dragThreshold) {
                 if (absDiffX > absDiffY) {
                     this.dragDirection = diffX > 0 ? 'right' : 'left';
@@ -380,33 +376,25 @@ class Game2048 {
                     this.dragDirection = diffY > 0 ? 'down' : 'up';
                     this.dragDistance = absDiffY;
                 }
-
+                
                 this.updateDragPreview(diffX, diffY);
             }
         });
-
+        
         document.addEventListener('mouseup', (e) => {
-            // 防御性检查：与 touchend 类似
-            if (this.isAnimating) {
-                mouseDown = false;
-                this.isDragging = false;
-                this.resetTileTransforms();
-                return;
-            }
-
             if (!mouseDown) return;
-
+            
             mouseDown = false;
             this.isDragging = false;
             this.tileContainer.classList.remove('dragging-active');
-
+            
             // 检查是否是快速滑动（鼠标也支持快速滑动）
             const dragDuration = Date.now() - this.dragStartTime;
             const isQuickSwipe = dragDuration < this.quickSwipeThreshold;
-
+            
             // 对于快速滑动，降低移动阈值
             const effectiveMinDistance = isQuickSwipe ? this.minDragDistance * 0.5 : this.minDragDistance;
-
+            
             if (this.dragDirection && this.dragDistance > effectiveMinDistance) {
                 if (isQuickSwipe && this.quickSwipeEnabled) {
                     // 快速滑动：先立即重置所有transform，避免残留
@@ -438,20 +426,46 @@ class Game2048 {
             }
         });
     }
-
+    
+    handleSwipe() {
+        const diffX = this.endX - this.startX;
+        const diffY = this.endY - this.startY;
+        const minSwipeDistance = 30; // 降低最小滑动距离，让滑动更容易触发
+        
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+            // 水平滑动
+            if (Math.abs(diffX) > minSwipeDistance) {
+                if (diffX > 0) {
+                    this.move('right');
+                } else {
+                    this.move('left');
+                }
+            }
+        } else {
+            // 垂直滑动
+            if (Math.abs(diffY) > minSwipeDistance) {
+                if (diffY > 0) {
+                    this.move('down');
+                } else {
+                    this.move('up');
+                }
+            }
+        }
+    }
+    
     move(direction) {
         // 如果正在动画中或正在拖动，忽略移动
         if (this.isAnimating || this.isDragging) return;
-
+        
         // 移除所有砖块的dragging类，确保使用正常的移动动画
         Object.values(this.tiles).forEach(tile => {
             tile.classList.remove('dragging');
         });
-
+        
         const movements = [];
         const merges = [];
         let moved = false;
-
+        
         // 创建新的网格来存储结果
         const newGrid = [];
         for (let i = 0; i < this.size; i++) {
@@ -460,7 +474,7 @@ class Game2048 {
                 newGrid[i][j] = null;
             }
         }
-
+        
         // 根据方向处理移动
         if (direction === 'left') {
             for (let row = 0; row < this.size; row++) {
@@ -495,50 +509,50 @@ class Game2048 {
                 this.setColumn(newGrid, col, result.line.reverse());
             }
         }
-
+        
         if (moved) {
             // 设置动画标志
             this.isAnimating = true;
             this.resetAnimationStateFallback(); // Add fallback
-
+            
             // 更新网格
             this.grid = newGrid;
-
+            
             // 执行动画
             this.animateMovements(movements, merges, () => {
                 // 动画完成后添加新方块
                 this.addNewTile();
-
+                
                 // 修复：先保存状态，再更新显示
                 this.saveState();
                 this.updateDisplay();
-
+                
                 // 清除动画标志
                 this.isAnimating = false;
                 if (this._animationTimeout) clearTimeout(this._animationTimeout);
-
+                
                 // 游戏状态检查
                 if (this.checkWin()) {
                     this.showMessage('You Win!', 'game-won');
                 } else if (this.checkGameOver()) {
-                    // 只有在没有撤销次数时才真正结束游戏
+                    // 只有在没有Undo次数时才真正结束游戏
                     if (this.undoCount === 0) {
                         this.showMessage('Try Again', 'game-over');
                     } else {
-                        // 如果还有撤销次数，给用户提示
+                        // 如果还有Undo次数，给用户提示
                         this.showMessage('Game Over!', 'game-stuck');
                     }
                 }
             });
         }
     }
-
+    
     processLine(line, startRow, startCol, rowDir, colDir) {
         const movements = [];
         const merges = [];
         const result = [];
         let moved = false;
-
+        
         // 第一步：移除空格，收集所有非空方块
         const tiles = [];
         for (let i = 0; i < line.length; i++) {
@@ -549,18 +563,18 @@ class Game2048 {
                 });
             }
         }
-
+        
         // 第二步：处理合并
         let resultIndex = 0;
         let i = 0;
-
+        
         while (i < tiles.length) {
             const currentTile = tiles[i];
             const fromRow = startRow + currentTile.originalIndex * rowDir;
             const fromCol = startCol + currentTile.originalIndex * colDir;
             const toRow = startRow + resultIndex * rowDir;
             const toCol = startCol + resultIndex * colDir;
-
+            
             // 检查是否需要移动
             if (fromRow !== toRow || fromCol !== toCol) {
                 movements.push({
@@ -570,72 +584,72 @@ class Game2048 {
                 });
                 moved = true;
             }
-
+            
             // 检查是否可以合并
-            if (i + 1 < tiles.length &&
+            if (i + 1 < tiles.length && 
                 currentTile.tile.value === tiles[i + 1].tile.value &&
                 !currentTile.tile.merged) {
-
+                
                 // 创建合并后的方块
                 const mergedTile = {
                     id: this.tileId++,
                     value: currentTile.tile.value * 2,
                     merged: true
                 };
-
+                
                 // 记录第二个方块的移动（移动到合并位置）
                 const nextTile = tiles[i + 1];
                 const nextFromRow = startRow + nextTile.originalIndex * rowDir;
                 const nextFromCol = startCol + nextTile.originalIndex * colDir;
-
+                
                 movements.push({
                     tile: nextTile.tile,
                     from: { row: nextFromRow, col: nextFromCol },
                     to: { row: toRow, col: toCol }
                 });
-
+                
                 // 记录合并
                 merges.push({
                     tiles: [currentTile.tile, nextTile.tile],
                     result: mergedTile,
                     position: { row: toRow, col: toCol }
                 });
-
+                
                 result.push(mergedTile);
                 this.score += mergedTile.value;
                 moved = true;
-
-                // 检查是否合成了256的倍数，奖励撤销次数
-                if (mergedTile.value >= this.undoRewardValue &&
+                
+                // 检查是否合成了256的倍数，奖励Undo次数
+                if (mergedTile.value >= this.undoRewardValue && 
                     mergedTile.value % this.undoRewardValue === 0) {
                     this.earnUndoReward();
                 }
-
+                
                 i += 2; // 跳过已合并的两个方块
             } else {
                 result.push(currentTile.tile);
                 i += 1;
             }
-
+            
             resultIndex++;
         }
-
+        
         // 第三步：填充空格
         while (result.length < this.size) {
             result.push(null);
         }
-
+        
         return { line: result, moved, movements, merges };
     }
-
+    
     getRow(row) {
         return this.grid[row].slice();
     }
-
+    
     setRow(grid, row, values) {
         grid[row] = values;
     }
-
+    
     getColumn(col) {
         const column = [];
         for (let i = 0; i < this.size; i++) {
@@ -643,14 +657,22 @@ class Game2048 {
         }
         return column;
     }
-
+    
     setColumn(grid, col, values) {
         for (let i = 0; i < this.size; i++) {
             grid[i][col] = values[i];
         }
     }
-
+    
     animateMovements(movements, merges, callback) {
+        // 先清除所有砖块的transform，确保从当前位置平滑过渡
+        Object.values(this.tiles).forEach(tile => {
+            if (tile.style.transform) {
+                // 保持原有的transition以确保平滑过渡
+                tile.style.transform = '';
+            }
+        });
+        
         // 移动所有方块
         movements.forEach(movement => {
             const tile = this.tiles[movement.tile.id];
@@ -660,37 +682,33 @@ class Game2048 {
                 tile.style.left = left;
             }
         });
-
-        // 使用固定的超时来处理合并和后续逻辑，这比监听多个 transitionend 事件更可靠
-        // 时间略长于CSS中的 transition-duration (0.12s)
+        
+        // 120ms后处理合并（与CSS动画时间一致）
         setTimeout(() => {
             merges.forEach(merge => {
                 // 移除被合并的方块
                 merge.tiles.forEach(tile => {
                     if (this.tiles[tile.id]) {
-                        const tileElement = this.tiles[tile.id];
-                        if (tileElement && tileElement.parentNode) {
-                            tileElement.remove();
-                        }
+                        this.tiles[tile.id].remove();
                         delete this.tiles[tile.id];
                     }
                 });
-
+                
                 // 创建新的合并后的方块
                 this.createTileElement(
-                    merge.position.row,
-                    merge.position.col,
+                    merge.position.row, 
+                    merge.position.col, 
                     merge.result,
                     false,
                     true
                 );
             });
-
+            
             // 触发液态爆发效果
             if (merges.length > 0) {
                 this.liquidBurst();
             }
-
+            
             // 更新分数显示
             this.scoreDisplay.textContent = this.score;
             if (this.score > this.bestScore) {
@@ -698,27 +716,22 @@ class Game2048 {
                 this.bestScoreDisplay.textContent = this.bestScore;
                 localStorage.setItem('bestScore', this.bestScore);
             }
-
-            // 强制重置所有方块位置以确保同步，这是防止卡死的关键保险
-            this.forceResetAllTiles();
-
-            // 执行回调
-            if (callback) {
-                callback();
-            }
-        }, 150); // 150ms timeout
+            
+            // 再等待一小段时间后执行回调
+            setTimeout(callback, 30);
+        }, 120);
     }
-
+    
     addNewTile() {
         const emptyCells = [];
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
                 if (this.grid[i][j] === null) {
-                    emptyCells.push({ row: i, col: j });
+                    emptyCells.push({row: i, col: j});
                 }
             }
         }
-
+        
         if (emptyCells.length > 0) {
             const randomCell = emptyCells[Math.floor(this.random.random() * emptyCells.length)];
             const value = this.random.random() < 0.9 ? 2 : 4;
@@ -731,7 +744,7 @@ class Game2048 {
             this.createTileElement(randomCell.row, randomCell.col, newTile, true, false);
         }
     }
-
+    
     updateDisplay() {
         // 清理已标记为合并的方块
         for (let i = 0; i < this.size; i++) {
@@ -741,34 +754,34 @@ class Game2048 {
                 }
             }
         }
-
+        
         // 更新分数显示
         this.scoreDisplay.textContent = this.score;
-
-        // 更新撤销按钮状态
+        
+        // 更新Undo按钮状态
         this.updateUndoButton();
     }
-
+    
     earnUndoReward() {
         if (this.undoCount < this.maxUndoCount) {
             this.undoCount++;
             this.showUndoReward();
         }
     }
-
+    
     showUndoReward() {
-        // 创建一个临时的提示元素显示获得撤销次数
+        // 创建一个临时的提示元素显示获得Undo次数
         const reward = document.createElement('div');
         reward.className = 'undo-reward';
         reward.textContent = '+1 Undo';
         document.querySelector('.score-container').appendChild(reward);
-
+        
         // 1秒后移除提示
         setTimeout(() => {
             reward.remove();
         }, 1000);
     }
-
+    
     updateUndoButton() {
         const undoButton = document.querySelector('.btn-undo');
         if (undoButton) {
@@ -777,8 +790,8 @@ class Game2048 {
             if (contentSpan) {
                 contentSpan.textContent = `Undo (${this.undoCount})`;
             }
-
-            // 修复：当历史记录大于1时就应该启用撤销
+            
+            // 修复：当历史记录大于1时就应该启用Undo
             if (this.undoCount > 0 && this.stateHistory.length > 1) {
                 undoButton.disabled = false;
                 undoButton.classList.remove('disabled');
@@ -788,7 +801,7 @@ class Game2048 {
             }
         }
     }
-
+    
     createTileElement(row, col, tileData, isNew = false, isMerged = false, isReappear = false) {
         const tileWrapper = document.createElement('div');
         tileWrapper.className = `tile liquidGlass-wrapper tile-${tileData.value}`;
@@ -823,32 +836,32 @@ class Game2048 {
         tileWrapper.appendChild(tintDiv);
         tileWrapper.appendChild(shineDiv);
         tileWrapper.appendChild(textDiv);
-
+        
         const { top, left } = this.getPosition(row, col);
         tileWrapper.style.top = top;
         tileWrapper.style.left = left;
-
+        
         this.tileContainer.appendChild(tileWrapper);
         this.tiles[tileData.id] = tileWrapper; // 引用现在指向包装器
     }
-
+    
     getPosition(row, col) {
         // 检查是否在小屏幕上（响应式）
         const isSmallScreen = window.innerWidth <= 520;
         const gap = isSmallScreen ? 8 : 10; // 响应式间隙
-
+        
         // 计算每个格子的大小
         const cellSize = `(100% - ${gap * 3}px) / 4`;
-
+        
         // 计算位置：格子大小 * 索引 + 间隙 * 索引
         const position = {
             top: `calc(${cellSize} * ${row} + ${gap}px * ${row})`,
             left: `calc(${cellSize} * ${col} + ${gap}px * ${col})`
         };
-
+        
         return position;
     }
-
+    
     checkWin() {
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
@@ -859,7 +872,7 @@ class Game2048 {
         }
         return false;
     }
-
+    
     checkGameOver() {
         // 检查是否还有空格
         for (let i = 0; i < this.size; i++) {
@@ -869,29 +882,29 @@ class Game2048 {
                 }
             }
         }
-
+        
         // 检查是否还能合并
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
                 const current = this.grid[i][j];
                 if (!current) continue;
-
+                
                 // 检查右边
-                if (j < this.size - 1 && this.grid[i][j + 1] &&
+                if (j < this.size - 1 && this.grid[i][j + 1] && 
                     current.value === this.grid[i][j + 1].value) {
                     return false;
                 }
                 // 检查下边
-                if (i < this.size - 1 && this.grid[i + 1][j] &&
+                if (i < this.size - 1 && this.grid[i + 1][j] && 
                     current.value === this.grid[i + 1][j].value) {
                     return false;
                 }
             }
         }
-
+        
         return true;
     }
-
+    
     saveState() {
         // 保存当前状态到历史栈
         const state = {
@@ -901,7 +914,7 @@ class Game2048 {
             randomSeed: this.random.getSeed(), // 保存随机种子
             tileId: this.tileId // 保存方块ID计数器
         };
-
+        
         // 检查是否与最后一个状态相同（避免重复保存）
         if (this.stateHistory.length > 0) {
             const lastState = this.stateHistory[this.stateHistory.length - 1];
@@ -910,60 +923,60 @@ class Game2048 {
                 return;
             }
         }
-
+        
         this.stateHistory.push(state);
-
+        
         // 限制历史栈大小
         if (this.stateHistory.length > this.maxHistorySize) {
             this.stateHistory.shift();
         }
     }
-
+    
     undo() {
-        // 如果正在动画中，忽略撤销
+        // 如果正在动画中，忽略Undo
         if (this.isAnimating) return;
-
-        // 检查是否有撤销次数和历史记录
+        
+        // 检查是否有Undo次数和历史记录
         if (this.undoCount > 0 && this.stateHistory.length > 1) {
             this.isAnimating = true;
             this.resetAnimationStateFallback(); // Add fallback
-
+            
             // 保存当前游戏状态的快照，用于计算动画
             const currentGridSnapshot = JSON.parse(JSON.stringify(this.grid));
-
+            
             // 移除历史栈最后一个状态（当前状态）
             this.stateHistory.pop();
-
+            
             // 获取要恢复到的状态（上一个状态）
             const previousState = this.stateHistory[this.stateHistory.length - 1];
-
+            
             // 使用快照的grid计算动画，而不是this.grid
             const animations = this.calculateUndoAnimations(currentGridSnapshot, previousState.grid);
-
-            // 执行撤销动画
+            
+            // 执行Undo动画
             this.animateUndo(animations, () => {
                 // 动画完成后，更新游戏状态
                 this.grid = JSON.parse(JSON.stringify(previousState.grid));
                 this.score = previousState.score;
-
+                
                 // 恢复随机种子和方块ID
                 this.random.setSeed(previousState.randomSeed);
                 this.tileId = previousState.tileId;
-
-                // 减少撤销次数
+                
+                // 减少Undo次数
                 this.undoCount--;
-
+                
                 // 更新显示
                 this.updateDisplay();
                 this.updateUndoButton();
-
+                
                 // 清除动画标志
                 this.isAnimating = false;
                 if (this._animationTimeout) clearTimeout(this._animationTimeout);
             });
         }
     }
-
+    
     // Add a fallback to reset isAnimating if animation callback fails
     resetAnimationStateFallback() {
         if (this._animationTimeout) clearTimeout(this._animationTimeout);
@@ -982,11 +995,11 @@ class Game2048 {
             disappears: [],     // 方块消失（合并后的方块）
             appears: []         // 方块出现（分裂回原来的方块）
         };
-
+        
         // 创建一个映射来追踪方块
         const currentTiles = new Map();
         const previousTiles = new Map();
-
+        
         // 收集当前状态的所有方块
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
@@ -999,7 +1012,7 @@ class Game2048 {
                 }
             }
         }
-
+        
         // 收集之前状态的所有方块
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
@@ -1012,7 +1025,7 @@ class Game2048 {
                 }
             }
         }
-
+        
         // 查找需要移动的方块
         previousTiles.forEach((prevInfo, id) => {
             const currInfo = currentTiles.get(id);
@@ -1033,7 +1046,7 @@ class Game2048 {
                 });
             }
         });
-
+        
         // 查找需要消失的方块（当前有但之前没有的，如新生成的方块或合并产生的方块）
         currentTiles.forEach((currInfo, id) => {
             if (!previousTiles.has(id)) {
@@ -1043,508 +1056,137 @@ class Game2048 {
                 });
             }
         });
-
+        
         return animations;
     }
-
+    
     animateUndo(animations, callback) {
-        // 1. 让需要消失的方块（新生成的或合并结果）消失
+        // 首先，让需要消失的方块消失（反向的新方块出现动画）
         animations.disappears.forEach(item => {
             const tile = this.tiles[item.tile.id];
             if (tile) {
                 tile.classList.add('tile-disappear');
             }
         });
-
-        // 2. 移动需要移动的方块
+        
+        // 同时移动需要移动的方块
         animations.movements.forEach(movement => {
             const tile = this.tiles[movement.tile.id];
             if (tile) {
                 const { top, left } = this.getPosition(movement.to.row, movement.to.col);
-                tile.style.transition = 'top 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94), left 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                 tile.style.top = top;
                 tile.style.left = left;
-                tile.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
             }
         });
-
-        // 3. 使用固定的超时来处理后续逻辑，以提高可靠性
-        setTimeout(() => {
-            // 移除消失的方块
-            animations.disappears.forEach(item => {
-                const tile = this.tiles[item.tile.id];
-                if (tile && tile.parentNode) {
-                    tile.remove();
-                }
-                delete this.tiles[item.tile.id];
-            });
-
-            // 创建/重新创建“出现”的方块（之前被合并的）
-            animations.appears.forEach(item => {
-                if (!this.tiles[item.tile.id]) {
-                    this.createTileElement(item.position.row, item.position.col, item.tile, false, false, true); // isReappear = true
-                }
-            });
-
-            // 最终清理和回调
-            this.forceResetAllTiles();
-            if (callback) {
-                callback();
-            }
-        }, 150); // 150ms timeout
-    }
-
-    restart() {
-        // 关键修复：强制重置动画状态，确保 "New Game" 按钮总能解决卡死问题
-        if (this._animationTimeout) clearTimeout(this._animationTimeout);
-        this.isAnimating = false;
-        this.isDragging = false;
-        this.tileContainer.classList.remove('dragging-active');
-
-        // 清空方块
-        this.tileContainer.innerHTML = '';
-        this.tiles = {};
-
-        this.grid = [];
-        this.score = 0;
-        this.stateHistory = [];
-        this.undoCount = this.initialUndoCount;
-        this.tileId = 0;
-
-        // 重置随机数生成器
-        this.randomSeed = Date.now();
-        this.random = this.createSeededRandom(this.randomSeed);
-
-        this.hideMessage();
-        this.setup();
-    }
-
-    showMessage(text, className) {
-        this.messageContainer.innerHTML = ''; // 先清空内容
-
-        const messageText = document.createElement('p');
-        messageText.textContent = text;
-        this.messageContainer.appendChild(messageText);
-
-        this.messageContainer.className = 'game-message ' + className;
-
-        // 当游戏卡住时，显示"撤销"和"再来一局"两个按钮
-        if (className === 'game-stuck') {
-            const buttonContainer = document.createElement('div');
-            buttonContainer.className = 'message-buttons';
-
-            const undoButton = document.createElement('button');
-            undoButton.className = 'restart-button';
-            undoButton.textContent = `Undo (${this.undoCount})`;
-            undoButton.onclick = () => {
-                this.hideMessage();
-                this.undo();
-            };
-
-            const restartButton = document.createElement('button');
-            restartButton.className = 'restart-button';
-            restartButton.textContent = 'Try Again';
-            restartButton.onclick = () => game.restart();
-
-            buttonContainer.appendChild(undoButton);
-            buttonContainer.appendChild(restartButton);
-            this.messageContainer.appendChild(buttonContainer);
-
-        } else if (className !== 'game-won' && className !== 'game-over') {
-            const restartButton = document.createElement('button');
-            restartButton.className = 'restart-button';
-            restartButton.textContent = 'Try Again';
-            restartButton.onclick = () => game.restart();
-            this.messageContainer.appendChild(restartButton);
-        } else {
-            const restartButton = document.createElement('button');
-            restartButton.className = 'restart-button';
-            restartButton.textContent = 'Try Again';
-            restartButton.onclick = () => game.restart();
-            this.messageContainer.appendChild(restartButton);
-        }
-
-        this.messageContainer.style.display = 'flex';
-        this.messageContainer.style.alignItems = 'center';
-        this.messageContainer.style.justifyContent = 'center';
-        this.messageContainer.style.flexDirection = 'column';
-    }
-
-    hideMessage() {
-        this.messageContainer.style.display = 'none';
-        this.messageContainer.className = 'game-message';
-    }
-
-    // 液态爆发效果 - 用于合并动画
-    liquidBurst() {
-        const displacementMap = document.querySelector('#liquid-burst feDisplacementMap');
-        if (!displacementMap) return;
-
-        // 临时增加扭曲强度
-        const originalScale = displacementMap.getAttribute('scale');
-        displacementMap.setAttribute('scale', '60');
-
-        // 300ms后恢复
-        setTimeout(() => {
-            displacementMap.setAttribute('scale', originalScale);
-        }, 300);
-    }
-
-    // 更新拖动预览效果
-    updateDragPreview(offsetX, offsetY) {
-        // Clear any previous RAF call to ensure only one is pending
-        if (this.rafId) {
-            cancelAnimationFrame(this.rafId);
-            this.rafId = null;
-        }
-
-        // 计算单个格子的大小
-        const cellSize = this.tileContainer.offsetWidth / 4;
-        const gap = 10; // 格子间距
-        const unitDistance = cellSize + gap;
-
-        // 计算预览偏移量，使用缓动系数让动画更流畅
-        const dampingFactor = 0.7; // 提高缓动系数，让跟随更灵敏
-        const maxOffset = unitDistance * 3.5; // 最大可以移动3.5个格子的距离
-
-        // 根据拖动方向限制偏移
-        let basePreviewX = 0;
-        let basePreviewY = 0;
-
-        if (this.dragDirection === 'left' || this.dragDirection === 'right') {
-            basePreviewX = Math.max(-maxOffset, Math.min(maxOffset, offsetX * dampingFactor));
-            basePreviewY = 0;
-        } else if (this.dragDirection === 'up' || this.dragDirection === 'down') {
-            basePreviewX = 0;
-            basePreviewY = Math.max(-maxOffset, Math.min(maxOffset, offsetY * dampingFactor));
-        }
-
-        this.rafId = requestAnimationFrame(() => {
-            // 应用transform到所有可移动的砖块
-            for (let row = 0; row < this.size; row++) {
-                for (let col = 0; col < this.size; col++) {
-                    const tile = this.grid[row][col];
-                    if (tile && this.tiles[tile.id]) {
-                        const element = this.tiles[tile.id];
-
-                        // 检查这个砖块在当前方向上是否可以移动
-                        if (this.canTileMove(row, col, this.dragDirection)) {
-                            // 添加dragging类
-                            if (!element.classList.contains('dragging')) {
-                                element.classList.add('dragging');
-                            }
-
-                            // 计算渐进的偏移量
-                            // 使用更线性的进度计算，避免初始阶段过度缩减
-                            const linearProgress = Math.min(this.dragDistance / this.minDragDistance, 1);
-                            // 在初始阶段使用更线性的响应，后期才加入缓动
-                            const progress = linearProgress < 0.5
-                                ? linearProgress * 1.5  // 初始阶段放大响应
-                                : this.easeOutCubic(linearProgress);
-
-                            // 计算每个砖块可以移动的最大距离
-                            let maxMoveDistance = 0;
-
-                            if (this.dragDirection === 'left') {
-                                maxMoveDistance = col * unitDistance;
-                            } else if (this.dragDirection === 'right') {
-                                maxMoveDistance = (this.size - 1 - col) * unitDistance;
-                            } else if (this.dragDirection === 'up') {
-                                maxMoveDistance = row * unitDistance;
-                            } else if (this.dragDirection === 'down') {
-                                maxMoveDistance = (this.size - 1 - row) * unitDistance;
-                            }
-
-                            // 计算实际偏移量，但不超过砖块可以移动的最大距离
-                            const targetOffset = this.dragDirection === 'left' || this.dragDirection === 'right'
-                                ? basePreviewX : basePreviewY;
-                            // 直接使用progress而不是easedProgress，因为已经在上面处理了
-                            const actualOffset = Math.sign(targetOffset) *
-                                Math.min(Math.abs(targetOffset * progress), maxMoveDistance * 0.9);
-
-                            const actualX = this.dragDirection === 'left' || this.dragDirection === 'right'
-                                ? actualOffset : 0;
-                            const actualY = this.dragDirection === 'up' || this.dragDirection === 'down'
-                                ? actualOffset : 0;
-
-                            // 添加轻微的缩放和倾斜效果
-                            // 只在拖动距离较大时才添加缩放和旋转，避免初始阶段的突变
-                            const visualProgress = Math.max(0, (linearProgress - 0.2) / 0.8);
-                            const scale = 1 + (visualProgress * 0.02);
-                            const rotate = this.dragDirection === 'left' ? -1 :
-                                this.dragDirection === 'right' ? 1 :
-                                    this.dragDirection === 'up' ? -0.5 : 0.5;
-                            const rotateAngle = rotate * visualProgress * 2;
-
-                            // 直接设置transform
-                            element.style.transform = `translate(${actualX}px, ${actualY}px) scale(${scale}) rotate(${rotateAngle}deg)`;
-                        } else {
-                            element.classList.remove('dragging');
-                            // 边缘的砖块保持原位
-                            element.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
-                        }
-                    }
-                }
-            }
-            this.rafId = null; // Reset RAF ID after execution
-        });
-    }
-
-    // 缓动函数
-    easeOutCubic(t) {
-        return 1 - Math.pow(1 - t, 3);
-    }
-
-    // 重置所有砖块的transform
-    resetTileTransforms() {
-        if (this.rafId) {
-            cancelAnimationFrame(this.rafId);
-            this.rafId = null;
-        }
-        Object.values(this.tiles).forEach(tile => {
-            tile.classList.remove('dragging');
-            tile.classList.remove('moving');
-            tile.style.transition = 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            tile.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
-        });
-    }
-
-    // 强制重置所有砖块到正确位置（更彻底的重置）
-    forceResetAllTiles() {
-        if (this.rafId) {
-            cancelAnimationFrame(this.rafId);
-            this.rafId = null;
-        }
-        // 遍历网格，确保每个砖块都在正确的位置
-        for (let row = 0; row < this.size; row++) {
-            for (let col = 0; col < this.size; col++) {
-                const gridTile = this.grid[row][col];
-                if (gridTile && this.tiles[gridTile.id]) {
-                    const tile = this.tiles[gridTile.id];
-                    const { top, left } = this.getPosition(row, col);
-
-                    // 移除所有类
-                    tile.classList.remove('dragging', 'moving');
-
-                    // 重置样式
-                    tile.style.transition = 'none';
-                    tile.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
-                    tile.style.top = top;
-                    tile.style.left = left;
-
-                    // 强制重绘
-                    void tile.offsetHeight;
-
-                    // 恢复transition
-                    tile.style.transition = '';
-                }
-            }
-        }
-
-        // 移除任何不在网格中的孤立砖块
-        Object.keys(this.tiles).forEach(id => {
-            let found = false;
-            for (let row = 0; row < this.size && !found; row++) {
-                for (let col = 0; col < this.size && !found; col++) {
-                    if (this.grid[row][col] && this.grid[row][col].id === parseInt(id)) {
-                        found = true;
-                    }
-                }
-            }
-            if (!found && this.tiles[id]) {
-                this.tiles[id].remove();
-                delete this.tiles[id];
-            }
-        });
-    }
-
-    // 计算砖块的移动信息
-    calculateMovement(row, col, direction) {
-        const tile = this.grid[row][col];
-        if (!tile) return null;
-
-        let targetRow = row;
-        let targetCol = col;
-        let distance = 0;
-        let willMerge = false;
-
-        // 根据方向计算目标位置
-        if (direction === 'left') {
-            for (let c = col - 1; c >= 0; c--) {
-                if (this.grid[row][c] === null) {
-                    targetCol = c;
-                    distance++;
-                } else if (this.grid[row][c].value === tile.value && !this.grid[row][c].merged) {
-                    targetCol = c;
-                    distance++;
-                    willMerge = true;
-                    break;
-                } else {
-                    break;
-                }
-            }
-        } else if (direction === 'right') {
-            for (let c = col + 1; c < this.size; c++) {
-                if (this.grid[row][c] === null) {
-                    targetCol = c;
-                    distance++;
-                } else if (this.grid[row][c].value === tile.value && !this.grid[row][c].merged) {
-                    targetCol = c;
-                    distance++;
-                    willMerge = true;
-                    break;
-                } else {
-                    break;
-                }
-            }
-        } else if (direction === 'up') {
-            for (let r = row - 1; r >= 0; r--) {
-                if (this.grid[r][col] === null) {
-                    targetRow = r;
-                    distance++;
-                } else if (this.grid[r][col].value === tile.value && !this.grid[r][col].merged) {
-                    targetRow = r;
-                    distance++;
-                    willMerge = true;
-                    break;
-                } else {
-                    break;
-                }
-            }
-        } else if (direction === 'down') {
-            for (let r = row + 1; r < this.size; r++) {
-                if (this.grid[r][col] === null) {
-                    targetRow = r;
-                    distance++;
-                } else if (this.grid[r][col].value === tile.value && !this.grid[r][col].merged) {
-                    targetRow = r;
-                    distance++;
-                    willMerge = true;
-                    break;
-                } else {
-                    break;
-                }
-            }
-        }
-
-        if (distance > 0) {
-            return {
-                to: { row: targetRow, col: targetCol },
-                distance: distance,
-                willMerge: willMerge
-            };
-        }
-
-        return null;
-    }
-
-    // 检查砖块在指定方向上是否可以移动
-    canTileMove(row, col, direction) {
-        const tile = this.grid[row][col];
-        if (!tile) return false;
-
-        switch (direction) {
-            case 'left':
-                for (let c = col - 1; c >= 0; c--) {
-                    if (this.grid[row][c] === null) return true; // Found empty space
-                    if (this.grid[row][c].value === tile.value && !this.grid[row][c].merged) return true; // Found mergeable tile
-                    if (this.grid[row][c].value !== tile.value) return false; // Blocked
-                }
-                return false; // Reached edge
-            case 'right':
-                for (let c = col + 1; c < this.size; c++) {
-                    if (this.grid[row][c] === null) return true;
-                    if (this.grid[row][c].value === tile.value && !this.grid[row][c].merged) return true;
-                    if (this.grid[row][c].value !== tile.value) return false;
-                }
-                return false;
-            case 'up':
-                for (let r = row - 1; r >= 0; r--) {
-                    if (this.grid[r][col] === null) return true;
-                    if (this.grid[r][col].value === tile.value && !this.grid[r][col].merged) return true;
-                    if (this.grid[r][col].value !== tile.value) return false;
-                }
-                return false;
-            case 'down':
-                for (let r = row + 1; r < this.size; r++) {
-                    if (this.grid[r][col] === null) return true;
-                    if (this.grid[r][col].value === tile.value && !this.grid[r][col].merged) return true;
-                    if (this.grid[r][col].value !== tile.value) return false;
-                }
-                return false;
-            default:
-                return false;
-        }
-    }
-
-    // 从拖动预览状态过渡到实际移动
-    transitionFromDragToMove(direction, callback) {
-        if (!this.canMoveInDirection(direction)) {
-            this.resetTileTransforms();
-            return;
-        }
-
-        // 设置动画标志
-        // this.isAnimating = true; // isAnimating is set inside move()
-
-        // 立即重置所有 transform，让 move() 函数来处理动画
-        // 这可以防止拖动预览的 transform 状态干扰 move() 的动画
-        Object.values(this.tiles).forEach(tile => {
-            tile.classList.remove('dragging');
-            tile.style.transition = 'none'; // 临时禁用过渡
-            tile.style.transform = '';
-        });
-
-        // 强制浏览器重绘以应用 transform 的重置
-        void this.tileContainer.offsetHeight;
-
-        // 调用核心的 move 函数，它现在拥有更可靠的动画逻辑
-        this.move(direction);
-    }
-
-    canMoveInDirection(direction) {
-        for (let i = 0; i < this.size; i++) {
-            let line;
-            if (direction === 'left' || direction === 'right') {
-                line = this.getRow(i);
-            } else {
-                line = this.getColumn(i);
-            }
-            const processed = this.processLine(
-                (direction === 'right' || direction === 'down') ? line.slice().reverse() : line.slice(),
-                0, 0, 0, 0
-            );
-            if (processed.moved) return true;
-        }
-        return false;
-    }
-
-    // How to play popup functionality
-    setupHowToModal() {
-        const howtoBtn = document.getElementById('howto-btn');
-        if (!howtoBtn) return;
-
-        let modal = null;
-        howtoBtn.addEventListener('click', () => {
-            if (modal) return;
-            modal = document.createElement('div');
-            modal.className = 'howto-modal';
-            modal.innerHTML = `
-                <div class="howto-modal-content">
-                    <button class="howto-modal-close">&times;</button>
-                    <div class="howto-modal-message" align=left>Use the arrow keys (or swipe on mobile devices) to move all tiles in that direction.<a href=how-to-play.html>Read More</a></div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            document.body.classList.add('howto-modal-open');
-            modal.querySelector('.howto-modal-close').onclick = () => {
-                modal.remove();
-                modal = null;
-                document.body.classList.remove('howto-modal-open');
-            };
-        });
-    }
-}
-
-// 启动游戏
-const game = new Game2048();
+        
+          // 150ms后，处理方块的出现和最终状态
+          setTimeout(() => {
+              // 移除消失的方块
+              animations.disappears.forEach(item => {
+                  const tile = this.tiles[item.tile.id];
+                  if (tile) {
+                      tile.remove();
+                      delete this.tiles[item.tile.id];
+                  }
+              });
+              
+              // 清空所有现有方块并重建（确保状态一致）
+              this.tileContainer.innerHTML = '';
+              this.tiles = {};
+              
+              // 从previousGrid重建所有方块
+              const previousState = this.stateHistory[this.stateHistory.length - 1];
+              for (let i = 0; i < this.size; i++) {
+                  for (let j = 0; j < this.size; j++) {
+                      if (previousState.grid[i][j]) {
+                          const wasNewlyAppeared = animations.appears.some(
+                              item => item.tile.id === previousState.grid[i][j].id
+                          );
+                          this.createTileElement(i, j, previousState.grid[i][j], false, false, wasNewlyAppeared);
+                      }
+                  }
+              }
+              
+              // 执行回调
+              setTimeout(callback, 50);
+          }, 150);
+      }
+      
+      restart() {
+          // Clear tiles
+          this.tileContainer.innerHTML = '';
+          this.tiles = {};
+          
+          this.grid = [];
+          this.score = 0;
+          this.stateHistory = [];
+          this.undoCount = this.initialUndoCount;
+          this.tileId = 0;
+          
+          // Reset random number generator
+          this.randomSeed = Date.now();
+          this.random = this.createSeededRandom(this.randomSeed);
+          
+          this.hideMessage();
+          this.setup();
+      }
+      
+      showMessage(text, className) {
+          this.messageContainer.innerHTML = ''; // Clear content first
+          
+          const messageText = document.createElement('p');
+          messageText.textContent = text;
+          this.messageContainer.appendChild(messageText);
+  
+          this.messageContainer.className = 'game-message ' + className;
+          
+          // When the game is stuck, show "Undo" and "Try Again" buttons
+          if (className === 'game-stuck') {
+              const buttonContainer = document.createElement('div');
+              buttonContainer.className = 'message-buttons';
+              
+              const undoButton = document.createElement('button');
+              undoButton.className = 'restart-button';
+              undoButton.textContent = `Undo (${this.undoCount})`;
+              undoButton.onclick = () => {
+                  this.hideMessage();
+                  this.undo();
+              };
+              
+              const restartButton = document.createElement('button');
+              restartButton.className = 'restart-button';
+              restartButton.textContent = 'Try Again';
+              restartButton.onclick = () => game.restart();
+              
+              buttonContainer.appendChild(undoButton);
+              buttonContainer.appendChild(restartButton);
+              this.messageContainer.appendChild(buttonContainer);
+  
+          } else if (className !== 'game-won' && className !== 'game-over') {
+              const restartButton = document.createElement('button');
+              restartButton.className = 'restart-button';
+              restartButton.textContent = 'Try Again';
+              restartButton.onclick = () => game.restart();
+              this.messageContainer.appendChild(restartButton);
+          } else {
+               const restartButton = document.createElement('button');
+              restartButton.className = 'restart-button';
+              restartButton.textContent = 'Try Again';
+              restartButton.onclick = () => game.restart();
+              this.messageContainer.appendChild(restartButton);
+          }
+  
+          this.messageContainer.style.display = 'flex';
+          this.messageContainer.style.alignItems = 'center';
+          this.messageContainer.style.justifyContent = 'center';
+          this.messageContainer.style.flexDirection = 'column';
+      }
+      
+      hideMessage() {
+          this.messageContainer.style.display = 'none';
+          this.messageContainer.className = 'game-message';
+      }
+      
+      startLiquidAnimation() {
+          // Remove liquid animation, as the new implementation doesn't need to dynamically modify filter parameters
+          
