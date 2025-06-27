@@ -10,13 +10,13 @@ class Game2048 {
         this.score = 0;
         this.bestScore = localStorage.getItem('bestScore') || 0;
         
-        // 撤销系统
+        // Undo系统
         this.stateHistory = []; // 历史状态栈
         this.maxHistorySize = 100; // 最多保存100个历史状态
-        this.initialUndoCount = 3; // 初始撤销次数
-        this.undoCount = this.initialUndoCount; // 当前可用撤销次数
-        this.maxUndoCount = 10; // 最大累计撤销次数
-        this.undoRewardValue = 256; // 每合成256的倍数获得撤销次数
+        this.initialUndoCount = 3; // 初始Undo次数
+        this.undoCount = this.initialUndoCount; // 当前可用Undo次数
+        this.maxUndoCount = 10; // 最大累计Undo次数
+        this.undoRewardValue = 256; // 每合成256的倍数获得Undo次数
         
         this.tileContainer = document.getElementById('tile-container');
         this.scoreDisplay = document.getElementById('score');
@@ -120,7 +120,7 @@ class Game2048 {
         // 更新最高分显示
         this.bestScoreDisplay.textContent = this.bestScore;
         
-        // 更新撤销按钮
+        // 更新Undo按钮
         this.updateUndoButton();
         
         // 启动液态玻璃动画
@@ -520,11 +520,11 @@ class Game2048 {
                 if (this.checkWin()) {
                     this.showMessage('You win!', 'game-won');
                 } else if (this.checkGameOver()) {
-                    // 只有在没有撤销次数时才真正结束游戏
+                    // 只有在没有Undo次数时才真正结束游戏
                     if (this.undoCount === 0) {
                         this.showMessage('Game Over', 'game-over');
                     } else {
-                        // 如果还有撤销次数，给用户提示
+                        // 如果还有Undo次数，给用户提示
                         this.showMessage('No moves left!', 'game-stuck');
                     }
                 }
@@ -604,7 +604,7 @@ class Game2048 {
                 this.score += mergedTile.value;
                 moved = true;
                 
-                // 检查是否合成了256的倍数，奖励撤销次数
+                // 检查是否合成了256的倍数，奖励Undo次数
                 if (mergedTile.value >= this.undoRewardValue && 
                     mergedTile.value % this.undoRewardValue === 0) {
                     this.earnUndoReward();
@@ -743,7 +743,7 @@ class Game2048 {
         // 更新分数显示
         this.scoreDisplay.textContent = this.score;
         
-        // 更新撤销按钮状态
+        // 更新Undo按钮状态
         this.updateUndoButton();
     }
     
@@ -913,10 +913,10 @@ class Game2048 {
     }
     
     undo() {
-        // 如果正在动画中，忽略撤销
+        // 如果正在动画中，忽略Undo
         if (this.isAnimating) return;
         
-        // 检查是否有撤销次数和历史记录
+        // 检查是否有Undo次数和历史记录
         if (this.undoCount > 0 && this.stateHistory.length > 1) {
             // 设置动画标志
             this.isAnimating = true;
@@ -933,7 +933,7 @@ class Game2048 {
             // 使用快照的grid计算动画，而不是this.grid
             const animations = this.calculateUndoAnimations(currentGridSnapshot, previousState.grid);
             
-            // 执行撤销动画
+            // 执行Undo动画
             this.animateUndo(animations, () => {
                 // 动画完成后，更新游戏状态
                 this.grid = JSON.parse(JSON.stringify(previousState.grid));
@@ -943,7 +943,7 @@ class Game2048 {
                 this.random.setSeed(previousState.randomSeed);
                 this.tileId = previousState.tileId;
                 
-                // 减少撤销次数
+                // 减少Undo次数
                 this.undoCount--;
                 
                 // 更新显示

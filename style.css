@@ -737,7 +737,7 @@ h1 {
     }
 }
 
-/* 撤销动画 - 方块消失 */
+/* Undo动画 - 方块消失 */
 .tile-disappear {
     animation: disappear 0.15s ease-in-out;
 }
@@ -753,7 +753,7 @@ h1 {
     }
 }
 
-/* 撤销动画 - 方块重新出现（分裂效果） */
+/* Undo动画 - 方块重新出现（分裂效果） */
 .tile-reappear {
     animation: reappear 0.2s ease-in-out;
 }
@@ -1066,7 +1066,7 @@ h1 {
     }
 }
 
-/* 撤销奖励动画 */
+/* Undo奖励动画 */
 .undo-reward {
     position: absolute;
     right: 20px;
