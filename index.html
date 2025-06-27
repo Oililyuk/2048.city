@@ -1,39 +1,41 @@
-
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#000000">
+    <meta name="description" content="Wicked 2048 game – play wicked, win smarter. Enjoy a modern, elegant 2048 puzzle game with liquid glass effects. Challenge your mind and reach 2048!">
+    <meta name="keywords" content="2048, Wicked 2048, puzzle game, play wicked, win smarter, liquid glass, iOS style, online game, brain game, best 2048, wicked.today">
+    <meta name="author" content="Wicked 2048 Team">
     
     <!-- Open Graph / Facebook / Telegram -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://wicked.today/">
-    <meta property="og:title" content="2048 - 液态玻璃版">
-    <meta property="og:description" content="一个优雅精致的2048游戏实现，具有iOS风格的液态玻璃效果。">
+    <meta property="og:title" content="Wicked 2048 game – play wicked, win smarter">
+    <meta property="og:description" content="Play Wicked 2048 game online. A beautiful, modern 2048 puzzle game with liquid glass effects. Play wicked, win smarter!">
     <meta property="og:image" content="https://wicked.today/asset/preview.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:site_name" content="2048 - 液态玻璃版">
+    <meta property="og:site_name" content="Wicked 2048 game">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://wicked.today/">
     <meta name="twitter:domain" content="wicked.today">
-    <meta name="twitter:title" content="2048 - 液态玻璃版">
-    <meta name="twitter:description" content="一个优雅精致的2048游戏实现，具有iOS风格的液态玻璃效果。">
+    <meta name="twitter:title" content="Wicked 2048 game – play wicked, win smarter">
+    <meta name="twitter:description" content="Play Wicked 2048 game online. A beautiful, modern 2048 puzzle game with liquid glass effects. Play wicked, win smarter!">
     <meta name="twitter:image" content="https://wicked.today/asset/preview.png">
-    <meta name="twitter:image:alt" content="2048游戏液态玻璃效果预览图">
+    <meta name="twitter:image:alt" content="Wicked 2048 game – play wicked, win smarter">
     
-    <title>2048游戏</title>
+    <title>Wicked 2048 game – play wicked, win smarter</title>
     <link rel="icon" type="image/png" href="icon.png" sizes="16x16">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- SVG滤镜定义 -->
+    <!-- SVG Filter Definitions -->
     <svg style="position: absolute; width: 0; height: 0;">
         <defs>
-            <!-- 液态玻璃效果滤镜 - 完全遵循示例 -->
+            <!-- Liquid Glass Effect Filter -->
             <filter id="glass-distortion">
                 <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="1" seed="5" result="turbulence"/>
                 <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap"/>
@@ -44,7 +46,7 @@
                 <feDisplacementMap in="SourceGraphic" in2="softMap" scale="15" xChannelSelector="R" yChannelSelector="G"/>
             </filter>
             
-            <!-- 合并时的爆发效果 -->
+            <!-- Burst Effect on Merge -->
             <filter id="liquid-burst" x="-100%" y="-100%" width="300%" height="300%">
                 <feTurbulence 
                     type="fractalNoise" 
@@ -66,14 +68,15 @@
     
     <div class="container">
         <header class="header">
-            <h1>2048</h1>
+            <h1>Wicked 2048 game</h1>
+            <div class="slogan">play wicked, win smarter</div>
             <div class="score-container">
                 <div class="score-box ui-liquid-wrapper">
                     <div class="liquidGlass-effect"></div>
                     <div class="liquidGlass-tint"></div>
                     <div class="liquidGlass-shine"></div>
                     <div class="liquidGlass-content">
-                        <div class="score-label">当前分数</div>
+                        <div class="score-label">Score</div>
                         <div class="score" id="score">0</div>
                     </div>
                 </div>
@@ -82,7 +85,7 @@
                     <div class="liquidGlass-tint"></div>
                     <div class="liquidGlass-shine"></div>
                     <div class="liquidGlass-content">
-                        <div class="score-label">最高分数</div>
+                        <div class="score-label">Best</div>
                         <div class="best-score" id="best-score">0</div>
                     </div>
                 </div>
@@ -92,14 +95,14 @@
         <main class="main-content">
             <div class="game-message" id="game-message">
                 <p></p>
-                <button class="restart-button" onclick="game.restart()">再来一局</button>
+                <button class="restart-button" onclick="game.restart()">Restart</button>
             </div>
             
             <div class="game-container">
-                <!-- 液态玻璃效果层 -->
+                <!-- Liquid Glass Effect Layer -->
                 <div class="liquid-glass-effect"></div>
                 <div class="grid-container">
-                    <!-- 4x4的网格背景 -->
+                    <!-- 4x4 Grid Background -->
                     <div class="grid-row">
                         <div class="grid-cell"></div>
                         <div class="grid-cell"></div>
@@ -127,7 +130,7 @@
                 </div>
                 
                 <div class="tile-container" id="tile-container">
-                    <!-- 数字方块将动态生成在这里 -->
+                    <!-- Number tiles will be dynamically generated here -->
                 </div>
             </div>
         </main>
@@ -138,21 +141,20 @@
                     <span class="liquidGlass-effect"></span>
                     <span class="liquidGlass-tint"></span>
                     <span class="liquidGlass-shine"></span>
-                    <span class="liquidGlass-content">新游戏</span>
+                    <span class="liquidGlass-content">New Game</span>
                 </button>
                 <button class="btn-undo ui-liquid-wrapper" onclick="game.undo()">
                     <span class="liquidGlass-effect"></span>
                     <span class="liquidGlass-tint"></span>
                     <span class="liquidGlass-shine"></span>
-                    <span class="liquidGlass-content">撤销</span>
+                    <span class="liquidGlass-content">Undo</span>
                 </button>
             </div>
             <div class="instructions">
-                <p><strong>游戏说明：</strong> 使用方向键或在屏幕任意位置滑动来移动方块。相同数字的方块碰撞时会合并成一个！</p>
-            </div>
+                <p><strong>Wicked 2048 game</strong> – play wicked, win smarter.</div>
         </footer>
     </div>
     
     <script src="script.js"></script>
 </body>
-</html> 
+</html>
