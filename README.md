@@ -1,51 +1,33 @@
-# 2048 Frosted Edition
+# 2048.city
 
-A modern, responsive implementation of the classic 2048 game with an iOS-style frosted glass UI. Built with vanilla JavaScript, HTML5, and CSS3.
+2048.city is a free, web-based implementation of the classic 2048 puzzle game. Players can enjoy smooth controls, a beautiful interface, and addictive gameplay, either directly on the website or embedded in Reddit via OAuth login.
 
 ## Features
 
-- 🎮 Classic 2048 gameplay
-- 🎨 iOS-style frosted glass UI
-- 📱 Fully responsive design
-- ⌨️ Keyboard controls (arrow keys)
-- 👆 Touch controls (swipe)
-- 💾 Score persistence
-- 📖 Comprehensive how-to-play guide
+- **Play the classic 2048 game** with a clean, modern interface.
+- **Easy controls**: arrow keys or swipe gestures.
+- **Track and share scores** with Reddit integration.
+- **User authentication**: login securely with your Reddit account via OAuth.
+- **Community engagement**: share your high scores directly to the subreddit [r/2048city](https://www.reddit.com/r/2048city).
 
-## Getting Started
+## Reddit Integration
 
-1. Clone the repository:
+2048.city integrates with Reddit using OAuth to authenticate users and allow them to post scores. Key functionality includes:
+
+1. **Login with Reddit**: Users authenticate via OAuth with `identity` and `submit` scopes.
+2. **Score submission**: After playing, users can click “Share to Reddit” to post their high score to [r/2048city](https://www.reddit.com/r/2048city).
+3. **User-controlled posting**: Posts are only made when the user explicitly chooses to share their score.
+4. **Server-side handling**: The backend exchanges the OAuth code for an access token, verifies identity, and submits the score via the Reddit API (`/api/submit`).
+
+## Installation & Development
+
 ```bash
-git clone https://github.com/yourusername/2048-frosted.git
-cd 2048-frosted
-```
+# Clone the repository
+git clone https://github.com/<your-username>/2048.city.git
+cd 2048.city
 
-2. Open `index.html` in your web browser to start playing!
+# Install dependencies
+npm install
 
-## How to Play
-
-1. Use arrow keys (or swipe on mobile) to move tiles
-2. When two tiles with the same number collide, they merge into one
-3. Try to reach the 2048 tile!
-4. For detailed instructions, visit the [How to Play](how-to-play.html) page
-
-## Browser Support
-
-The game works best in modern browsers that support:
-- CSS Grid
-- CSS Variables
-- Backdrop Filter
-- Local Storage
-
-## Contributing
-
-Feel free to submit issues and enhancement requests!
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Original 2048 game by Gabriele Cirulli
-- Inspired by iOS 18's frosted glass design 
+# Start the development server
+npm run dev
