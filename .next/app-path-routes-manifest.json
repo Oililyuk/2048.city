@@ -6,5 +6,7 @@
   "/api/scores/submit/route": "/api/scores/submit",
   "/api/scores/user/route": "/api/scores/user",
   "/favicon.ico/route": "/favicon.ico",
-  "/page": "/"
+  "/page": "/",
+  "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml"
 }

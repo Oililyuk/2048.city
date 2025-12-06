@@ -21,9 +21,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr">
       <head>
+        <meta httpEquiv="Content-Language" content="en" />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="canonical" href="https://2048.city" />
       </head>
       <body>
         <SessionProvider>
