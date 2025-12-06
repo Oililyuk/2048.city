@@ -18,12 +18,49 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
       const { Game2048 } = await import('./game-logic');
       // @ts-ignore
       const game = new Game2048();
+      
+      // Set up game end callback to submit score
+      game.onGameEnd = async (finalScore: number, won: boolean) => {
+        if (session?.user) {
+          try {
+            // Calculate max tile from the game grid
+            let maxTile = 0;
+            for (let i = 0; i < game.size; i++) {
+              for (let j = 0; j < game.size; j++) {
+                const tile = game.grid[i][j];
+                if (tile && tile.value > maxTile) {
+                  maxTile = tile.value;
+                }
+              }
+            }
+            
+            // Submit score to API
+            const response = await fetch('/api/scores/submit', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                score: finalScore,
+                maxTile: maxTile,
+                moves: 0,
+                gameDuration: 0
+              })
+            });
+            
+            if (response.ok) {
+              console.log('Score submitted successfully');
+            }
+          } catch (error) {
+            console.error('Failed to submit score:', error);
+          }
+        }
+      };
+      
       // @ts-ignore
       window.game = game;
     };
 
     initGame();
-  }, []);
+  }, [session]);
 
   return (
     <>

@@ -45,6 +45,8 @@ class Game2048 {
     touchMoveThrottle: number;
     dragPreviewEnabled: boolean;
     keydownHandler?: (e: KeyboardEvent) => void;
+    onGameEnd?: (score: number, won: boolean) => void;
+    onScoreUpdate?: (score: number, bestScore: number) => void;
 
     constructor() {
         this.size = 4;
@@ -213,11 +215,11 @@ class Game2048 {
                 // 测试快捷键
                 if (e.keyCode === 57) { // "9" key
                     e.preventDefault();
-                    this.showMessage('你赢了!', 'game-won');
+                    this.showMessage('You Win!', 'game-won');
                 }
                 if (e.keyCode === 48) { // "0" key
                     e.preventDefault();
-                    this.showMessage('无路可走!', 'game-stuck');
+                    this.showMessage('No Moves Available!', 'game-stuck');
                 }
             };
         }
@@ -560,14 +562,18 @@ class Game2048 {
                 
                 // 游戏状态检查
                 if (this.checkWin()) {
-                    this.showMessage('你赢了!', 'game-won');
+                    this.showMessage('You Win!', 'game-won');
                 } else if (this.checkGameOver()) {
                     // 只有在没有撤销次数时才真正结束游戏
                     if (this.undoCount === 0) {
-                        this.showMessage('游戏结束', 'game-over');
+                        this.showMessage('Game Over', 'game-over');
+                        // 触发游戏结束回调
+                        if (this.onGameEnd) {
+                            this.onGameEnd(this.score, false);
+                        }
                     } else {
                         // 如果还有撤销次数，给用户提示
-                        this.showMessage('无路可走!', 'game-stuck');
+                        this.showMessage('No Moves Available!', 'game-stuck');
                     }
                 }
             });
@@ -1161,7 +1167,7 @@ class Game2048 {
             
             const undoButton = document.createElement('button');
             undoButton.className = 'restart-button';
-            undoButton.textContent = `撤销 (${this.undoCount})`;
+            undoButton.textContent = `Undo (${this.undoCount})`;
             undoButton.onclick = () => {
                 this.hideMessage();
                 this.undo();
@@ -1169,7 +1175,7 @@ class Game2048 {
             
             const restartButton = document.createElement('button');
             restartButton.className = 'restart-button';
-            restartButton.textContent = '再来一局';
+            restartButton.textContent = 'Try Again';
             restartButton.onclick = () => game.restart();
             
             buttonContainer.appendChild(undoButton);
@@ -1179,13 +1185,13 @@ class Game2048 {
         } else if (className !== 'game-won' && className !== 'game-over') {
             const restartButton = document.createElement('button');
             restartButton.className = 'restart-button';
-            restartButton.textContent = '再来一局';
+            restartButton.textContent = 'Try Again';
             restartButton.onclick = () => game.restart();
             this.messageContainer.appendChild(restartButton);
         } else {
              const restartButton = document.createElement('button');
             restartButton.className = 'restart-button';
-            restartButton.textContent = '再来一局';
+            restartButton.textContent = 'Try Again';
             restartButton.onclick = () => game.restart();
             this.messageContainer.appendChild(restartButton);
         }
