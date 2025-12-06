@@ -21,6 +21,8 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
       
       // Set up game end callback to submit score
       game.onGameEnd = async (finalScore: number, won: boolean) => {
+        console.log('Game ended - Score:', finalScore, 'Won:', won, 'Session:', !!session?.user);
+        
         if (session?.user) {
           try {
             // Calculate max tile from the game grid
@@ -34,6 +36,8 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
               }
             }
             
+            console.log('Submitting score - Score:', finalScore, 'MaxTile:', maxTile);
+            
             // Submit score to API
             const response = await fetch('/api/scores/submit', {
               method: 'POST',
@@ -46,12 +50,19 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
               })
             });
             
+            const result = await response.json();
+            console.log('Score submission result:', result);
+            
             if (response.ok) {
               console.log('Score submitted successfully');
+            } else {
+              console.error('Score submission failed:', result);
             }
           } catch (error) {
             console.error('Failed to submit score:', error);
           }
+        } else {
+          console.log('User not logged in, score not submitted');
         }
       };
       

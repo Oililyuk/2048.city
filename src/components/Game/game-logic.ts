@@ -219,7 +219,7 @@ class Game2048 {
                 }
                 if (e.keyCode === 48) { // "0" key
                     e.preventDefault();
-                    this.showMessage('No Moves Available!', 'game-stuck');
+                    this.showMessage('Game Over', 'game-stuck');
                 }
             };
         }
@@ -573,7 +573,11 @@ class Game2048 {
                         }
                     } else {
                         // 如果还有撤销次数，给用户提示
-                        this.showMessage('No Moves Available!', 'game-stuck');
+                        this.showMessage('Game Over', 'game-stuck');
+                        // 也触发游戏结束回调提交分数
+                        if (this.onGameEnd) {
+                            this.onGameEnd(this.score, false);
+                        }
                     }
                 }
             });
