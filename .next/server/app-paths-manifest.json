@@ -1,0 +1,10 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/scores/leaderboard/route": "app/api/scores/leaderboard/route.js",
+  "/api/scores/submit/route": "app/api/scores/submit/route.js",
+  "/api/scores/user/route": "app/api/scores/user/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js"
+}

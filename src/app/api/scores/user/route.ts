@@ -23,12 +23,15 @@ export async function GET() {
     // Get user's rank
     let rank = 0;
     if (bestScore) {
-      rank = await prisma.score.count({
+      // Count users with better scores by finding distinct user IDs
+      const betterScores = await prisma.score.findMany({
         where: {
           score: { gt: bestScore.score }
         },
-        distinct: ['userId']
-      }) + 1;
+        distinct: ['userId'],
+        select: { userId: true }
+      });
+      rank = betterScores.length + 1;
     }
 
     return NextResponse.json({

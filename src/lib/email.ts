@@ -1,12 +1,19 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY 
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 export async function sendRecordEmail(
   to: string,
   name: string,
   score: number
 ) {
+  if (!resend) {
+    console.warn('Resend API key not configured, skipping email');
+    return;
+  }
+  
   try {
     await resend.emails.send({
       from: '2048.city <noreply@2048.city>',
@@ -113,6 +120,11 @@ export async function sendWelcomeEmail(
   to: string,
   name: string
 ) {
+  if (!resend) {
+    console.warn('Resend API key not configured, skipping email');
+    return;
+  }
+  
   try {
     await resend.emails.send({
       from: '2048.city <noreply@2048.city>',

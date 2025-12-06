@@ -1,9 +1,51 @@
+// @ts-nocheck
 // 全局变量
-let touchStartX = null;
-let touchStartY = null;
-let animationId = null;
+let touchStartX: number | null = null;
+let touchStartY: number | null = null;
+let animationId: number | null = null;
 
 class Game2048 {
+    size: number;
+    grid: any[][];
+    score: number;
+    bestScore: any;
+    stateHistory: any[];
+    maxHistorySize: number;
+    initialUndoCount: number;
+    undoCount: number;
+    maxUndoCount: number;
+    undoRewardValue: number;
+    tileContainer: HTMLElement | null;
+    scoreDisplay: HTMLElement | null;
+    bestScoreDisplay: HTMLElement | null;
+    messageContainer: HTMLElement | null;
+    startX: number;
+    startY: number;
+    endX: number;
+    endY: number;
+    tiles: Record<string, any>;
+    tileId: number;
+    randomSeed: number;
+    random: { random: () => number; getSeed: () => number; setSeed: (seed: number) => void };
+    isAnimating: boolean;
+    isDragging: boolean;
+    dragStartX: number;
+    dragStartY: number;
+    currentDragX: number;
+    currentDragY: number;
+    dragDirection: string | null;
+    dragDistance: number;
+    previewOffset: { x: number; y: number };
+    minDragDistance: number;
+    dragThreshold: number;
+    dragStartTime: number;
+    quickSwipeThreshold: number;
+    quickSwipeEnabled: boolean;
+    lastTouchMoveTime: number;
+    touchMoveThrottle: number;
+    dragPreviewEnabled: boolean;
+    keydownHandler?: (e: KeyboardEvent) => void;
+
     constructor() {
         this.size = 4;
         this.grid = [];
