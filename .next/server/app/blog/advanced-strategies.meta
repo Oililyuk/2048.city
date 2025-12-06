@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/blog/layout,_N_T_/blog/advanced-strategies/layout,_N_T_/blog/advanced-strategies/page,_N_T_/blog/advanced-strategies"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/blog/advanced-strategies/__PAGE__",
+    "/blog/advanced-strategies",
+    "/blog",
+    "/_index",
+    "/_head"
+  ]
+}

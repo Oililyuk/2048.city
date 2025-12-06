@@ -49,6 +49,12 @@
       "namedRegex": "^/_not\\-found(?:/)?$"
     },
     {
+      "page": "/about",
+      "regex": "^/about(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/about(?:/)?$"
+    },
+    {
       "page": "/api/scores/leaderboard",
       "regex": "^/api/scores/leaderboard(?:/)?$",
       "routeKeys": {},
@@ -65,6 +71,48 @@
       "regex": "^/api/scores/user(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/scores/user(?:/)?$"
+    },
+    {
+      "page": "/blog",
+      "regex": "^/blog(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog(?:/)?$"
+    },
+    {
+      "page": "/blog/advanced-strategies",
+      "regex": "^/blog/advanced\\-strategies(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/advanced\\-strategies(?:/)?$"
+    },
+    {
+      "page": "/blog/ai-vs-human",
+      "regex": "^/blog/ai\\-vs\\-human(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/ai\\-vs\\-human(?:/)?$"
+    },
+    {
+      "page": "/blog/history-of-2048",
+      "regex": "^/blog/history\\-of\\-2048(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/history\\-of\\-2048(?:/)?$"
+    },
+    {
+      "page": "/blog/how-to-win-2048",
+      "regex": "^/blog/how\\-to\\-win\\-2048(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog/how\\-to\\-win\\-2048(?:/)?$"
+    },
+    {
+      "page": "/challenges/daily",
+      "regex": "^/challenges/daily(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/challenges/daily(?:/)?$"
+    },
+    {
+      "page": "/contact",
+      "regex": "^/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/contact(?:/)?$"
     },
     {
       "page": "/favicon.ico",

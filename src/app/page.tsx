@@ -4,6 +4,7 @@ import GameBoard from '@/components/Game/GameBoard';
 import LoginButton from '@/components/Auth/LoginButton';
 import CookieConsent from '@/components/CookieConsent/CookieConsent';
 import Leaderboard from '@/components/Leaderboard/Leaderboard';
+import HowToPlay from '@/components/HowToPlay/HowToPlay';
 
 export const metadata: Metadata = {
   title: '2048 • Play Free Online | 2048.city',
@@ -54,6 +55,9 @@ export default async function Home() {
       
       <GameBoard session={session} />
       
+      {/* How to Play 内容区域 */}
+      <HowToPlay />
+      
       <CookieConsent />
       
       <script
@@ -72,6 +76,58 @@ export default async function Home() {
               price: '0',
               priceCurrency: 'USD'
             }
+          })
+        }}
+      />
+      
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'How do you play 2048?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Use arrow keys or swipe to move tiles. When two tiles with the same number touch, they merge into one. The goal is to create a tile with the number 2048.'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: 'Is 2048 free to play?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Yes! 2048.city is completely free to play. No downloads, no subscriptions, no hidden costs.'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: 'What happens after I reach 2048?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'You can choose to continue playing and try to reach even higher tiles like 4096, 8192, or beyond. The game does not stop at 2048.'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: 'Can I play 2048 on mobile?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Yes! 2048.city is fully optimized for mobile devices. Simply swipe in any direction to move the tiles.'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: 'How does the leaderboard work?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Sign in with Google to submit your scores to the global leaderboard. Your best score will be displayed, and you can compete with players worldwide.'
+                }
+              }
+            ]
           })
         }}
       />

@@ -1,0 +1,200 @@
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 60px auto 0;
+  padding: 0 20px 40px;
+}
+
+.content {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.section {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.sectionHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: inherit;
+}
+
+.sectionHeader:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon {
+  font-size: 24px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.6);
+  transition: transform 0.3s ease;
+  min-width: 24px;
+  text-align: center;
+}
+
+.sectionHeader:hover .icon {
+  color: rgba(255, 255, 255, 0.9);
+  transform: scale(1.1);
+}
+
+.sectionContent {
+  padding: 0 24px 24px;
+  animation: slideDown 0.3s ease;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.7;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sectionContent h3 {
+  color: #edc850;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 24px 0 12px;
+}
+
+.sectionContent h3:first-child {
+  margin-top: 0;
+}
+
+.sectionContent p {
+  margin: 12px 0;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.sectionContent ul {
+  margin: 12px 0;
+  padding-left: 24px;
+}
+
+.sectionContent li {
+  margin: 8px 0;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.sectionContent strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.footer {
+  margin-top: 40px;
+  padding: 20px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.footer p {
+  margin: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    margin-top: 40px;
+    padding: 0 16px 32px;
+  }
+
+  .sectionHeader {
+    padding: 16px 20px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .sectionContent {
+    padding: 0 20px 20px;
+    font-size: 15px;
+  }
+
+  .sectionContent h3 {
+    font-size: 16px;
+  }
+
+  .sectionContent ul {
+    padding-left: 20px;
+  }
+
+  .footer {
+    font-size: 12px;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin-top: 30px;
+    padding: 0 12px 24px;
+  }
+
+  .sectionHeader {
+    padding: 14px 16px;
+  }
+
+  .title {
+    font-size: 16px;
+    gap: 6px;
+  }
+
+  .icon {
+    font-size: 20px;
+  }
+
+  .sectionContent {
+    padding: 0 16px 16px;
+    font-size: 14px;
+  }
+
+  .sectionContent h3 {
+    font-size: 15px;
+    margin: 20px 0 10px;
+  }
+
+  .sectionContent ul {
+    padding-left: 18px;
+  }
+
+  .sectionContent li {
+    margin: 6px 0;
+  }
+}
