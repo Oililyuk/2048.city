@@ -1,33 +1,33 @@
 {
   "name": "2048-city",
-  "version": "1.0.0",
-  "description": "2048 game with Reddit integration - share your scores to r/2048city",
-  "main": "server/index.js",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "nodemon server/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
-  "keywords": [
-    "2048",
-    "game",
-    "reddit",
-    "puzzle"
-  ],
-  "author": "2048.city",
-  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "cors": "^2.8.5",
-    "axios": "^1.6.2",
-    "dotenv": "^16.3.1"
+    "@auth/core": "^0.41.0",
+    "@vercel/postgres": "^0.10.0",
+    "lucide-react": "^0.556.0",
+    "next": "16.0.7",
+    "next-auth": "^5.0.0-beta.30",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "resend": "^6.5.2"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
-  },
-  "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=8.0.0"
+    "@prisma/client": "^6.19.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.7",
+    "prisma": "^6.19.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

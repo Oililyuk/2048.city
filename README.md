@@ -1,33 +1,115 @@
-# 2048.city
+# 2048.city - Free 2048 Game
 
-2048.city is a free, web-based implementation of the classic 2048 puzzle game. Players can enjoy smooth controls, a beautiful interface, and addictive gameplay, either directly on the website or embedded in Reddit via OAuth login.
+A modern, elegant 2048 puzzle game with iOS frosted glass effects, Google authentication, leaderboards, and social sharing.
 
 ## Features
 
-- **Play the classic 2048 game** with a clean, modern interface.
-- **Easy controls**: arrow keys or swipe gestures.
-- **Track and share scores** with Reddit integration.
-- **User authentication**: login securely with your Reddit account via OAuth.
-- **Community engagement**: share your high scores directly to the subreddit [r/2048city](https://www.reddit.com/r/2048city).
+- 🎮 Classic 2048 gameplay with liquid glass UI effects
+- 🔐 Google OAuth authentication
+- 🏆 Global and daily leaderboards
+- 📧 Email notifications for new high scores (via Resend)
+- 📱 Fully responsive design
+- 🍪 GDPR-compliant cookie consent
+- 💰 Ad-supported (Google AdSense ready)
+- 🚀 Built with Next.js 14 & TypeScript
 
-## Reddit Integration
+## Tech Stack
 
-2048.city integrates with Reddit using OAuth to authenticate users and allow them to post scores. Key functionality includes:
+- **Framework**: Next.js 14 (App Router)
+- **Auth**: NextAuth.js v5 + Google OAuth
+- **Database**: Vercel Postgres + Prisma ORM  
+- **Email**: Resend (3000 free emails/month)
+- **Styling**: CSS Modules (100% preserved from original)
+- **Deployment**: Vercel
 
-1. **Login with Reddit**: Users authenticate via OAuth with `identity` and `submit` scopes.
-2. **Score submission**: After playing, users can click “Share to Reddit” to post their high score to [r/2048city](https://www.reddit.com/r/2048city).
-3. **User-controlled posting**: Posts are only made when the user explicitly chooses to share their score.
-4. **Server-side handling**: The backend exchanges the OAuth code for an access token, verifies identity, and submits the score via the Reddit API (`/api/submit`).
+## Setup Instructions
 
-## Installation & Development
+### 1. Install Dependencies
 
 ```bash
-# Clone the repository
-git clone https://github.com/<your-username>/2048.city.git
-cd 2048.city
-
-# Install dependencies
 npm install
+```
 
-# Start the development server
+### 2. Configure Environment Variables
+
+Create `.env.local`:
+
+```env
+# Database (from Vercel Postgres)
+POSTGRES_URL=
+POSTGRES_PRISMA_URL=
+POSTGRES_URL_NON_POOLING=
+
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=  # Generate with: openssl rand -base64 32
+
+# Google OAuth (get from Google Cloud Console)
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# Resend Email
+RESEND_API_KEY=  # Get from resend.com
+
+# App Config
+NEXT_PUBLIC_APP_URL=https://2048.city
+```
+
+### 3. Set up Database
+
+```bash
+# Push schema to database
+npx prisma db push
+
+# Generate Prisma Client
+npx prisma generate
+```
+
+### 4. Run Development Server
+
+```bash
 npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000)
+
+## Email Service Setup (Resend)
+
+1. Sign up at [resend.com](https://resend.com)
+2. Free tier includes 3,000 emails/month
+3. Verify your domain or use their sandbox domain for testing
+4. Add API key to `.env.local`
+
+## Deployment to Vercel
+
+1. Push code to GitHub
+2. Import project in Vercel
+3. Add environment variables
+4. Deploy!
+
+## Project Structure
+
+```
+├── app/
+│   ├── api/
+│   │   ├── auth/[...nextauth]/     # NextAuth endpoints
+│   │   ├── scores/                 # Score management APIs
+│   │   └── share/                  # Social sharing
+│   ├── leaderboard/                # Leaderboard page
+│   └── page.tsx                    # Main game page
+├── components/
+│   ├── Game/                       # Core game components
+│   ├── Auth/                       # Authentication UI
+│   ├── Leaderboard/                # Leaderboard components
+│   └── CookieConsent/              # GDPR cookie banner
+├── lib/
+│   ├── db.ts                       # Database client
+│   ├── auth.ts                     # Auth configuration
+│   └── email.ts                    # Email utilities
+└── prisma/
+    └── schema.prisma               # Database schema
+```
+
+## License
+
+MIT License - feel free to use for your own projects!

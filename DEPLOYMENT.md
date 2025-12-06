@@ -1,277 +1,179 @@
-# Deployment Guide - 2048.city
+# Vercel 部署指南
 
-This guide explains how to deploy your 2048.city application with Reddit integration.
-
-## Prerequisites
-
-- Node.js 16+ and npm 8+
-- Reddit account
-- Reddit App credentials (Client ID and Secret)
-
-## Step 1: Set Up Reddit App
-
-1. Go to https://www.reddit.com/prefs/apps
-2. Click "Create App" or "Create Another App"
-3. Fill in the form:
-   - **Name**: 2048.city (or your preferred name)
-   - **App type**: Select "web app"
-   - **Description**: 2048 game with Reddit integration
-   - **About URL**: https://your-domain.com
-   - **Redirect URI**: `http://localhost:3000/api/auth/reddit/callback` (for development)
-   - For production, use: `https://your-domain.com/api/auth/reddit/callback`
-4. Click "Create app"
-5. Note down the **client ID** (under the app name) and **client secret**
-
-## Step 2: Local Development Setup
-
-### 1. Install Dependencies
+## 步骤 1: 准备 Git 仓库
 
 ```bash
-cd /path/to/2048
-npm install
+git init
+git add .
+git commit -m "Initial commit"
 ```
 
-### 2. Configure Environment Variables
+将代码推送到 GitHub/GitLab/Bitbucket
 
-```bash
-# Copy the example env file
-cp .env.example .env
+## 步骤 2: 在 Vercel 创建项目
 
-# Edit .env with your credentials
-nano .env  # or use your preferred editor
-```
+1. 访问 https://vercel.com
+2. 点击 "Add New Project"
+3. 导入你的 Git 仓库
+4. Vercel 会自动检测 Next.js 项目
 
-Fill in the following in `.env`:
-```env
-REDDIT_CLIENT_ID=your_client_id_here
-REDDIT_CLIENT_SECRET=your_client_secret_here
-REDDIT_REDIRECT_URI=http://localhost:3000/api/auth/reddit/callback
-SESSION_SECRET=generate_a_random_string_here
-```
+## 步骤 3: 配置 Vercel Postgres 数据库
 
-### 3. Copy Game Core Logic
+1. 在 Vercel 项目中，进入 "Storage" 标签
+2. 点击 "Create Database"
+3. 选择 "Postgres"
+4. 点击 "Continue" 创建数据库
+5. 数据库创建后，Vercel 会自动添加以下环境变量：
+   - `POSTGRES_URL` (这将作为 `DATABASE_URL`)
+   - `POSTGRES_URL_NON_POOLING` (这将作为 `DIRECT_URL`)
 
-The `public/game-core.js` file needs the complete game logic from `script.js`:
+## 步骤 4: 配置环境变量
 
-```bash
-# Copy the Game2048 class from script.js to public/game-core.js
-# You can do this manually or use:
-head -n 1500 script.js > public/game-core.js
-```
+在 Vercel 项目的 "Settings" -> "Environment Variables" 中添加：
 
-Or manually copy the entire `Game2048` class from `script.js` into `public/game-core.js`.
+### 必需的环境变量：
 
-### 4. Copy Static Assets
+1. **DATABASE_URL**
+   - 值：从 Vercel Postgres 自动生成的 `POSTGRES_URL`
+   - 或手动复制连接字符串
 
-```bash
-# Copy the stylesheet
-cp style.css public/style.css
+2. **DIRECT_URL**
+   - 值：从 Vercel Postgres 自动生成的 `POSTGRES_URL_NON_POOLING`
 
-# Copy assets folder
-cp -r asset public/asset
-```
+3. **NEXTAUTH_URL**
+   - 值：`https://2048.city` (你的域名)
+   - 如果还没配置域名，先用 Vercel 提供的域名如 `https://your-project.vercel.app`
 
-### 5. Start Development Server
-
-```bash
-npm run dev
-```
-
-The application will be available at:
-- New app with Reddit: http://localhost:3000/app
-- Original game: http://localhost:3000/
-- API health check: http://localhost:3000/api/health
-
-## Step 3: Testing Reddit Integration
-
-1. Visit http://localhost:3000/app
-2. Click "Login with Reddit"
-3. Authorize the app on Reddit
-4. Play the game
-5. When game ends, click "Share to Reddit"
-6. Check r/2048city for your post
-
-## Step 4: Production Deployment
-
-### Option A: Vercel (Recommended for Serverless)
-
-1. Install Vercel CLI:
-```bash
-npm i -g vercel
-```
-
-2. Create `vercel.json`:
-```json
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "server/index.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "server/index.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "public/$1"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
-}
-```
-
-3. Set environment variables in Vercel:
-```bash
-vercel env add REDDIT_CLIENT_ID
-vercel env add REDDIT_CLIENT_SECRET
-vercel env add SESSION_SECRET
-```
-
-4. Deploy:
-```bash
-vercel --prod
-```
-
-5. Update Reddit app redirect URI to your Vercel URL:
-   - Go to https://www.reddit.com/prefs/apps
-   - Edit your app
-   - Change redirect URI to: `https://your-app.vercel.app/api/auth/reddit/callback`
-
-### Option B: Traditional VPS (DigitalOcean, AWS, etc.)
-
-1. SSH into your server
-2. Install Node.js 16+
-3. Clone your repository
-4. Install dependencies: `npm install`
-5. Create `.env` file with production values
-6. Use PM2 to run the app:
-```bash
-npm install -g pm2
-pm2 start server/index.js --name 2048-city
-pm2 save
-pm2 startup
-```
-
-7. Set up Nginx as reverse proxy:
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
-
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
-
-8. Set up SSL with Let's Encrypt:
-```bash
-sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d your-domain.com
-```
-
-### Option C: Railway
-
-1. Create account at https://railway.app
-2. Create new project
-3. Connect your GitHub repository
-4. Add environment variables in Railway dashboard
-5. Railway will auto-deploy on push
-
-## Step 5: Update Reddit App for Production
-
-1. Go to https://www.reddit.com/prefs/apps
-2. Edit your app
-3. Update redirect URI to production URL:
+4. **NEXTAUTH_SECRET**
+   - 生成新的密钥：
+   ```bash
+   openssl rand -base64 32
    ```
-   https://your-production-domain.com/api/auth/reddit/callback
+   - 将生成的字符串作为值
+
+5. **GOOGLE_CLIENT_ID**
+   - 从 Google Cloud Console 获取
+   - https://console.cloud.google.com/apis/credentials
+
+6. **GOOGLE_CLIENT_SECRET**
+   - 从 Google Cloud Console 获取
+
+## 步骤 5: 配置 Google OAuth
+
+1. 访问 https://console.cloud.google.com/apis/credentials
+2. 编辑你的 OAuth 2.0 客户端
+3. 在 "已授权的重定向 URI" 中添加：
    ```
-4. Update `.env` on server:
-   ```env
-   REDDIT_REDIRECT_URI=https://your-production-domain.com/api/auth/reddit/callback
-   FRONTEND_URL=https://your-production-domain.com
-   NODE_ENV=production
+   https://2048.city/api/auth/callback/google
+   https://your-project.vercel.app/api/auth/callback/google
    ```
 
-## Security Checklist
+## 步骤 6: 运行数据库迁移
 
-- [ ] Generate strong random `SESSION_SECRET`
-- [ ] Never commit `.env` to version control
-- [ ] Use HTTPS in production (required for Reddit OAuth)
-- [ ] Set `NODE_ENV=production` in production
-- [ ] Configure CORS properly for your domain
-- [ ] Keep Reddit API credentials secure
-- [ ] Regularly update dependencies
+有两种方式：
 
-## Monitoring
+### 方式 A: 本地运行迁移（推荐）
 
-### Check server status:
-```bash
-curl https://your-domain.com/api/health
+1. 更新本地 `.env.local`，临时使用 Vercel Postgres 连接字符串：
+   ```bash
+   DATABASE_URL="postgres://..."
+   DIRECT_URL="postgres://..."
+   ```
+
+2. 运行迁移：
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+### 方式 B: 通过 Vercel 部署自动运行
+
+在 `vercel.json` 中已经配置了 `prisma generate`，首次部署时会自动生成客户端。
+
+但需要手动在 Vercel 项目设置中添加构建命令：
+```
+prisma generate && prisma db push && next build
 ```
 
-### View logs:
-```bash
-# PM2
-pm2 logs 2048-city
+## 步骤 7: 部署
 
-# Vercel
-vercel logs
+1. 提交所有更改：
+   ```bash
+   git add .
+   git commit -m "Configure for Vercel deployment"
+   git push
+   ```
 
-# Railway
-railway logs
-```
+2. Vercel 会自动检测到新的提交并开始部署
 
-## Troubleshooting
+3. 等待部署完成（通常 2-3 分钟）
 
-### "Reddit authentication failed"
-- Check if Reddit app credentials are correct
-- Verify redirect URI matches exactly (including http/https)
-- Ensure app type is "web app" on Reddit
+## 步骤 8: 配置自定义域名
 
-### "Token expired" errors
-- Check if SESSION_SECRET is set
-- Verify token refresh logic is working
-- Check server logs for token refresh errors
+1. 在 Vercel 项目中，进入 "Settings" -> "Domains"
+2. 添加 `2048.city` 和 `www.2048.city`
+3. 按照 Vercel 的指示配置 DNS 记录：
+   - A 记录指向 Vercel 的 IP
+   - CNAME 记录指向 `cname.vercel-dns.com`
 
-### CORS errors
-- Ensure FRONTEND_URL matches your actual domain
-- Check CORS configuration in server/index.js
-- Verify credentials: true in CORS options
+4. 等待 DNS 传播（通常 5-30 分钟）
 
-### Rate limiting issues
-- Users are limited to 3 shares per hour
-- This is enforced server-side
-- Check middleware/auth.js for rate limit settings
+5. 更新环境变量 `NEXTAUTH_URL` 为 `https://2048.city`
 
-## Support
+6. 重新部署项目
 
-For issues:
-1. Check server logs
-2. Test with `curl` or Postman
-3. Verify environment variables
-4. Check Reddit app status at https://www.reddit.com/prefs/apps
+## 步骤 9: 验证部署
 
-## Next Steps
+访问 https://2048.city（或你的 Vercel 域名）：
 
-After deployment:
-1. Test all functionality (login, play, share)
-2. Share your app URL on r/2048city
-3. Monitor for errors and user feedback
-4. Consider adding analytics
-5. Plan feature updates (see ARCHITECTURE.md)
+- ✅ 游戏正常加载
+- ✅ 可以登录 Google
+- ✅ 排行榜功能正常
+- ✅ 分数保存到数据库
+
+## 故障排查
+
+### 数据库连接错误
+
+如果看到 "Can't reach database server" 错误：
+1. 确认环境变量正确设置
+2. 检查 Prisma schema 中的 `directUrl` 配置
+3. 在 Vercel 日志中查看详细错误信息
+
+### OAuth 回调错误
+
+如果登录后出现 "Callback URL mismatch" 错误：
+1. 检查 Google Cloud Console 中的授权重定向 URI
+2. 确保 `NEXTAUTH_URL` 环境变量正确
+
+### 构建失败
+
+查看 Vercel 构建日志，常见问题：
+1. 缺少环境变量
+2. Prisma 生成失败 - 运行 `npx prisma generate`
+3. TypeScript 错误 - 本地运行 `npm run build` 检查
+
+## 性能优化
+
+部署后可以考虑：
+
+1. **启用 Edge Functions**（可选）
+   - 将 API 路由移至 Edge Runtime
+   - 更快的全球响应速度
+
+2. **配置 CDN 缓存**
+   - 静态资源自动通过 Vercel CDN 分发
+
+3. **数据库连接池**
+   - Vercel Postgres 自动提供连接池
+   - 使用 `DATABASE_URL` 而不是 `DIRECT_URL` 进行查询
+
+## 监控和分析
+
+1. Vercel Analytics - 访问统计
+2. Vercel Speed Insights - 性能监控
+3. 在 Vercel 项目中查看实时日志
+
+---
+
+部署完成后，你的 Free 2048 游戏就可以在 https://2048.city 上运行了！
