@@ -3,6 +3,7 @@ import { SessionProvider } from '@/components/SessionProvider';
 import './globals.css';
 
 import MainMenu from '@/components/MainMenu/MainMenu';
+import { ToastProvider } from '@/components/Toast/ToastProvider';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://2048.city'),
@@ -31,10 +32,12 @@ export default function RootLayout({
         <link rel="canonical" href="https://2048.city" />
       </head>
       <body>
-        <SessionProvider>
-          <MainMenu />
-          {children}
-        </SessionProvider>
+        <ToastProvider>
+          <SessionProvider>
+            <MainMenu />
+            {children}
+          </SessionProvider>
+        </ToastProvider>
       </body>
     </html>
   );

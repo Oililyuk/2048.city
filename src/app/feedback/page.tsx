@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import ToastContainer, { ToastItem } from '@/components/Toast/Toast';
+import { useToast } from '@/components/Toast/ToastProvider';
 
 const glass = {
   background: 'rgba(255,255,255,0.12)',
@@ -15,15 +15,7 @@ export default function FeedbackPage() {
   const [comments, setComments] = useState<Array<{id: string; content: string; user: string; createdAt: string}>>([]);
   const [form, setForm] = useState({ content: '' });
   const [loading, setLoading] = useState(false);
-  const [toasts, setToasts] = useState<ToastItem[]>([]);
-
-  const addToast = (message: string, type: ToastItem['type'] = 'info', duration = 4000) => {
-    const t: ToastItem = { id: String(Date.now()) + Math.random().toString(36).slice(2), message, type, duration };
-    setToasts((s) => [t, ...s]);
-    return t.id;
-  };
-
-  const removeToast = (id: string) => setToasts((s) => s.filter((t) => t.id !== id));
+  const { addToast } = useToast();
 
   async function fetchComments() {
     const res = await fetch('/api/feedback');
@@ -95,7 +87,7 @@ export default function FeedbackPage() {
           </ul>
         )}
       </section>
-      <ToastContainer toasts={toasts} onRemove={removeToast} />
+      {/* Toasts are provided globally by ToastProvider */}
     </main>
   );
 }

@@ -27,12 +27,7 @@
     pointer-events: none;
 }
 
-/* 暗黑模式背景 */
-@media (prefers-color-scheme: dark) {
-    body::before {
-        background-image: url('/asset/wallpaper/bg1.jpg');
-    }
-}
+/* Note: global background is controlled by src/app/globals.css; avoid overriding body/background here */
 
 /* 浅色模式下的UI元素颜色 */
 @media (prefers-color-scheme: light) {
