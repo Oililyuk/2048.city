@@ -59,25 +59,33 @@
 }
 .menuList {
   display: none;
+}
 .mainButtonWrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 .mainButton {
-  background: #4fd1c5;
-  color: #222;
-  font-size: 1.1rem;
+  background: linear-gradient(90deg, #4fd1c5 60%, #38b2ac 100%);
+  color: #fff;
+  font-size: 1.15rem;
   font-weight: 700;
   border: none;
-  border-radius: 8px;
-  padding: 10px 24px;
+  border-radius: 16px;
+  padding: 12px 32px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(79,209,197,0.12);
-  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 4px 24px rgba(79,209,197,0.18);
+  transition: background 0.22s, color 0.22s, box-shadow 0.22s;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  position: relative;
+  outline: none;
+}
+.mainButton:hover, .mainButton:focus {
+  background: linear-gradient(90deg, #38b2ac 60%, #4fd1c5 100%);
+  color: #fff;
+  box-shadow: 0 8px 32px #4fd1c544;
 }
 .mainButton:hover {
   background: #38b2ac;
@@ -91,11 +99,11 @@
   position: absolute;
   top: 110%;
   left: 0;
-  min-width: 180px;
-  background: rgba(30,30,40,0.98);
-  border-radius: 10px;
-  box-shadow: 0 8px 32px rgba(30,30,40,0.22);
-  padding: 8px 0;
+  min-width: 220px;
+  background: linear-gradient(90deg, rgba(30,30,40,0.98) 80%, #4fd1c522 100%);
+  border-radius: 18px;
+  box-shadow: 0 12px 48px rgba(30,30,40,0.28);
+  padding: 12px 0;
   z-index: 2100;
   list-style: none;
   margin: 0;
@@ -111,8 +119,8 @@
 .submenu .menuLink {
   width: 100%;
   display: block;
-  padding: 12px 24px;
-  font-size: 1rem;
+  padding: 14px 32px;
+  font-size: 1.08rem;
   color: #fff;
   border: none;
   background: none;
@@ -120,11 +128,11 @@
   border-bottom: 1px solid rgba(255,255,255,0.08);
   border-radius: 0;
   transition: background 0.18s, color 0.18s;
+  font-weight: 500;
 }
-.submenu .menuLink:hover {
-  background: rgba(79,209,197,0.14);
-  color: #4fd1c5;
-}
+.submenu .menuLink:hover, .submenu .menuLink:focus {
+  background: linear-gradient(90deg, #4fd1c5 10%, rgba(79,209,197,0.14) 100%);
+  color: #222;
 }
 .menuLink {
   color: #fff;
