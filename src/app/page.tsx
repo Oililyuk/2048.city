@@ -51,6 +51,7 @@ export default async function Home() {
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '0', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh' }}>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', height: 56, padding: '12px 0 0 0', position: 'sticky', top: 0, zIndex: 100 }}>
           <LoginButton />
+          <Leaderboard />
         </div>
         <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0', padding: '0' }}>
           <GameBoard session={session} />
