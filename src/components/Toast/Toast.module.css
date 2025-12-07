@@ -1,0 +1,55 @@
+.toastRoot {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  min-width: 220px;
+  max-width: 360px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  border: 1px solid rgba(255,255,255,0.06);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.success {
+  background: linear-gradient(180deg, rgba(79,209,197,0.12), rgba(79,209,197,0.08));
+  color: #e6fffa;
+}
+
+.error {
+  background: linear-gradient(180deg, rgba(255,99,71,0.12), rgba(255,99,71,0.08));
+  color: #fff5f5;
+}
+
+.message {
+  font-size: 14px;
+}
+
+.closeBtn {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 700;
+  margin-left: 12px;
+}

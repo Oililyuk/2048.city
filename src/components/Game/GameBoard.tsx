@@ -74,7 +74,7 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
   }, [session]);
 
   return (
-    <>
+    <div className="game-root">
       <svg style={{ position: 'absolute', width: 0, height: 0 }}>
         <defs>
           <filter id="glass-distortion">
@@ -93,7 +93,7 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
           </filter>
         </defs>
       </svg>
-      
+
       <div className="container" ref={containerRef}>
         <header className="header">
           <h1>Free 2048</h1>
@@ -181,6 +181,6 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
           <div className="button-spacer" style={{ height: '60px' }}></div>
         </footer>
       </div>
-    </>
+    </div>
   );
 }

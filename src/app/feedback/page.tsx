@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import ToastContainer, { ToastItem } from '@/components/Toast/Toast';
 
 const glass = {
   background: 'rgba(255,255,255,0.12)',
@@ -14,6 +15,15 @@ export default function FeedbackPage() {
   const [comments, setComments] = useState<Array<{id: string; content: string; user: string; createdAt: string}>>([]);
   const [form, setForm] = useState({ content: '' });
   const [loading, setLoading] = useState(false);
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
+
+  const addToast = (message: string, type: ToastItem['type'] = 'info', duration = 4000) => {
+    const t: ToastItem = { id: String(Date.now()) + Math.random().toString(36).slice(2), message, type, duration };
+    setToasts((s) => [t, ...s]);
+    return t.id;
+  };
+
+  const removeToast = (id: string) => setToasts((s) => s.filter((t) => t.id !== id));
 
   async function fetchComments() {
     const res = await fetch('/api/feedback');
@@ -41,16 +51,17 @@ export default function FeedbackPage() {
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: 'Unknown error' }));
-        alert('Failed to submit: ' + (err.error || res.statusText));
+        addToast('Failed to submit: ' + (err.error || res.statusText), 'error');
       } else {
         // optimistic fetch update
         const created = await res.json();
         setComments(prev => [created, ...prev]);
         setForm({ content: '' });
+        addToast('Feedback submitted — thanks!', 'success');
       }
     } catch (error) {
       console.error('Submit error', error);
-      alert('Failed to submit feedback. Please try again.');
+      addToast('Failed to submit feedback. Please try again.', 'error');
     } finally {
       setLoading(false);
     }
@@ -84,6 +95,7 @@ export default function FeedbackPage() {
           </ul>
         )}
       </section>
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </main>
   );
 }
