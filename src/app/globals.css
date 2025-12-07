@@ -11,11 +11,10 @@
 
 html {
     height: 100%;
-    overflow: hidden;
-    position: fixed;
     width: 100%;
 }
 
+/* body allows scrolling; add top padding to avoid fixed menu overlap */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     background: #000;
@@ -23,8 +22,9 @@ body {
     font-size: 18px;
     line-height: 1.42857143;
     min-height: 100vh;
-    overflow: hidden;
-    padding-top: env(safe-area-inset-top);
+    overflow: auto;
+    /* account for top fixed menu (64px) + safe area */
+    padding-top: calc(64px + env(safe-area-inset-top));
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);

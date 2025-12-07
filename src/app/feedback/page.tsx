@@ -33,13 +33,28 @@ export default function FeedbackPage() {
     e.preventDefault();
     if (!form.content.trim()) return;
     setLoading(true);
-    const res = await fetch('/api/feedback', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: form.content }),
-    });
-    setForm({ content: '' });
-    setLoading(false);
+    try {
+      const res = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: form.content }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'Unknown error' }));
+        alert('Failed to submit: ' + (err.error || res.statusText));
+      } else {
+        // optimistic fetch update
+        const created = await res.json();
+        setComments(prev => [created, ...prev]);
+        setForm({ content: '' });
+      }
+    } catch (error) {
+      console.error('Submit error', error);
+      alert('Failed to submit feedback. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+    // ensure list refreshed from server
     fetchComments();
   };
 
