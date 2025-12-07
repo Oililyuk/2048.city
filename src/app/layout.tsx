@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { SessionProvider } from '@/components/SessionProvider';
 import './globals.css';
 
+import MainMenu from '@/components/MainMenu/MainMenu';
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://2048.city'),
   title: {
@@ -11,9 +13,10 @@ export const metadata: Metadata = {
   description: 'Play free 2048 game with iOS frosted glass effects',
   keywords: 'free 2048, 2048 game, 2048.city, iOS glass effect, puzzle game',
   authors: [{ name: '2048.city Team' }],
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
-  themeColor: '#000000',
 };
+
+export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+export const themeColor = '#000000';
 
 export default function RootLayout({
   children,
@@ -29,6 +32,7 @@ export default function RootLayout({
       </head>
       <body>
         <SessionProvider>
+          <MainMenu />
           {children}
         </SessionProvider>
       </body>

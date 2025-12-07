@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   description: 'Explore the differences between AI and human strategies in 2048. See how algorithms solve the puzzle and what humans can learn from them.'
 };
 
+export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+export const themeColor = '#000000';
+
 export default function AiVsHumanPage() {
   return (
     <main style={{ maxWidth: 800, margin: '0 auto', padding: '2rem 1rem' }}>

@@ -4,7 +4,7 @@ import GameBoard from '@/components/Game/GameBoard';
 import LoginButton from '@/components/Auth/LoginButton';
 import CookieConsent from '@/components/CookieConsent/CookieConsent';
 import Leaderboard from '@/components/Leaderboard/Leaderboard';
-import HowToPlay from '@/components/HowToPlay/HowToPlay';
+import InfoDrawer from '@/components/InfoDrawer/InfoDrawer';
 
 export const metadata: Metadata = {
   title: '2048 • Play Free Online | 2048.city',
@@ -38,99 +38,26 @@ export const metadata: Metadata = {
   other: {
     'pinterest-rich-pin': 'true',
   },
-};
+  };  
+
+  export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+  export const themeColor = '#000000';
 
 export default async function Home() {
   const session = await auth();
 
   return (
     <>
-      {/* 排行榜按钮 - 左上角 */}
-      <Leaderboard />
-      
-      {/* 登录按钮 - 右下角 */}
-      <div style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 1000 }}>
-        <LoginButton />
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: '32px 0 0 0' }}>
+        <GameBoard session={session} />
+        <div style={{ textAlign: 'center', margin: '32px 0 0 0', color: '#4fd1c5', fontWeight: 500, fontSize: 18 }}>
+          <span>2048.city — Play the classic puzzle game online, free and beautiful.</span>
+        </div>
+        <div style={{ textAlign: 'center', margin: '24px 0 0 0', color: '#fff', fontSize: 15 }}>
+          <span>Want more strategies and guides? Visit our <a href="/blog" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>Blog</a> for expert tips!</span>
+        </div>
+        <InfoDrawer />
       </div>
-      
-      <GameBoard session={session} />
-      
-      {/* How to Play 内容区域 */}
-      <HowToPlay />
-      
-      <CookieConsent />
-      
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebApplication',
-            name: '2048.city - Free 2048 Game',
-            description: 'Play free 2048 game online at 2048.city. The best free 2048 puzzle game with beautiful iOS glass effects. No download, play instantly!',
-            url: 'https://2048.city',
-            applicationCategory: 'Game',
-            operatingSystem: 'Any',
-            offers: {
-              '@type': 'Offer',
-              price: '0',
-              priceCurrency: 'USD'
-            }
-          })
-        }}
-      />
-      
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: [
-              {
-                '@type': 'Question',
-                name: 'How do you play 2048?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Use arrow keys or swipe to move tiles. When two tiles with the same number touch, they merge into one. The goal is to create a tile with the number 2048.'
-                }
-              },
-              {
-                '@type': 'Question',
-                name: 'Is 2048 free to play?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Yes! 2048.city is completely free to play. No downloads, no subscriptions, no hidden costs.'
-                }
-              },
-              {
-                '@type': 'Question',
-                name: 'What happens after I reach 2048?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'You can choose to continue playing and try to reach even higher tiles like 4096, 8192, or beyond. The game does not stop at 2048.'
-                }
-              },
-              {
-                '@type': 'Question',
-                name: 'Can I play 2048 on mobile?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Yes! 2048.city is fully optimized for mobile devices. Simply swipe in any direction to move the tiles.'
-                }
-              },
-              {
-                '@type': 'Question',
-                name: 'How does the leaderboard work?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Sign in with Google to submit your scores to the global leaderboard. Your best score will be displayed, and you can compete with players worldwide.'
-                }
-              }
-            ]
-          })
-        }}
-      />
     </>
   );
 }

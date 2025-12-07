@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   description: 'Try the 2048 daily challenge! Compete with players worldwide and see if you can reach the top of the leaderboard.'
 };
 
+export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+export const themeColor = '#000000';
+
 export default function DailyChallengePage() {
   return (
     <main style={{ maxWidth: 700, margin: '0 auto', padding: '2rem 1rem' }}>

@@ -13,7 +13,9 @@
   "/blog/page": "/blog",
   "/challenges/daily/page": "/challenges/daily",
   "/contact/page": "/contact",
+  "/faq/page": "/faq",
   "/favicon.ico/route": "/favicon.ico",
+  "/feedback/page": "/feedback",
   "/page": "/",
   "/robots.txt/route": "/robots.txt",
   "/sitemap.xml/route": "/sitemap.xml"

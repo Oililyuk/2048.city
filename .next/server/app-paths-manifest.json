@@ -13,7 +13,9 @@
   "/blog/page": "app/blog/page.js",
   "/challenges/daily/page": "app/challenges/daily/page.js",
   "/contact/page": "app/contact/page.js",
+  "/faq/page": "app/faq/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/feedback/page": "app/feedback/page.js",
   "/page": "app/page.js",
   "/robots.txt/route": "app/robots.txt/route.js",
   "/sitemap.xml/route": "app/sitemap.xml/route.js"

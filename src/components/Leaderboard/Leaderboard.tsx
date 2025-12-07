@@ -65,6 +65,11 @@ export default function Leaderboard() {
             </div>
 
             <div className={styles.content}>
+              <div style={{ marginBottom: 16, color: '#4fd1c5', fontWeight: 500, fontSize: '1.05rem' }}>
+                <span>Top scores are ranked by highest tile and total points. Only logged-in users can submit scores. Daily challenges have their own leaderboard.</span>
+                <br />
+                <span>See <a href="/faq" style={{ color: '#0070f3' }}>FAQ</a> for details.</span>
+              </div>
               {loading ? (
                 <div className={styles.loading}>Loading...</div>
               ) : leaderboard.length === 0 ? (
@@ -99,7 +104,6 @@ export default function Leaderboard() {
                   </div>
                 </>
               )}
-              
               {/* 激励说明和社区链接 */}
               <div className={styles.footer}>
                 <div className={styles.callToAction}>
@@ -112,7 +116,6 @@ export default function Leaderboard() {
                     </p>
                   </div>
                 </div>
-                
                 <div className={styles.community}>
                   <p className={styles.communityTitle}>Join Our Community</p>
                   <a 
@@ -125,6 +128,9 @@ export default function Leaderboard() {
                     <span>Discuss strategies on Reddit</span>
                     <span className={styles.externalIcon}>→</span>
                   </a>
+                </div>
+                <div style={{ marginTop: 16, color: '#888', fontSize: 13 }}>
+                  <span>Leaderboard is updated in real time. For privacy and rules, see <a href="/faq" style={{ color: '#0070f3' }}>FAQ</a>.</span>
                 </div>
               </div>
             </div>

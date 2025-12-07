@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   description: 'Step-by-step strategies and expert tips to help you reach 2048 and beyond. Learn the best moves, patterns, and secrets to master the game.'
 };
 
+export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+export const themeColor = '#000000';
+
 export default function HowToWin2048Page() {
   return (
     <main style={{ maxWidth: 800, margin: '0 auto', padding: '2rem 1rem' }}>
