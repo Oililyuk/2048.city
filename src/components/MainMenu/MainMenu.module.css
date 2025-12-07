@@ -58,13 +58,73 @@
   transition: all 0.3s;
 }
 .menuList {
+  display: none;
+.mainButtonWrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 24px;
+}
+.mainButton {
+  background: #4fd1c5;
+  color: #222;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(79,209,197,0.12);
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mainButton:hover {
+  background: #38b2ac;
+  color: #fff;
+}
+.arrow {
+  font-size: 1rem;
+  margin-left: 6px;
+}
+.submenu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  min-width: 180px;
+  background: rgba(30,30,40,0.98);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(30,30,40,0.22);
+  padding: 8px 0;
+  z-index: 2100;
   list-style: none;
   margin: 0;
-  padding: 0;
-  transition: box-shadow 0.3s, background 0.3s;
+  animation: fadeInMenu 0.25s;
+}
+@keyframes fadeInMenu {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.submenu li {
+  width: 100%;
+}
+.submenu .menuLink {
+  width: 100%;
+  display: block;
+  padding: 12px 24px;
+  font-size: 1rem;
+  color: #fff;
+  border: none;
+  background: none;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-radius: 0;
+  transition: background 0.18s, color 0.18s;
+}
+.submenu .menuLink:hover {
+  background: rgba(79,209,197,0.14);
+  color: #4fd1c5;
+}
 }
 .menuLink {
   color: #fff;

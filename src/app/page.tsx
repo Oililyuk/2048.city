@@ -48,15 +48,19 @@ export default async function Home() {
 
   return (
     <>
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '32px 0 0 0' }}>
+      <div style={{ maxWidth: 480, margin: '0 auto', padding: '32px 0 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+          <LoginButton />
+        </div>
         <GameBoard session={session} />
         <div style={{ textAlign: 'center', margin: '32px 0 0 0', color: '#4fd1c5', fontWeight: 500, fontSize: 18 }}>
           <span>2048.city — Play the classic puzzle game online, free and beautiful.</span>
         </div>
         <div style={{ textAlign: 'center', margin: '24px 0 0 0', color: '#fff', fontSize: 15 }}>
-          <span>Want more strategies and guides? Visit our <a href="/blog" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>Blog</a> for expert tips!</span>
+          <span>Want more strategies and guides? Visit our <a href="/blog" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>Blog</a> or <a href="/faq" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>FAQ</a> for expert tips!</span>
         </div>
         <InfoDrawer />
+        <CookieConsent />
       </div>
     </>
   );
