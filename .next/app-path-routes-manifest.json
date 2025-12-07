@@ -3,6 +3,7 @@
   "/_not-found/page": "/_not-found",
   "/about/page": "/about",
   "/api/auth/[...nextauth]/route": "/api/auth/[...nextauth]",
+  "/api/feedback/route": "/api/feedback",
   "/api/scores/leaderboard/route": "/api/scores/leaderboard",
   "/api/scores/submit/route": "/api/scores/submit",
   "/api/scores/user/route": "/api/scores/user",

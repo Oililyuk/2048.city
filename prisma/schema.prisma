@@ -35,3 +35,12 @@ model Score {
   @@index([score])
   @@index([createdAt])
 }
+
+model Feedback {
+  id        String   @id @default(cuid())
+  content   String
+  user      String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

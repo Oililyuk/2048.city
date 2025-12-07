@@ -3,6 +3,7 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/about/page": "app/about/page.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/feedback/route": "app/api/feedback/route.js",
   "/api/scores/leaderboard/route": "app/api/scores/leaderboard/route.js",
   "/api/scores/submit/route": "app/api/scores/submit/route.js",
   "/api/scores/user/route": "app/api/scores/user/route.js",

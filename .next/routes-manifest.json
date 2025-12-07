@@ -55,6 +55,12 @@
       "namedRegex": "^/about(?:/)?$"
     },
     {
+      "page": "/api/feedback",
+      "regex": "^/api/feedback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/feedback(?:/)?$"
+    },
+    {
       "page": "/api/scores/leaderboard",
       "regex": "^/api/scores/leaderboard(?:/)?$",
       "routeKeys": {},

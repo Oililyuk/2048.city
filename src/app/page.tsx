@@ -49,9 +49,12 @@ export default async function Home() {
   return (
     <>
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '0', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh' }}>
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', height: 56, padding: '12px 0 0 0', position: 'sticky', top: 0, zIndex: 100 }}>
-          <LoginButton />
-          <Leaderboard />
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 56, padding: '12px 0 0 0', position: 'sticky', top: 0, zIndex: 100 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <LoginButton />
+            <Leaderboard />
+          </div>
+          <InfoDrawer />
         </div>
         <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0', padding: '0' }}>
           <GameBoard session={session} />
@@ -62,7 +65,6 @@ export default async function Home() {
         <div style={{ width: '100%', textAlign: 'center', margin: '18px 0 0 0', color: '#fff', fontSize: 15 }}>
           <span>Want more strategies and guides? Visit our <a href="/blog" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>Blog</a> or <a href="/faq" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>FAQ</a>.</span>
         </div>
-        <InfoDrawer />
         <CookieConsent />
       </div>
     </>
