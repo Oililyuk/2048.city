@@ -126,52 +126,59 @@ export default function MainMenu() {
       {/* Compact main button + submenu for extras */}
       <div className={styles.mainButtonWrapper}>
         <button
-          className={styles.mainButton}
-          onClick={() => setSubmenuOpen(v => !v)}
-          aria-haspopup="true"
-          aria-expanded={submenuOpen}
-        >
-          More
-          <span className={styles.arrow}>{submenuOpen ? '▲' : '▼'}</span>
-        </button>
+          "use client";
+          import Link from 'next/link';
+          import styles from './MainMenu.module.css';
 
-        {submenuOpen && (
-          <ul className={styles.submenu} role="menu">
-            <li>
-              <Link href="/blog" className={styles.menuLink} role="menuitem"><span className={styles.icon}><Icon name="Blog"/></span> Blog</Link>
-            </li>
-            <li>
-              <Link href="/about" className={styles.menuLink} role="menuitem"><span className={styles.icon}><Icon name="About"/></span> About</Link>
-            </li>
-            <li>
-              <a href="https://www.reddit.com/r/2048city/" target="_blank" rel="noopener noreferrer" className={styles.menuLink} role="menuitem"><span className={styles.icon}><Icon name="Community"/></span> Reddit ↗</a>
-            </li>
-          </ul>
-        )}
-      </div>
+          import { useState } from 'react';
 
-      {/* Mobile overlay menu */}
-      {mobileOpen && (
-        <div className={styles.mobileOverlay} onClick={() => setMobileOpen(false)}>
-          <div className={styles.mobileMenu} onClick={(e) => e.stopPropagation()}>
-            <ul>
-              {menuItems.map(item => (
-                <li key={item.href}>
-                  {item.external ? (
-                    <a href={item.href} target="_blank" rel="noopener noreferrer" className={styles.menuLink}>
-                      {item.label}
-                    </a>
-                  ) : (
-                    <Link href={item.href} className={styles.menuLink} onClick={() => setMobileOpen(false)}>
-                      {item.label}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-    </nav>
-  );
-}
+          const menuItems = [
+            { label: 'Blog', href: '/blog' },
+            { label: 'How to Play', href: '/how-to-play' },
+            { label: 'Daily', href: '/challenges/daily' },
+            { label: 'Leaderboard', href: '/#leaderboard' },
+            { label: 'About', href: '/about' },
+            { label: 'Feedback', href: '/feedback' },
+            { label: 'Community', href: 'https://www.reddit.com/r/2048city/', external: true },
+          ];
+
+          export default function MainMenu() {
+            const [open, setOpen] = useState(false);
+
+            return (
+              <nav className={styles.menu} role="navigation" aria-label="Main menu">
+                <div className={styles.logoSection}>
+                  <Link href="/" className={styles.logo} aria-label="Home">2048.city</Link>
+                </div>
+
+                <div className={styles.controls}>
+                  <Link href="/" className={styles.controlButton} aria-label="Home">Home</Link>
+
+                  <div className={styles.dropdownWrapper}>
+                    <button
+                      className={styles.controlButton}
+                      aria-haspopup="true"
+                      aria-expanded={open}
+                      onClick={() => setOpen(v => !v)}
+                    >
+                      Menu <span className={styles.caret}>{open ? '▲' : '▼'}</span>
+                    </button>
+
+                    {open && (
+                      <ul className={styles.submenu} role="menu">
+                        {menuItems.map(item => (
+                          <li key={item.href}>
+                            {item.external ? (
+                              <a href={item.href} className={styles.menuLink} target="_blank" rel="noopener noreferrer" role="menuitem">{item.label}</a>
+                            ) : (
+                              <Link href={item.href} className={styles.menuLink} role="menuitem">{item.label}</Link>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              </nav>
+            );
+          }
