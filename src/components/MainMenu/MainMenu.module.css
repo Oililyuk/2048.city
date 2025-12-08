@@ -7,12 +7,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(90deg, rgba(30,30,40,0.85) 60%, rgba(79,209,197,0.12) 100%);
-  backdrop-filter: blur(18px) saturate(180%);
-  border-bottom: 1.5px solid rgba(79,209,197,0.18);
-  box-shadow: 0 4px 32px rgba(30,30,40,0.18);
+  background: rgba(20,20,28,0.5);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
   z-index: 2000;
-  padding: 0 32px;
+  padding: 0 20px;
 }
 .logoSection {
   display: flex;
@@ -20,17 +20,15 @@
   height: 100%;
 }
 .logo {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #4fd1c5;
+  color: #fff;
   text-decoration: none;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   padding: 0 12px;
   display: flex;
   align-items: center;
   height: 100%;
-  filter: drop-shadow(0 0 8px #4fd1c5cc);
-  animation: logoGlow 2.5s ease-in-out infinite alternate;
 }
 
 @keyframes logoGlow {
@@ -66,21 +64,20 @@
   align-items: center;
 }
 .mainButton {
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
   color: #fff;
-  font-size: 1.08rem;
+  font-size: 1.02rem;
   font-weight: 700;
-  border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 16px;
-  padding: 10px 28px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 8px 20px;
   cursor: pointer;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
-  transition: background 0.22s, color 0.22s, box-shadow 0.22s;
+  transition: background 0.18s, transform 0.18s;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   position: relative;
   outline: none;
 }
@@ -102,14 +99,14 @@
   top: 110%;
   left: 0;
   min-width: 220px;
-  background: linear-gradient(90deg, rgba(30,30,40,0.98) 80%, #4fd1c522 100%);
-  border-radius: 18px;
-  box-shadow: 0 12px 48px rgba(30,30,40,0.28);
-  padding: 12px 0;
+  background: rgba(20,20,28,0.95);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  padding: 8px 0;
   z-index: 2100;
   list-style: none;
   margin: 0;
-  animation: fadeInMenu 0.25s;
+  animation: fadeInMenu 0.18s;
 }
 @keyframes fadeInMenu {
   from { opacity: 0; transform: translateY(-10px); }
@@ -186,12 +183,15 @@
   .menuIcon {
     display: flex;
   }
+  .mainButton {
+    display: none; /* hide main button on small screens, use hamburger */
+  }
   .menuList {
     position: fixed;
     top: 48px;
     left: 0;
     width: 100vw;
-    background: linear-gradient(180deg, rgba(30,30,40,0.98) 80%, rgba(79,209,197,0.18) 100%);
+    background: rgba(20,20,28,0.96);
     flex-direction: column;
     align-items: flex-start;
     gap: 0;

@@ -21,6 +21,20 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Inline variant for placing the leaderboard button inline (e.g., inside the game footer) */
+.inline {
+  position: static !important;
+  bottom: auto !important;
+  left: auto !important;
+  margin-left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+}
+
 .leaderboardButton:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);

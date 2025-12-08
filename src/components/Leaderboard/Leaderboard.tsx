@@ -11,7 +11,7 @@ interface LeaderboardEntry {
   createdAt: string;
 }
 
-export default function Leaderboard() {
+export default function Leaderboard({ inline }: { inline?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -41,7 +41,7 @@ export default function Leaderboard() {
     <>
       {/* 排行榜按钮 */}
       <button
-        className={styles.leaderboardButton}
+        className={`${styles.leaderboardButton} ${inline ? styles.inline : ''}`}
         onClick={() => setIsOpen(true)}
         aria-label="View Leaderboard"
       >

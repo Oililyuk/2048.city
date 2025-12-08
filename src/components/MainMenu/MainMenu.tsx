@@ -25,6 +25,11 @@ export default function MainMenu() {
           Home
         </Link>
       </div>
+      <button className={styles.menuIcon} aria-label="Open menu" onClick={() => setSubmenuOpen(v => !v)}>
+        <span className={styles.iconBar}></span>
+        <span className={styles.iconBar}></span>
+        <span className={styles.iconBar}></span>
+      </button>
       <div className={styles.mainButtonWrapper}>
         <button
           className={styles.mainButton}

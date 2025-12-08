@@ -4,7 +4,6 @@ import GameBoard from '@/components/Game/GameBoard';
 import LoginButton from '@/components/Auth/LoginButton';
 import CookieConsent from '@/components/CookieConsent/CookieConsent';
 import Leaderboard from '@/components/Leaderboard/Leaderboard';
-import InfoDrawer from '@/components/InfoDrawer/InfoDrawer';
 
 export const metadata: Metadata = {
   title: '2048 • Play Free Online | 2048.city',
@@ -49,20 +48,18 @@ export default async function Home() {
   return (
     <>
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '0', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh' }}>
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 56, padding: '12px 0 0 0', position: 'sticky', top: 0, zIndex: 100 }}>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', height: 56, padding: '12px 0 0 0', position: 'sticky', top: 0, zIndex: 100 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <LoginButton />
-            <Leaderboard />
           </div>
-          <InfoDrawer />
         </div>
         <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0', padding: '0' }}>
           <GameBoard session={session} />
         </div>
-        <div style={{ width: '100%', textAlign: 'center', margin: '32px 0 0 0', color: '#4fd1c5', fontWeight: 500, fontSize: 18 }}>
+        <div style={{ textAlign: 'center', margin: '32px 0 0 0', color: '#4fd1c5', fontWeight: 500, fontSize: 18, position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
           <span>2048.city — Play the classic puzzle game online, free and beautiful.</span>
         </div>
-        <div style={{ width: '100%', textAlign: 'center', margin: '18px 0 0 0', color: '#fff', fontSize: 15 }}>
+        <div style={{ textAlign: 'center', margin: '18px 0 0 0', color: '#fff', fontSize: 15, position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
           <span>Want more strategies and guides? Visit our <a href="/blog" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>Blog</a> or <a href="/faq" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>FAQ</a>.</span>
         </div>
         <CookieConsent />

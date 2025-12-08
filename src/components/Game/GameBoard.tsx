@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import './game-global.css';
+import Leaderboard from '@/components/Leaderboard/Leaderboard';
 
 interface GameBoardProps {
   session: any;
@@ -177,6 +178,8 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
               <span className="liquidGlass-shine"></span>
               <span className="liquidGlass-content">Undo (<span id="undo-count">3</span>)</span>
             </button>
+            {/* Inline leaderboard button placed to the right of Undo */}
+            <Leaderboard inline />
           </div>
           <div className="button-spacer" style={{ height: '60px' }}></div>
         </footer>
