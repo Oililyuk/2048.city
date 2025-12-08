@@ -96,12 +96,42 @@
 }
 
 /* mobile overlay (left drawer) */
-.mobileOverlay { position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:2050; display:flex; justify-content:flex-start; }
-.mobileMenu { width: min(320px, 76vw); height:100%; background:rgba(22,22,22,0.98); padding:18px 12px; box-shadow:12px 0 40px rgba(0,0,0,0.4); overflow-y:auto; }
+/* Mobile overlay (left drawer) visual polish */
+.mobileOverlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:2050; display:flex; justify-content:flex-start; }
+.mobileMenu { width: min(360px, 78vw); height:100%; background:rgba(12,12,12,0.96); padding:12px 8px; box-shadow:12px 0 40px rgba(0,0,0,0.5); overflow-y:auto; -webkit-overflow-scrolling: touch; }
 .mobileMenu ul { list-style:none; margin:0; padding:8px 0; display:flex; flex-direction:column; gap:0; }
-.mobileMenu li { width:100%; border-bottom:1px solid rgba(255,255,255,0.04); }
-.mobileMenu .menuLink { padding:18px 16px; font-size:1.05rem; display:block; color:rgba(255,255,255,0.92); text-decoration:none; }
+.mobileMenu li { width:100%; border-bottom:1px solid rgba(255,255,255,0.03); }
+.mobileMenu .menuLink { padding:16px 14px; font-size:0.99rem; display:block; color:rgba(255,255,255,0.92); text-decoration:none; font-weight:400; }
 .mobileMenu .menuLink:hover { background: rgba(255,255,255,0.02); }
+.mobileMenu .menuLink:active { background: rgba(255,255,255,0.03); }
+
+/* Slightly larger tap targets for accessibility */
+.mobileMenu .contentItem { padding: 12px 12px; }
+
+/* Header inside drawer */
+.mobileHeader { padding: 10px 12px 12px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); display:flex; align-items:center; justify-content:space-between; }
+.mobileLogo { color: #fff; text-decoration: none; font-weight:700; font-size:1.06rem; }
+
+/* Caret styling */
+.leftCaret { display:inline-block; margin-right:8px; transform:translateY(0); opacity:0.9; color: rgba(255,255,255,0.85); font-size:0.95rem; }
+
+/* Accordion title - subtle background when active */
+.accordion .title { background: transparent; border: none; padding: 14px 12px; }
+.accordion .title[aria-expanded="true"] { background: rgba(255,255,255,0.02); }
+
+/* Improve transition feel */
+.accordion .content { transition: max-height 280ms cubic-bezier(.2,.9,.2,1), opacity 200ms ease; }
+.accordion .content[style] { opacity:1; }
+
+/* Make separators subtle and full-width */
+.accordion .item { border-bottom: 1px solid rgba(255,255,255,0.03); }
+
+/* Login area styling inside drawer */
+.loginWrap { display:flex; align-items:center; justify-content:flex-start; padding: 12px 12px; }
+
+/* Hide scrollbar visually but keep scrollable */
+.mobileMenu::-webkit-scrollbar { width: 8px; }
+.mobileMenu::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 8px; }
 
 /* Accordion for mobile drawer */
 .accordion { display:flex; flex-direction:column; gap:0; }

@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import styles from './MainMenu.module.css';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import LoginButton from '@/components/Auth/LoginButton';
 
@@ -20,7 +20,36 @@ export default function MainMenu() {
   const [open, setOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(false);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [bestScore, setBestScore] = useState<number>(0);
+  const [undoCountDisplay, setUndoCountDisplay] = useState<number | null>(null);
   const pathname = usePathname();
+
+  // read best score from localStorage and poll game undo count
+  useEffect(() => {
+    try {
+      const b = parseInt(localStorage.getItem('bestScore') || '0', 10);
+      setBestScore(Number.isFinite(b) ? b : 0);
+    } catch (e) {
+      setBestScore(0);
+    }
+
+    const id = setInterval(() => {
+      const u = (window as any).game?.undoCount;
+      if (typeof u === 'number') setUndoCountDisplay(u);
+    }, 500);
+
+    return () => clearInterval(id);
+  }, []);
+
+  function newGame() {
+    if ((window as any).game?.restart) (window as any).game.restart();
+    setMobileOpen(false);
+  }
+
+  function doUndo() {
+    if ((window as any).game?.undo) (window as any).game.undo();
+  }
 
   return (
     <nav className={styles.menu} role="navigation" aria-label="Main menu">
@@ -77,34 +106,63 @@ export default function MainMenu() {
             </div>
 
             <nav className={styles.accordion} aria-label="Mobile navigation">
+              {/* Home as its own simple item */}
               <div className={styles.item}>
                 <Link href="/" className={styles.menuLink}>Home</Link>
               </div>
 
-              <div className={styles.item}>
-                <button
-                  className={styles.title}
-                  aria-expanded={accordionOpen}
-                  onClick={() => setAccordionOpen(v => !v)}
-                >
-                  <span className={styles.leftCaret}>▾</span>
-                  Menu
-                </button>
-                <div
-                  className={styles.content}
-                  style={{ maxHeight: accordionOpen ? `${menuItems.length * 48}px` : '0px' }}
-                >
-                  {menuItems.map(item => (
-                    <div key={item.href} className={styles.contentItem}>
-                      {item.external ? (
-                        <a href={item.href} className={styles.menuLink} target="_blank" rel="noopener noreferrer">{item.label}</a>
-                      ) : (
-                        <Link href={item.href} className={styles.menuLink}>{item.label}</Link>
-                      )}
-                    </div>
-                  ))}
+              {/* Build accordion groups: Menu and Game actions */}
+              {[
+                {
+                  title: 'Menu',
+                  items: menuItems.map(mi => ({
+                    label: mi.label,
+                    href: mi.href,
+                    external: mi.external || false
+                  }))
+                },
+                {
+                  title: 'Game',
+                  items: [
+                    { label: 'New Game', action: newGame },
+                    { label: `Undo ${undoCountDisplay !== null ? `(${undoCountDisplay})` : ''}`, action: doUndo },
+                    { label: 'Leaderboard', href: '/#leaderboard' },
+                    { label: `Best: ${bestScore}`, href: '#' }
+                  ]
+                }
+              ].map((group, idx) => (
+                <div className={styles.item} key={group.title}>
+                  <button
+                    onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                    className={styles.title}
+                    aria-expanded={openIndex === idx}
+                  >
+                    <span className={styles.leftCaret}>▾</span>
+                    {group.title}
+                  </button>
+
+                  <div
+                    className={styles.content}
+                    style={{ maxHeight: openIndex === idx ? `${group.items.length * 48}px` : '0px' }}
+                  >
+                    {group.items.map((it, i) => (
+                      <div className={styles.contentItem} key={i}>
+                        {it.href ? (
+                          it.href.startsWith('http') ? (
+                            <a href={it.href} className={styles.menuLink} target="_blank" rel="noopener noreferrer">{it.label}</a>
+                          ) : (
+                            <Link href={it.href} className={styles.menuLink}>{it.label}</Link>
+                          )
+                        ) : ('action' in it && it.action) ? (
+                          <button className={styles.menuLink} onClick={() => { (it as any).action(); }}>{it.label}</button>
+                        ) : (
+                          <span className={styles.menuLink}>{it.label}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ))}
 
               <div className={styles.item}>
                 <div style={{ padding: '12px 16px' }}><LoginButton /></div>
