@@ -1,4 +1,10 @@
+
 'use client';
+declare global {
+  interface Window {
+    game?: any;
+  }
+}
 
 import { useEffect, useRef } from 'react';
 import './game-global.css';
