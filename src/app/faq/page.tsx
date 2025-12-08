@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     q: 'How do I submit my score?',
-    a: 'After finishing a game, you can submit your score to the leaderboard if you are logged in.'
+    a: 'After you finish a game, you can submit your score to the leaderboard if you are logged in.'
   },
   {
     q: 'How does the leaderboard work?',
@@ -40,7 +40,7 @@ const faqs = [
   },
   {
     q: 'Who created 2048.city?',
-    a: 'The site is built by the 2048.city team, inspired by Gabriele Cirulli’s original 2048.'
+    a: "The site is built by the 2048.city team, inspired by Gabriele Cirulli's original 2048."
   },
   {
     q: 'Is my data safe?',
