@@ -4,6 +4,7 @@ import styles from './MainMenu.module.css';
 
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import LoginButton from '@/components/Auth/LoginButton';
 
 const menuItems = [
   { label: 'Blog', href: '/blog' },
@@ -50,8 +51,8 @@ export default function MainMenu() {
           </ul>
         </div>
 
-        {/* Login button placed to the right of Menu */}
-        <Link href="/api/auth/signin" className={styles.loginButton}>Log in</Link>
+        {/* Login component placed to the right of Menu */}
+        <div className={styles.loginWrap}><LoginButton /></div>
 
         {/* Mobile hamburger (only visible on small screens) */}
         <button
@@ -81,7 +82,7 @@ export default function MainMenu() {
                   )}
                 </li>
               ))}
-              <li style={{ marginTop: 12 }}><Link href="/api/auth/signin" className={styles.menuLink}>Log in</Link></li>
+              <li style={{ marginTop: 12 }}><LoginButton /></li>
             </ul>
           </div>
         </div>
