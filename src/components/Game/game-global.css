@@ -229,7 +229,17 @@ h1 {
 }
 
 .controls {
-    display: none; /* 隐藏旧的controls容器 */
+    /* keep default hidden for unrelated contexts; game controls are shown via .game-root .controls */
+    display: none; /* legacy global rule kept for backward compatibility */
+}
+
+/* Show controls inside the game root (New Game / Undo / Leaderboard) */
+.game-root .controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 12px;
+    z-index: 5;
 }
 
 .btn-new, .btn-undo {
