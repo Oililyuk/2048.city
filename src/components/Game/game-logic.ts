@@ -1,8 +1,8 @@
 // @ts-nocheck
 // 全局变量
-let touchStartX: number | null = null;
-let touchStartY: number | null = null;
-let animationId: number | null = null;
+const touchStartX: number | null = null;
+const touchStartY: number | null = null;
+const animationId: number | null = null;
 
 class Game2048 {
     size: number;

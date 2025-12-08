@@ -56,10 +56,10 @@ export default async function Home() {
         <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0', padding: '0' }}>
           <GameBoard session={session} />
         </div>
-        <div style={{ textAlign: 'center', margin: '32px 0 0 0', color: '#4fd1c5', fontWeight: 500, fontSize: 18, position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
+        <div className="visually-hidden" style={{ textAlign: 'center', margin: '32px 0 0 0', color: '#4fd1c5', fontWeight: 500, fontSize: 18 }}>
           <span>2048.city — Play the classic puzzle game online, free and beautiful.</span>
         </div>
-        <div style={{ textAlign: 'center', margin: '18px 0 0 0', color: '#fff', fontSize: 15, position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
+        <div className="visually-hidden" style={{ textAlign: 'center', margin: '18px 0 0 0', color: '#fff', fontSize: 15 }}>
           <span>Want more strategies and guides? Visit our <a href="/blog" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>Blog</a> or <a href="/faq" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>FAQ</a>.</span>
         </div>
         <CookieConsent />

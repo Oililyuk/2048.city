@@ -109,7 +109,7 @@ export async function sendRecordEmail(
       `,
     });
     
-    console.log(`Email sent to ${to} for score ${score}`);
+    // email sent (no debug logging)
   } catch (error) {
     console.error('Failed to send email:', error);
     throw error;

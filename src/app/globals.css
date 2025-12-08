@@ -124,3 +124,12 @@ body, html, h1, h2, h3, h4, h5, h6, p, span, div, li, ul, ol, a, label, input, t
     color: #fff !important;
 }
 
+/* Utility to keep content in the DOM for SEO but visually hidden */
+.visually-hidden {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+}
+
