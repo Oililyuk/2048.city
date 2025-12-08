@@ -48,11 +48,7 @@ export default async function Home() {
   return (
     <>
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '0', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh' }}>
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', height: 56, padding: '12px 0 0 0', position: 'sticky', top: 0, zIndex: 100 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <LoginButton />
-          </div>
-        </div>
+        {/* header area removed — login is handled in the main menu */}
         <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0', padding: '0' }}>
           <GameBoard session={session} />
         </div>

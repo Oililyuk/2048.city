@@ -48,10 +48,10 @@
 
 .submenu {
   position:absolute;
-  top:110%;
+  top:100%;
   right:0;
   min-width:200px;
-  background: rgba(20,20,28,0.99); /* higher opacity */
+  background: rgba(20,20,28,0.86); /* more transparent */
   border-radius:8px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.22);
   padding:6px 0;
@@ -59,6 +59,7 @@
   list-style:none;
   margin:0;
   display:none; /* will show on hover */
+  pointer-events: auto;
 }
 .submenu li { width:100%; }
 .submenu .menuLink {
@@ -75,7 +76,8 @@
 /* show submenu on hover / focus of wrapper */
 .dropdownWrapper:hover .submenu,
 .dropdownWrapper:focus-within .submenu,
-.menuLabel:focus + .submenu {
+.menuLabel:focus + .submenu,
+.submenu:hover {
   display:block;
 }
 
