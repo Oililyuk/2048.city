@@ -17,6 +17,7 @@ const menuItems = [
 
 export default function MainMenu() {
   const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -26,33 +27,65 @@ export default function MainMenu() {
       </div>
 
       <div className={styles.controls}>
-        <Link href="/" className={styles.controlButton} aria-current={pathname === '/' ? 'page' : undefined}>Home</Link>
+        {/* Plain text Home link (not button-like) */}
+        <Link href="/" className={styles.controlLink} aria-current={pathname === '/' ? 'page' : undefined}>Home</Link>
 
+        {/* Dropdown that opens on hover (desktop). Arrow on left of the label. */}
         <div className={styles.dropdownWrapper}>
-          <button
-            className={styles.controlButton}
-            aria-haspopup="true"
-            aria-expanded={open}
-            onClick={() => setOpen(v => !v)}
-          >
-            Menu <span className={styles.caret}>{open ? '▲' : '▼'}</span>
-          </button>
+          <div className={styles.menuLabel} tabIndex={0} aria-haspopup="true">
+            <span className={styles.leftCaret}>▾</span>
+            <span>Menu</span>
+          </div>
 
-          {open && (
-            <ul className={styles.submenu} role="menu">
+          <ul className={styles.submenu} role="menu">
+            {menuItems.map(item => (
+              <li key={item.href}>
+                {item.external ? (
+                  <a href={item.href} className={styles.menuLink} target="_blank" rel="noopener noreferrer" role="menuitem">{item.label}</a>
+                ) : (
+                  <Link href={item.href} className={styles.menuLink} role="menuitem">{item.label}</Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Login button placed to the right of Menu */}
+        <Link href="/api/auth/signin" className={styles.loginButton}>Log in</Link>
+
+        {/* Mobile hamburger (only visible on small screens) */}
+        <button
+          className={styles.menuIcon}
+          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={mobileOpen}
+          onClick={() => setMobileOpen(v => !v)}
+        >
+          <span className={styles.iconBar}></span>
+          <span className={styles.iconBar}></span>
+          <span className={styles.iconBar}></span>
+        </button>
+      </div>
+
+      {/* Mobile overlay / left drawer */}
+      {mobileOpen && (
+        <div className={styles.mobileOverlay} onClick={() => setMobileOpen(false)}>
+          <div className={styles.mobileMenu} onClick={(e) => e.stopPropagation()}>
+            <ul>
+              <li><Link href="/" className={styles.menuLink}>Home</Link></li>
               {menuItems.map(item => (
                 <li key={item.href}>
                   {item.external ? (
-                    <a href={item.href} className={styles.menuLink} target="_blank" rel="noopener noreferrer" role="menuitem">{item.label}</a>
+                    <a href={item.href} className={styles.menuLink} target="_blank" rel="noopener noreferrer">{item.label}</a>
                   ) : (
-                    <Link href={item.href} className={styles.menuLink} role="menuitem">{item.label}</Link>
+                    <Link href={item.href} className={styles.menuLink}>{item.label}</Link>
                   )}
                 </li>
               ))}
+              <li style={{ marginTop: 12 }}><Link href="/api/auth/signin" className={styles.menuLink}>Log in</Link></li>
             </ul>
-          )}
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 }
