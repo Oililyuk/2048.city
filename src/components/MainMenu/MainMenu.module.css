@@ -103,4 +103,32 @@
 .mobileMenu .menuLink { padding:18px 16px; font-size:1.05rem; display:block; color:rgba(255,255,255,0.92); text-decoration:none; }
 .mobileMenu .menuLink:hover { background: rgba(255,255,255,0.02); }
 
+/* Accordion for mobile drawer */
+.accordion { display:flex; flex-direction:column; gap:0; }
+.accordion .item { border-bottom: 1px solid rgba(255,255,255,0.04); }
+.accordion .title {
+  width:100%;
+  padding:14px 16px;
+  text-align:left;
+  border:none;
+  background:transparent;
+  color: rgba(255,255,255,0.94);
+  font-size:1rem;
+  font-weight:500;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.accordion .content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.28s ease;
+  background: transparent;
+}
+.contentItem { padding: 8px 16px; }
+.contentItem .menuLink { padding: 10px 0; display:block; }
+
+.mobileHeader { padding: 6px 12px 12px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+.mobileLogo { color: #fff; text-decoration: none; font-weight:700; font-size:1.05rem; }
+
 /* keep styling minimal and neutral to match novas.live look */

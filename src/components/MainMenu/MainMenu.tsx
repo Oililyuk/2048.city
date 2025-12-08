@@ -19,6 +19,7 @@ const menuItems = [
 export default function MainMenu() {
   const [open, setOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [accordionOpen, setAccordionOpen] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -71,19 +72,44 @@ export default function MainMenu() {
       {mobileOpen && (
         <div className={styles.mobileOverlay} onClick={() => setMobileOpen(false)}>
           <div className={styles.mobileMenu} onClick={(e) => e.stopPropagation()}>
-            <ul>
-              <li><Link href="/" className={styles.menuLink}>Home</Link></li>
-              {menuItems.map(item => (
-                <li key={item.href}>
-                  {item.external ? (
-                    <a href={item.href} className={styles.menuLink} target="_blank" rel="noopener noreferrer">{item.label}</a>
-                  ) : (
-                    <Link href={item.href} className={styles.menuLink}>{item.label}</Link>
-                  )}
-                </li>
-              ))}
-              <li style={{ marginTop: 12 }}><LoginButton /></li>
-            </ul>
+            <div className={styles.mobileHeader}>
+              <Link href="/" className={styles.mobileLogo}>2048.city</Link>
+            </div>
+
+            <nav className={styles.accordion} aria-label="Mobile navigation">
+              <div className={styles.item}>
+                <Link href="/" className={styles.menuLink}>Home</Link>
+              </div>
+
+              <div className={styles.item}>
+                <button
+                  className={styles.title}
+                  aria-expanded={accordionOpen}
+                  onClick={() => setAccordionOpen(v => !v)}
+                >
+                  <span className={styles.leftCaret}>▾</span>
+                  Menu
+                </button>
+                <div
+                  className={styles.content}
+                  style={{ maxHeight: accordionOpen ? `${menuItems.length * 48}px` : '0px' }}
+                >
+                  {menuItems.map(item => (
+                    <div key={item.href} className={styles.contentItem}>
+                      {item.external ? (
+                        <a href={item.href} className={styles.menuLink} target="_blank" rel="noopener noreferrer">{item.label}</a>
+                      ) : (
+                        <Link href={item.href} className={styles.menuLink}>{item.label}</Link>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.item}>
+                <div style={{ padding: '12px 16px' }}><LoginButton /></div>
+              </div>
+            </nav>
           </div>
         </div>
       )}
