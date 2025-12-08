@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import styles from './MainMenu.module.css';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import LoginButton from '@/components/Auth/LoginButton';
 
@@ -42,6 +42,92 @@ export default function MainMenu() {
     return () => clearInterval(id);
   }, []);
 
+  // refs for accordion content elements to measure their scrollHeight
+  const groupRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+  const prevActiveRef = useRef<HTMLElement | null>(null);
+
+  // when openIndex changes, set the maxHeight on the actual DOM nodes for smooth transition
+  useLayoutEffect(() => {
+    groupRefs.current.forEach((el, idx) => {
+      if (!el) return;
+      if (openIndex === idx) {
+        el.style.maxHeight = el.scrollHeight + 'px';
+        el.style.opacity = '1';
+      } else {
+        el.style.maxHeight = '0px';
+        el.style.opacity = '0';
+      }
+    });
+  }, [openIndex]);
+
+  // lock background scroll when mobile drawer open
+  useEffect(() => {
+    if (mobileOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = prev; };
+    }
+    return;
+  }, [mobileOpen]);
+
+  // focus trap and Escape-to-close while mobile menu is open
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    prevActiveRef.current = document.activeElement as HTMLElement | null;
+
+    // focus first focusable element inside the mobile menu
+    const focusFirst = () => {
+      const el = mobileMenuRef.current;
+      if (!el) return;
+      const selector = 'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])';
+      const nodes = Array.from(el.querySelectorAll<HTMLElement>(selector)).filter(n => !n.hasAttribute('disabled'));
+      if (nodes.length) nodes[0].focus();
+      else el.focus();
+    };
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        const el = mobileMenuRef.current;
+        if (!el) return;
+        const selector = 'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])';
+        const nodes = Array.from(el.querySelectorAll<HTMLElement>(selector)).filter(n => !!(n.offsetWidth || n.offsetHeight || n.getClientRects().length));
+        if (!nodes.length) return;
+        const first = nodes[0];
+        const last = nodes[nodes.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+        if (e.shiftKey) {
+          if (active === first || active === el) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (active === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    };
+
+    const timeout = setTimeout(focusFirst, 50);
+    document.addEventListener('keydown', handleKey);
+
+    return () => {
+      clearTimeout(timeout);
+      document.removeEventListener('keydown', handleKey);
+      // restore previous focus
+      try { prevActiveRef.current?.focus(); } catch (e) {}
+      setOpenIndex(null);
+    };
+  }, [mobileOpen]);
+
   function newGame() {
     if ((window as any).game?.restart) (window as any).game.restart();
     setMobileOpen(false);
@@ -50,6 +136,24 @@ export default function MainMenu() {
   function doUndo() {
     if ((window as any).game?.undo) (window as any).game.undo();
   }
+
+  const undoLabel = undoCountDisplay !== null ? `Undo (${undoCountDisplay})` : 'Undo';
+
+  const mobileGroups = [
+    {
+      title: 'Menu',
+      items: menuItems.map(mi => ({ label: mi.label, href: mi.href, external: mi.external || false }))
+    },
+    {
+      title: 'Game',
+      items: [
+        { label: 'New Game', action: newGame },
+        { label: undoLabel, action: doUndo },
+        { label: 'Leaderboard', href: '/#leaderboard' },
+        { label: `Best: ${bestScore}`, href: '#' }
+      ]
+    }
+  ];
 
   return (
     <nav className={styles.menu} role="navigation" aria-label="Main menu">
@@ -100,9 +204,10 @@ export default function MainMenu() {
       {/* Mobile overlay / left drawer */}
       {mobileOpen && (
         <div className={styles.mobileOverlay} onClick={() => setMobileOpen(false)}>
-          <div className={styles.mobileMenu} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.mobileMenu} ref={mobileMenuRef} tabIndex={-1} onClick={(e) => e.stopPropagation()}>
             <div className={styles.mobileHeader}>
               <Link href="/" className={styles.mobileLogo}>2048.city</Link>
+              <button aria-label="Close menu" className={styles.closeButton} onClick={() => setMobileOpen(false)}>✕</button>
             </div>
 
             <nav className={styles.accordion} aria-label="Mobile navigation">
@@ -112,25 +217,7 @@ export default function MainMenu() {
               </div>
 
               {/* Build accordion groups: Menu and Game actions */}
-              {[
-                {
-                  title: 'Menu',
-                  items: menuItems.map(mi => ({
-                    label: mi.label,
-                    href: mi.href,
-                    external: mi.external || false
-                  }))
-                },
-                {
-                  title: 'Game',
-                  items: [
-                    { label: 'New Game', action: newGame },
-                    { label: `Undo ${undoCountDisplay !== null ? `(${undoCountDisplay})` : ''}`, action: doUndo },
-                    { label: 'Leaderboard', href: '/#leaderboard' },
-                    { label: `Best: ${bestScore}`, href: '#' }
-                  ]
-                }
-              ].map((group, idx) => (
+              {mobileGroups.map((group, idx) => (
                 <div className={styles.item} key={group.title}>
                   <button
                     onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
@@ -143,18 +230,19 @@ export default function MainMenu() {
 
                   <div
                     className={styles.content}
-                    style={{ maxHeight: openIndex === idx ? `${group.items.length * 48}px` : '0px' }}
+                    ref={(el) => { groupRefs.current[idx] = el; }}
+                    style={{ maxHeight: '0px', opacity: 0 }}
                   >
                     {group.items.map((it, i) => (
                       <div className={styles.contentItem} key={i}>
                         {it.href ? (
                           it.href.startsWith('http') ? (
-                            <a href={it.href} className={styles.menuLink} target="_blank" rel="noopener noreferrer">{it.label}</a>
+                            <a href={it.href} className={styles.menuLink} target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)}>{it.label}</a>
                           ) : (
-                            <Link href={it.href} className={styles.menuLink}>{it.label}</Link>
+                            <Link href={it.href} className={styles.menuLink} onClick={() => setMobileOpen(false)}>{it.label}</Link>
                           )
                         ) : ('action' in it && it.action) ? (
-                          <button className={styles.menuLink} onClick={() => { (it as any).action(); }}>{it.label}</button>
+                          <button className={styles.menuLink} onClick={() => { (it as any).action(); setMobileOpen(false); }}>{it.label}</button>
                         ) : (
                           <span className={styles.menuLink}>{it.label}</span>
                         )}

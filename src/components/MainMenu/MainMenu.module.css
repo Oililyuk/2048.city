@@ -111,6 +111,21 @@
 /* Header inside drawer */
 .mobileHeader { padding: 10px 12px 12px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); display:flex; align-items:center; justify-content:space-between; }
 .mobileLogo { color: #fff; text-decoration: none; font-weight:700; font-size:1.06rem; }
+.closeButton {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.9);
+  font-size: 18px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+/* slide-in animation for the drawer */
+@keyframes slideInFromLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.mobileMenu { animation: slideInFromLeft 260ms cubic-bezier(.2,.9,.2,1) both; }
 
 /* Caret styling */
 .leftCaret { display:inline-block; margin-right:8px; transform:translateY(0); opacity:0.9; color: rgba(255,255,255,0.85); font-size:0.95rem; }
