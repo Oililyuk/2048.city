@@ -213,15 +213,16 @@
   padding: 16px 20px; 
   font-size: 0.95rem; 
   display: block !important;
-  color: rgba(255,255,255,0.9) !important; 
+  color: #FFFFFF !important; 
   text-decoration: none; 
   font-weight: 400;
   transition: all 0.2s ease;
   width: 100%;
   text-align: left;
-  background: transparent;
+  background: rgba(255, 255, 0, 0.1) !important; /* DEBUG: yellow tint */
   border: none;
   cursor: pointer;
+  min-height: 40px; /* DEBUG */
 }
 .menuLink:hover { 
   background: rgba(255,255,255,0.05) !important; 
@@ -292,31 +293,35 @@
   transition: transform 0.2s ease;
 }
 
-/* Accordion for mobile drawer */
+/* Accordion for mobile drawer - DEBUG VERSION */
 .accordion { 
-  display: flex; 
+  display: flex !important;
   flex-direction: column; 
   gap: 0;
   width: 100%;
   padding: 0;
   margin: 0;
+  background: rgba(255, 0, 0, 0.1); /* DEBUG: red tint */
+  min-height: 200px; /* DEBUG: ensure visible */
 }
 .item { 
   width: 100%;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  display: block;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  display: block !important;
   position: relative;
+  background: rgba(0, 255, 0, 0.1); /* DEBUG: green tint */
+  min-height: 50px; /* DEBUG: ensure visible */
 }
 .title {
   width: 100%;
   padding: 16px 20px;
   text-align: left;
   border: none;
-  background: transparent;
-  color: rgba(255,255,255,0.9);
+  background: rgba(0, 0, 255, 0.1); /* DEBUG: blue tint */
+  color: rgba(255,255,255,0.9) !important;
   font-size: 0.95rem;
   font-weight: 500;
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: 8px;
   cursor: pointer;
