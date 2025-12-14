@@ -207,19 +207,9 @@
   -webkit-overflow-scrolling: touch;
   z-index: 9999;
 }
-.mobileMenu ul { 
-  list-style: none; 
-  margin: 0; 
-  padding: 8px 0; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 0; 
-}
-.mobileMenu li { 
-  width: 100%; 
-  border-bottom: 1px solid rgba(255,255,255,0.05); 
-}
-.mobileMenu .menuLink { 
+
+/* Menu link styling for both direct links and accordion items */
+.menuLink { 
   padding: 16px 20px; 
   font-size: 0.95rem; 
   display: block; 
@@ -301,12 +291,14 @@
 .accordion { 
   display: flex; 
   flex-direction: column; 
-  gap: 0; 
+  gap: 0;
+  width: 100%;
 }
-.accordion .item { 
+.item { 
+  width: 100%;
   border-bottom: 1px solid rgba(255,255,255,0.05); 
 }
-.accordion .title {
+.title {
   width: 100%;
   padding: 16px 20px;
   text-align: left;
@@ -321,33 +313,36 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.accordion .title:hover {
+.title:hover {
   background: rgba(255,255,255,0.03);
 }
-.accordion .title[aria-expanded="true"] { 
+.title[aria-expanded="true"] { 
   background: rgba(255,255,255,0.04);
 }
-.accordion .title[aria-expanded="true"] .leftCaret {
+.title[aria-expanded="true"] .leftCaret {
   transform: rotate(180deg);
 }
-.accordion .content {
+.content {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
   background: rgba(0,0,0,0.15);
   opacity: 0;
+  width: 100%;
 }
 /* When expanded, content becomes visible */
-.accordion .content[data-open="true"] {
+.content[data-open="true"] {
   opacity: 1;
 }
 .contentItem { 
-  padding: 0; 
+  padding: 0;
+  width: 100%;
 }
 .contentItem .menuLink { 
   padding: 12px 20px 12px 48px; 
   display: block;
   font-size: 0.9rem;
+  width: 100%;
 }
 
 /* Login area styling inside drawer */
