@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { SessionProvider } from '@/components/SessionProvider';
 import './globals.css';
 
-import MainMenu from '@/components/MainMenu/MainMenu';
+import Header from '@/components/Header/Header';
 import { ToastProvider } from '@/components/Toast/ToastProvider';
 import AnimatedBackground from '@/components/AnimatedBackground/AnimatedBackground';
 
@@ -36,7 +36,7 @@ export default function RootLayout({
         <AnimatedBackground />
         <ToastProvider>
           <SessionProvider>
-            <MainMenu />
+            <Header />
             {children}
           </SessionProvider>
         </ToastProvider>
