@@ -17,9 +17,7 @@ const menuItems = [
 ];
 
 export default function MainMenu() {
-  const [open, setOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [accordionOpen, setAccordionOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [bestScore, setBestScore] = useState<number>(0);
   const [undoCountDisplay, setUndoCountDisplay] = useState<number | null>(null);

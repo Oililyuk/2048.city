@@ -1,4 +1,4 @@
-/* Simplified menu styles - left logo, right controls (Home + Menu) */
+/* Clean menu design inspired by novas.live */
 .menu {
   position: fixed;
   top: 0;
@@ -8,172 +8,358 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(20,20,28,0.6);
-  backdrop-filter: blur(12px) saturate(130%);
-  -webkit-backdrop-filter: blur(12px) saturate(130%);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  background: rgba(15,15,20,0.8);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
   z-index: 2000;
-  padding: 0 20px;
+  padding: 0 24px;
+  transition: all 0.3s ease;
 }
-.logoSection { display:flex; align-items:center; height:100%; }
-.logo { font-size:1.1rem; font-weight:700; color:#fff; text-decoration:none; letter-spacing:0.6px; padding:0 12px; }
+.logoSection { 
+  display: flex; 
+  align-items: center; 
+  height: 100%; 
+}
+.logo { 
+  font-size: 1.15rem; 
+  font-weight: 700; 
+  color: #fff; 
+  text-decoration: none; 
+  letter-spacing: 0.5px; 
+  padding: 0 8px;
+  transition: opacity 0.2s ease;
+}
+.logo:hover {
+  opacity: 0.8;
+}
 
-/* controls on the right: Home button + Menu dropdown */
-.controls { display:flex; gap:12px; align-items:center; }
+/* controls on the right: Home link + Menu dropdown + Login */
+.controls { 
+  display: flex; 
+  gap: 16px; 
+  align-items: center; 
+}
 .controlLink {
   background: transparent;
-  color: rgba(255,255,255,0.92);
+  color: rgba(255,255,255,0.85);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 400;
-  padding: 6px 8px;
+  padding: 8px 12px;
   border-radius: 6px;
+  transition: all 0.2s ease;
 }
-.controlLink:hover, .controlLink:focus { background: rgba(255,255,255,0.02); }
+.controlLink:hover, 
+.controlLink:focus { 
+  background: rgba(255,255,255,0.08); 
+  color: #fff;
+}
 
-.dropdownWrapper { position:relative; }
-.menuLabel { display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:0.95rem; font-weight:400; color:rgba(255,255,255,0.92); padding:6px 8px; }
-.leftCaret { display:inline-block; margin-right:6px; transform:translateY(0); opacity:0.9; }
+.dropdownWrapper { 
+  position: relative; 
+}
+.menuLabel { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 6px; 
+  cursor: pointer; 
+  font-size: 0.95rem; 
+  font-weight: 400; 
+  color: rgba(255,255,255,0.85); 
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+.menuLabel:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
 
 .loginButton {
   background: transparent;
-  color: rgba(255,255,255,0.94);
-  border: 1px solid rgba(255,255,255,0.06);
-  padding:6px 10px;
-  border-radius:8px;
-  font-weight:600;
-  text-decoration:none;
+  color: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
-.loginButton:hover { background: rgba(255,255,255,0.03); }
+.loginButton:hover { 
+  background: rgba(255,255,255,0.08); 
+  border-color: rgba(255,255,255,0.25);
+}
 
 .submenu {
-  position:absolute;
-  top:100%;
-  right:0;
-  min-width:200px;
-  background: rgba(20,20,28,0.86); /* more transparent */
-  border-radius:8px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.22);
-  padding:6px 0;
-  z-index:2100;
-  list-style:none;
-  margin:0;
-  display:none; /* will show on hover */
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  background: rgba(15,15,20,0.95);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  padding: 8px 0;
+  z-index: 2100;
+  list-style: none;
+  margin: 0;
+  display: none;
   pointer-events: auto;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
-.submenu li { width:100%; }
+.submenu li { 
+  width: 100%; 
+}
 .submenu .menuLink {
-  display:block;
-  padding:10px 16px;
-  color:#fff;
-  text-decoration:none;
-  border-bottom:1px solid rgba(255,255,255,0.04);
-  font-weight:400;
+  display: block;
+  padding: 12px 20px;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 0.93rem;
+  transition: all 0.2s ease;
 }
-.submenu .menuLink:last-child { border-bottom: none; }
-.submenu .menuLink:hover { background: rgba(255,255,255,0.03); color:#fff; }
+.submenu .menuLink:hover { 
+  background: rgba(255,255,255,0.08); 
+  color: #fff;
+}
 
-/* show submenu on hover / focus of wrapper */
+/* show submenu on hover / focus */
 .dropdownWrapper:hover .submenu,
 .dropdownWrapper:focus-within .submenu,
 .menuLabel:focus + .submenu,
 .submenu:hover {
-  display:block;
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* responsive: collapse into simple hamburger on small screens */
-.menuIcon { display:none; }
-.menuList { display:none; }
-@media (max-width: 600px) {
-  .menu { height:48px; padding:0 8px; }
-  .logo { font-size:1rem; padding:0 6px; }
-  .controls { gap:8px; }
-  /* hide desktop textual controls on small screens, show hamburger */
-  .controls > .controlLink,
-  .controls > .menuLabel,
-  .loginWrap { display: none; }
-  .menuIcon { display:flex; width:40px; height:40px; align-items:center; justify-content:center; }
+.menuIcon { 
+  display: none; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+.menuList { display: none; }
+.iconBar {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: rgba(255,255,255,0.9);
+  margin: 3px 0;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+@media (max-width: 768px) {
+  .menu { 
+    padding: 0 16px;
+  }
+  .logo { 
+    font-size: 1rem;
+  }
+  /* hide desktop menu controls on small screens, show hamburger */
+  .dropdownWrapper,
+  .loginWrap,
+  .controls > .controlLink { 
+    display: none; 
+  }
+  .menuIcon { 
+    display: flex;
+  }
 }
 
-/* mobile overlay (left drawer) */
-/* Mobile overlay (left drawer) visual polish */
-.mobileOverlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:2050; display:flex; justify-content:flex-start; }
-.mobileMenu { width: min(360px, 78vw); height:100%; background:rgba(12,12,12,0.96); padding:12px 8px; box-shadow:12px 0 40px rgba(0,0,0,0.5); overflow-y:auto; -webkit-overflow-scrolling: touch; }
-.mobileMenu ul { list-style:none; margin:0; padding:8px 0; display:flex; flex-direction:column; gap:0; }
-.mobileMenu li { width:100%; border-bottom:1px solid rgba(255,255,255,0.03); }
-.mobileMenu .menuLink { padding:16px 14px; font-size:0.99rem; display:block; color:rgba(255,255,255,0.92); text-decoration:none; font-weight:400; }
-.mobileMenu .menuLink:hover { background: rgba(255,255,255,0.02); }
-.mobileMenu .menuLink:active { background: rgba(255,255,255,0.03); }
+/* mobile overlay (left drawer) - clean design inspired by novas.live */
+.mobileOverlay { 
+  position: fixed; 
+  inset: 0; 
+  background: rgba(0,0,0,0.5); 
+  z-index: 2050; 
+  display: flex; 
+  justify-content: flex-start; 
+}
+.mobileMenu { 
+  width: min(320px, 85vw); 
+  height: 100%; 
+  background: rgba(15,15,20,0.98);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  padding: 0;
+  box-shadow: 12px 0 40px rgba(0,0,0,0.6); 
+  overflow-y: auto; 
+  -webkit-overflow-scrolling: touch; 
+}
+.mobileMenu ul { 
+  list-style: none; 
+  margin: 0; 
+  padding: 8px 0; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0; 
+}
+.mobileMenu li { 
+  width: 100%; 
+  border-bottom: 1px solid rgba(255,255,255,0.05); 
+}
+.mobileMenu .menuLink { 
+  padding: 16px 20px; 
+  font-size: 0.95rem; 
+  display: block; 
+  color: rgba(255,255,255,0.9); 
+  text-decoration: none; 
+  font-weight: 400;
+  transition: all 0.2s ease;
+}
+.mobileMenu .menuLink:hover { 
+  background: rgba(255,255,255,0.05); 
+  color: #fff;
+}
+.mobileMenu .menuLink:active { 
+  background: rgba(255,255,255,0.08); 
+}
 
-/* Slightly larger tap targets for accessibility */
-.mobileMenu .contentItem { padding: 12px 12px; }
+/* Accessible tap targets */
+.mobileMenu .contentItem { 
+  padding: 0; 
+}
 
 /* Header inside drawer */
-.mobileHeader { padding: 10px 12px 12px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); display:flex; align-items:center; justify-content:space-between; }
-.mobileLogo { color: #fff; text-decoration: none; font-weight:700; font-size:1.06rem; }
+.mobileHeader { 
+  padding: 16px 20px; 
+  border-bottom: 1px solid rgba(255,255,255,0.08); 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  background: rgba(255,255,255,0.02);
+}
+.mobileLogo { 
+  color: #fff; 
+  text-decoration: none; 
+  font-weight: 700; 
+  font-size: 1.1rem;
+  letter-spacing: 0.3px;
+}
 .closeButton {
   background: transparent;
   border: none;
-  color: rgba(255,255,255,0.9);
-  font-size: 18px;
-  padding: 6px 8px;
+  color: rgba(255,255,255,0.8);
+  font-size: 24px;
+  padding: 4px 8px;
   cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 1;
+}
+.closeButton:hover {
+  color: #fff;
 }
 
-/* slide-in animation for the drawer */
+/* smooth slide-in animation for the drawer */
 @keyframes slideInFromLeft {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+  from { 
+    transform: translateX(-100%); 
+    opacity: 0.8;
+  }
+  to { 
+    transform: translateX(0); 
+    opacity: 1;
+  }
 }
-.mobileMenu { animation: slideInFromLeft 260ms cubic-bezier(.2,.9,.2,1) both; }
+.mobileMenu { 
+  animation: slideInFromLeft 280ms cubic-bezier(0.16, 1, 0.3, 1) both; 
+}
 
 /* Caret styling */
-.leftCaret { display:inline-block; margin-right:8px; transform:translateY(0); opacity:0.9; color: rgba(255,255,255,0.85); font-size:0.95rem; }
-
-/* Accordion title - subtle background when active */
-.accordion .title { background: transparent; border: none; padding: 14px 12px; }
-.accordion .title[aria-expanded="true"] { background: rgba(255,255,255,0.02); }
-
-/* Improve transition feel */
-.accordion .content { transition: max-height 280ms cubic-bezier(.2,.9,.2,1), opacity 200ms ease; }
-.accordion .content[style] { opacity:1; }
-
-/* Make separators subtle and full-width */
-.accordion .item { border-bottom: 1px solid rgba(255,255,255,0.03); }
-
-/* Login area styling inside drawer */
-.loginWrap { display:flex; align-items:center; justify-content:flex-start; padding: 12px 12px; }
-
-/* Hide scrollbar visually but keep scrollable */
-.mobileMenu::-webkit-scrollbar { width: 8px; }
-.mobileMenu::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 8px; }
+.leftCaret { 
+  display: inline-block; 
+  margin-right: 8px; 
+  transform: translateY(0); 
+  opacity: 0.7; 
+  color: rgba(255,255,255,0.7); 
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
 
 /* Accordion for mobile drawer */
-.accordion { display:flex; flex-direction:column; gap:0; }
-.accordion .item { border-bottom: 1px solid rgba(255,255,255,0.04); }
+.accordion { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0; 
+}
+.accordion .item { 
+  border-bottom: 1px solid rgba(255,255,255,0.05); 
+}
 .accordion .title {
-  width:100%;
-  padding:14px 16px;
-  text-align:left;
-  border:none;
-  background:transparent;
-  color: rgba(255,255,255,0.94);
-  font-size:1rem;
-  font-weight:500;
-  display:flex;
-  align-items:center;
-  gap:8px;
+  width: 100%;
+  padding: 16px 20px;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.accordion .title:hover {
+  background: rgba(255,255,255,0.03);
+}
+.accordion .title[aria-expanded="true"] { 
+  background: rgba(255,255,255,0.04);
+}
+.accordion .title[aria-expanded="true"] .leftCaret {
+  transform: rotate(180deg);
 }
 .accordion .content {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.28s ease;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  background: rgba(0,0,0,0.15);
+  opacity: 0;
+}
+.contentItem { 
+  padding: 0; 
+}
+.contentItem .menuLink { 
+  padding: 12px 20px 12px 48px; 
+  display: block;
+  font-size: 0.9rem;
+}
+
+/* Login area styling inside drawer */
+.loginWrap { 
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-start; 
+  padding: 16px 20px; 
+}
+
+/* Scrollbar styling */
+.mobileMenu::-webkit-scrollbar { 
+  width: 6px; 
+}
+.mobileMenu::-webkit-scrollbar-track {
   background: transparent;
 }
-.contentItem { padding: 8px 16px; }
-.contentItem .menuLink { padding: 10px 0; display:block; }
+.mobileMenu::-webkit-scrollbar-thumb { 
+  background: rgba(255,255,255,0.1); 
+  border-radius: 3px; 
+}
+.mobileMenu::-webkit-scrollbar-thumb:hover { 
+  background: rgba(255,255,255,0.15); 
+}
 
-.mobileHeader { padding: 6px 12px 12px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); }
-.mobileLogo { color: #fff; text-decoration: none; font-weight:700; font-size:1.05rem; }
-
-/* keep styling minimal and neutral to match novas.live look */
+/* Keep styling minimal and clean */

@@ -95,10 +95,10 @@ h2 {
     }
 }
 
-/* 全站按钮统一半透明磨砂效果和字体、文字全白 */
+/* Global button styling with frosted glass effect */
 button, .button, [role="button"], input[type="button"], input[type="submit"], .mainButton, .leaderboardButton {
     font-family: inherit;
-    color: #fff !important;
+    color: #fff;
     background: rgba(255,255,255,0.12);
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
@@ -108,20 +108,19 @@ button, .button, [role="button"], input[type="button"], input[type="submit"], .m
     padding: 0.6em 1.2em;
     font-size: 1em;
     font-weight: 500;
-    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    transition: all 0.2s ease;
     cursor: pointer;
     outline: none;
 }
 button:hover, .button:hover, [role="button"]:hover, input[type="button"]:hover, input[type="submit"]:hover, .mainButton:hover, .leaderboardButton:hover {
-    background: rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.2);
     box-shadow: 0 4px 24px rgba(0,0,0,0.22);
-    color: #fff !important;
 }
 
-/* 全站字体统一，所有文字全白 */
+/* Global font and text color */
 body, html, h1, h2, h3, h4, h5, h6, p, span, div, li, ul, ol, a, label, input, textarea, button {
     font-family: 'Segoe UI', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-    color: #fff !important;
+    color: #fff;
 }
 
 /* Utility to keep content in the DOM for SEO but visually hidden */
