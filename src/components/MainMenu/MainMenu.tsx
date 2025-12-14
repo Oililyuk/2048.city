@@ -228,7 +228,7 @@ export default function MainMenu() {
                   <div
                     className={styles.content}
                     ref={(el) => { groupRefs.current[idx] = el; }}
-                    data-open={openIndex === idx}
+                    data-open={openIndex === idx ? 'true' : 'false'}
                   >
                     {group.items.map((it, i) => (
                       <div className={styles.contentItem} key={i}>
