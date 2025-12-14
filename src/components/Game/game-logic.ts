@@ -821,11 +821,18 @@ class Game2048 {
     
     updateUndoButton() {
         const undoButton = document.querySelector('.btn-undo');
+        const undoCountSpan = document.getElementById('undo-count');
+        
         if (undoButton) {
-            // 更新按钮内部content层的文本显示剩余次数
+            // 更新撤销计数显示
+            if (undoCountSpan) {
+                undoCountSpan.textContent = String(this.undoCount);
+            }
+            
+            // 同时更新 liquidGlass-content 中的文本（如果存在）
             const contentSpan = undoButton.querySelector('.liquidGlass-content');
             if (contentSpan) {
-                contentSpan.textContent = `Undo (${this.undoCount})`;
+                contentSpan.textContent = `撤销 (${this.undoCount})`;
             }
             
             // 修复：当历史记录大于1时就应该启用撤销

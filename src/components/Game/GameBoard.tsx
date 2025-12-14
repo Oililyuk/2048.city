@@ -79,18 +79,27 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
     <div className="game-root">
       <div className="container" ref={containerRef}>
         <div className="heading">
-          <h1>2048</h1>
+          <h1 className="game-title">2048</h1>
           <div className="score-container">
             <div className="score-box">
-              <div className="score-label">SCORE</div>
+              <div className="score-label">当前分数</div>
               <div className="score" id="score">0</div>
             </div>
             <div className="score-box">
-              <div className="score-label">BEST</div>
+              <div className="score-label">最高分数</div>
               <div className="best-score" id="best-score">0</div>
             </div>
           </div>
         </div>
+        
+        <div className="above-game">
+          <div className="game-intro">
+            <p className="game-intro-text">
+              <strong>游戏说明：</strong>使用方向键或在屏幕任意位置滑动来移动方块。相同数字的方块碰撞时会合并成一个！
+            </p>
+          </div>
+        </div>
+
         <div className="game-container">
           <div className="grid-container">
             {[0, 1, 2, 3].map((row) => (
@@ -104,9 +113,13 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
           <div className="tile-container" id="tile-container"></div>
           <div className="game-message" id="game-message"></div>
         </div>
+        
         <div className="controls">
-          <button className="btn-new" onClick={() => { if (window.game) window.game.restart(); }}>New Game</button>
-          <button className="btn-undo" id="undo-btn" onClick={() => { if (window.game) window.game.undo(); }}>Undo</button>
+          <button className="btn-new" onClick={() => { if (window.game) window.game.restart(); }}>新游戏</button>
+          <button className="btn-undo" id="undo-btn" onClick={() => { if (window.game) window.game.undo(); }}>撤销 (<span id="undo-count">3</span>)</button>
+        </div>
+
+        <div id="leaderboard-section">
           <Leaderboard inline />
         </div>
       </div>

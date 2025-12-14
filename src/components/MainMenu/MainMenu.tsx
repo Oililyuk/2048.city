@@ -9,7 +9,7 @@ import LoginButton from '@/components/Auth/LoginButton';
 const menuItems = [
   { label: 'Blog', href: '/blog' },
   { label: 'How to Play', href: '/how-to-play' },
-  { label: 'Daily', href: '/challenges/daily' },
+  { label: 'Daily Challenge', href: '/challenges/daily' },
   { label: 'Leaderboard', href: '/#leaderboard' },
   { label: 'About', href: '/about' },
   { label: 'Feedback', href: '/feedback' },
@@ -147,7 +147,6 @@ export default function MainMenu() {
       items: [
         { label: 'New Game', action: newGame },
         { label: undoLabel, action: doUndo },
-        { label: 'Leaderboard', href: '/#leaderboard' },
         { label: `Best: ${bestScore}`, href: '#' }
       ]
     }

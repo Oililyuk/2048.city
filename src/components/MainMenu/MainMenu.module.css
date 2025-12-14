@@ -59,6 +59,15 @@
 .dropdownWrapper { 
   position: relative; 
 }
+.dropdownWrapper::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: transparent;
+}
 .menuLabel { 
   display: inline-flex; 
   align-items: center; 
@@ -70,6 +79,7 @@
   padding: 8px 12px;
   border-radius: 6px;
   transition: all 0.2s ease;
+  user-select: none;
 }
 .menuLabel:hover {
   background: rgba(255,255,255,0.08);
@@ -93,7 +103,7 @@
 
 .submenu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: 100%;
   right: 0;
   min-width: 200px;
   background: rgba(15,15,20,0.95);
@@ -103,14 +113,14 @@
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
   padding: 8px 0;
+  margin-top: 8px;
   z-index: 2100;
   list-style: none;
-  margin: 0;
   display: none;
   pointer-events: auto;
   opacity: 0;
   transform: translateY(-8px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease, display 0s 0.15s;
 }
 .submenu li { 
   width: 100%; 
@@ -129,14 +139,13 @@
   color: #fff;
 }
 
-/* show submenu on hover / focus */
+/* show submenu on hover / focus - 改进交互体验 */
 .dropdownWrapper:hover .submenu,
-.dropdownWrapper:focus-within .submenu,
-.menuLabel:focus + .submenu,
-.submenu:hover {
+.dropdownWrapper:focus-within .submenu {
   display: block;
   opacity: 1;
   transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 /* responsive: collapse into simple hamburger on small screens */
@@ -328,7 +337,10 @@
   overflow: hidden;
   transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
   background: rgba(0,0,0,0.15);
-  opacity: 0;
+}
+/* When expanded, content becomes visible */
+.accordion .title[aria-expanded="true"] + .content {
+  opacity: 1;
 }
 .contentItem { 
   padding: 0; 
