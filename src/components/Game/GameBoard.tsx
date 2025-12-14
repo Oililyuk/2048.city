@@ -8,7 +8,6 @@ declare global {
 
 import { useEffect, useRef } from 'react';
 import './game-global.css';
-import Leaderboard from '@/components/Leaderboard/Leaderboard';
 
 interface GameBoardProps {
   session: any;
@@ -82,21 +81,13 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
           <h1 className="game-title">2048</h1>
           <div className="score-container">
             <div className="score-box">
-              <div className="score-label">当前分数</div>
+              <div className="score-label">Score</div>
               <div className="score" id="score">0</div>
             </div>
             <div className="score-box">
-              <div className="score-label">最高分数</div>
+              <div className="score-label">Best</div>
               <div className="best-score" id="best-score">0</div>
             </div>
-          </div>
-        </div>
-        
-        <div className="above-game">
-          <div className="game-intro">
-            <p className="game-intro-text">
-              <strong>游戏说明：</strong>使用方向键或在屏幕任意位置滑动来移动方块。相同数字的方块碰撞时会合并成一个！
-            </p>
           </div>
         </div>
 
@@ -115,12 +106,14 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
         </div>
         
         <div className="controls">
-          <button className="btn-new" onClick={() => { if (window.game) window.game.restart(); }}>新游戏</button>
-          <button className="btn-undo" id="undo-btn" onClick={() => { if (window.game) window.game.undo(); }}>撤销 (<span id="undo-count">3</span>)</button>
+          <button className="btn-new" onClick={() => { if (window.game) window.game.restart(); }}>New Game</button>
+          <button className="btn-undo" id="undo-btn" onClick={() => { if (window.game) window.game.undo(); }}>Undo (<span id="undo-count">3</span>)</button>
         </div>
 
-        <div id="leaderboard-section">
-          <Leaderboard inline />
+        <div className="game-instructions">
+          <p className="instructions-text">
+            <strong>How to play:</strong> Use arrow keys or swipe anywhere on screen to move tiles. When two tiles with the same number touch, they merge into one!
+          </p>
         </div>
       </div>
     </div>

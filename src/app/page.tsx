@@ -3,7 +3,6 @@ import { auth } from '@/lib/auth';
 import GameBoard from '@/components/Game/GameBoard';
 import LoginButton from '@/components/Auth/LoginButton';
 import CookieConsent from '@/components/CookieConsent/CookieConsent';
-import Leaderboard from '@/components/Leaderboard/Leaderboard';
 
 export const metadata: Metadata = {
   title: '2048 • Play Free Online | 2048.city',

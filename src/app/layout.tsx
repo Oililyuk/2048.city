@@ -4,6 +4,7 @@ import './globals.css';
 
 import MainMenu from '@/components/MainMenu/MainMenu';
 import { ToastProvider } from '@/components/Toast/ToastProvider';
+import AnimatedBackground from '@/components/AnimatedBackground/AnimatedBackground';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://2048.city'),
@@ -32,6 +33,7 @@ export default function RootLayout({
         <link rel="canonical" href="https://2048.city" />
       </head>
       <body>
+        <AnimatedBackground />
         <ToastProvider>
           <SessionProvider>
             <MainMenu />

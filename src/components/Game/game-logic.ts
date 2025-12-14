@@ -832,7 +832,7 @@ class Game2048 {
             // 同时更新 liquidGlass-content 中的文本（如果存在）
             const contentSpan = undoButton.querySelector('.liquidGlass-content');
             if (contentSpan) {
-                contentSpan.textContent = `撤销 (${this.undoCount})`;
+                contentSpan.textContent = `Undo (${this.undoCount})`;
             }
             
             // 修复：当历史记录大于1时就应该启用撤销

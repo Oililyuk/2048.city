@@ -10,7 +10,7 @@ const menuItems = [
   { label: 'Blog', href: '/blog' },
   { label: 'How to Play', href: '/how-to-play' },
   { label: 'Daily Challenge', href: '/challenges/daily' },
-  { label: 'Leaderboard', href: '/#leaderboard' },
+  { label: 'Leaderboard', href: '/leaderboard' },
   { label: 'About', href: '/about' },
   { label: 'Feedback', href: '/feedback' },
   { label: 'Community', href: 'https://www.reddit.com/r/2048city/', external: true },
@@ -228,7 +228,7 @@ export default function MainMenu() {
                   <div
                     className={styles.content}
                     ref={(el) => { groupRefs.current[idx] = el; }}
-                    style={{ maxHeight: '0px', opacity: 0 }}
+                    data-open={openIndex === idx}
                   >
                     {group.items.map((it, i) => (
                       <div className={styles.contentItem} key={i}>

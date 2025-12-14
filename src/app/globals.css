@@ -30,21 +30,7 @@ body {
     padding-right: env(safe-area-inset-right);
 }
 
-/* 背景壁纸 */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url('/asset/wallpaper/2048.webp');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: -1;
-    transition: background-image 0.5s ease-in-out;
-}
+/* Background handled by AnimatedBackground component */
 
 h1 {
     color: rgba(255, 255, 255, 0.92);
@@ -61,12 +47,7 @@ h2 {
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* 暗黑模式背景 */
-@media (prefers-color-scheme: dark) {
-    body::before {
-        background-image: url('/asset/wallpaper/2048.webp');
-    }
-}
+/* Dark mode handled by AnimatedBackground component */
 
 /* 浅色模式下的UI元素颜色 */
 @media (prefers-color-scheme: light) {
