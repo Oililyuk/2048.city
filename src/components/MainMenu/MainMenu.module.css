@@ -212,18 +212,23 @@
 .menuLink { 
   padding: 16px 20px; 
   font-size: 0.95rem; 
-  display: block; 
-  color: rgba(255,255,255,0.9); 
+  display: block !important;
+  color: rgba(255,255,255,0.9) !important; 
   text-decoration: none; 
   font-weight: 400;
   transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }
-.mobileMenu .menuLink:hover { 
-  background: rgba(255,255,255,0.05); 
-  color: #fff;
+.menuLink:hover { 
+  background: rgba(255,255,255,0.05) !important; 
+  color: #fff !important;
 }
-.mobileMenu .menuLink:active { 
-  background: rgba(255,255,255,0.08); 
+.menuLink:active { 
+  background: rgba(255,255,255,0.08) !important; 
 }
 
 /* Accessible tap targets */
@@ -293,10 +298,14 @@
   flex-direction: column; 
   gap: 0;
   width: 100%;
+  padding: 0;
+  margin: 0;
 }
 .item { 
   width: 100%;
-  border-bottom: 1px solid rgba(255,255,255,0.05); 
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: block;
+  position: relative;
 }
 .title {
   width: 100%;
@@ -329,6 +338,7 @@
   background: rgba(0,0,0,0.15);
   opacity: 0;
   width: 100%;
+  display: block;
 }
 /* When expanded, content becomes visible */
 .content[data-open="true"] {
@@ -337,12 +347,21 @@
 .contentItem { 
   padding: 0;
   width: 100%;
-}
-.contentItem .menuLink { 
-  padding: 12px 20px 12px 48px; 
   display: block;
+}
+.contentItem .menuLink,
+.contentItem button,
+.contentItem a { 
+  padding: 12px 20px 12px 48px; 
+  display: block !important;
   font-size: 0.9rem;
   width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  cursor: pointer;
 }
 
 /* Login area styling inside drawer */
