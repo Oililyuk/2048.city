@@ -11,7 +11,8 @@ export async function GET(request: Request) {
       ? { createdAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } }
       : {};
 
-    const scores = await prisma.score.findMany({
+    // Get all scores first
+    const allScores = await prisma.score.findMany({
       where,
       include: { 
         user: {
@@ -22,12 +23,32 @@ export async function GET(request: Request) {
           }
         } 
       },
-      orderBy: { score: 'desc' },
-      take: Math.min(limit, 100),
-      distinct: ['userId'], // Only get best score per user
+      orderBy: [
+        { maxTile: 'desc' },  // First by highest tile
+        { score: 'desc' }     // Then by score
+      ],
     });
 
-    // Add rank to each entry
+    // Get best score per user (by maxTile first, then score)
+    const userBestScores = new Map();
+    for (const entry of allScores) {
+      const existing = userBestScores.get(entry.userId);
+      if (!existing || 
+          entry.maxTile > existing.maxTile || 
+          (entry.maxTile === existing.maxTile && entry.score > existing.score)) {
+        userBestScores.set(entry.userId, entry);
+      }
+    }
+
+    // Convert to array and sort again
+    const scores = Array.from(userBestScores.values())
+      .sort((a, b) => {
+        if (b.maxTile !== a.maxTile) return b.maxTile - a.maxTile;
+        return b.score - a.score;
+      })
+      .slice(0, Math.min(limit, 100));
+
+    // Add rank to each entry, highlight top 3
     const leaderboard = scores.map((entry, index) => ({
       rank: index + 1,
       userId: entry.user.id,
@@ -36,6 +57,7 @@ export async function GET(request: Request) {
       score: entry.score,
       maxTile: entry.maxTile,
       createdAt: entry.createdAt,
+      isTopThree: index < 3,  // Highlight top 3 players
     }));
 
     return NextResponse.json(leaderboard);

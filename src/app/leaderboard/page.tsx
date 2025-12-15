@@ -21,9 +21,9 @@ export default function LeaderboardPage() {
         textAlign: 'center',
         color: 'rgba(255, 255, 255, 0.95)'
       }}>
-        Leaderboard
+        🏆 Leaderboard
       </h1>
-      <Leaderboard />
+      <Leaderboard autoOpen={true} />
     </div>
   );
 }
