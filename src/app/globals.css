@@ -98,6 +98,37 @@ button:hover, .button:hover, [role="button"]:hover, input[type="button"]:hover, 
     box-shadow: 0 4px 24px rgba(0,0,0,0.22);
 }
 
+/* Content pages layout - ensure proper layering and no interference with game */
+main {
+    position: relative;
+    z-index: 1;
+    /* Ensure content is above background but below header/menus */
+}
+
+/* Links styling for content pages */
+a {
+    color: #4fd1c5;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+/* Visually hidden but accessible to screen readers */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
 /* Global font and text color */
 body, html, h1, h2, h3, h4, h5, h6, p, span, div, li, ul, ol, a, label, input, textarea, button {
     font-family: 'Segoe UI', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;

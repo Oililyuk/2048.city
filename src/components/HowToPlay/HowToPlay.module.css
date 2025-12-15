@@ -3,6 +3,8 @@
   max-width: 800px;
   margin: 60px auto 0;
   padding: 0 20px 40px;
+  position: relative;
+  z-index: 1;
 }
 
 .content {
@@ -13,6 +15,8 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .section {

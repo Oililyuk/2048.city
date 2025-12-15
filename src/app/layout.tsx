@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SessionProvider } from '@/components/SessionProvider';
 import './globals.css';
+import './content-page.css';
 
 import Header from '@/components/Header/Header';
 import { ToastProvider } from '@/components/Toast/ToastProvider';

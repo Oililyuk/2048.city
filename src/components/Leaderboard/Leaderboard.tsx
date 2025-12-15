@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react';
 import styles from './Leaderboard.module.css';
 
 interface LeaderboardEntry {
-  id: string;
+  rank: number;
+  userId: string;
   userName: string;
+  userAvatar: string;
   score: number;
   maxTile: number;
   createdAt: string;
+  isTopThree: boolean;
 }
 
 export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; autoOpen?: boolean }) {
@@ -65,7 +68,7 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
           <>
             <div className={styles.list}>
               {leaderboard.map((entry, index) => (
-                <div key={entry.id} className={`${styles.entry} ${index < 3 ? styles.topThree : ''}`}>
+                <div key={entry.userId} className={`${styles.entry} ${entry.isTopThree ? styles.topThree : ''}`}>
                   <div className={styles.rank}>
                     {index === 0 && '🥇'}
                     {index === 1 && '🥈'}
@@ -164,7 +167,7 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
                 <>
                   <div className={styles.list}>
                     {leaderboard.map((entry, index) => (
-                      <div key={entry.id} className={`${styles.entry} ${index < 3 ? styles.topThree : ''}`}>
+                      <div key={entry.userId} className={`${styles.entry} ${entry.isTopThree ? styles.topThree : ''}`}>
                         <div className={styles.rank}>
                           {index === 0 && '🥇'}
                           {index === 1 && '🥈'}

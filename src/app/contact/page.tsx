@@ -14,21 +14,7 @@ export default function ContactPage() {
     <main style={{ maxWidth: 600, margin: '0 auto', padding: '2rem 1rem' }}>
       <h1>Contact Us</h1>
       <p>We value your feedback and are happy to answer any questions. You can email us at <a href="mailto:hello@2048.city">hello@2048.city</a> or use the form below:</p>
-      <form action="https://novas.live/contact.html" method="POST" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '2rem' }}>
-        <label>
-          Name
-          <input type="text" name="name" required style={{ width: '100%', padding: '0.5rem', marginTop: 4 }} />
-        </label>
-        <label>
-          Email
-          <input type="email" name="email" required style={{ width: '100%', padding: '0.5rem', marginTop: 4 }} />
-        </label>
-        <label>
-          Message
-          <textarea name="message" rows={5} required style={{ width: '100%', padding: '0.5rem', marginTop: 4 }} />
-        </label>
-        <button type="submit" style={{ padding: '0.75rem 2rem', background: '#222', color: '#fff', border: 'none', borderRadius: 6, fontWeight: 600, cursor: 'pointer' }}>Send</button>
-      </form>
+      <p style={{ marginTop: 16, color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>For quick support, please visit our <a href="/feedback" style={{ color: '#4fd1c5' }}>Feedback page</a> or email us directly at <a href="mailto:hello@2048.city" style={{ color: '#4fd1c5' }}>hello@2048.city</a>.</p>
       <section style={{ marginTop: 32 }}>
         <h2 style={{ fontSize: '1.1rem', color: '#4fd1c5' }}>Frequently Asked Contact Questions</h2>
         <ul style={{ paddingLeft: 18, color: '#444', fontSize: '1rem' }}>

@@ -40,8 +40,6 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
               }
             }
             
-            // submit score (no debug logging in production)
-            
             // Submit score to API
             const response = await fetch('/api/scores/submit', {
               method: 'POST',
@@ -56,7 +54,15 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
             
             const result = await response.json();
             
-            if (!response.ok) {
+            if (response.ok && result.success) {
+              // Score was submitted successfully
+              if (result.isPersonalBest) {
+                console.log('🎉 New personal best!');
+              }
+            } else if (result.belowThreshold) {
+              // Score didn't meet threshold
+              console.log(`Keep practicing! Reach ${result.threshold?.minTile || 512} tile or ${result.threshold?.minScore || 2000} points to qualify for leaderboard.`);
+            } else {
               console.error('Score submission failed:', result);
             }
           } catch (error) {
@@ -64,6 +70,7 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
           }
         } else {
           // user not logged in; skipping score submit
+          console.log('Sign in to save your score and compete on the leaderboard!');
         }
       };
       
