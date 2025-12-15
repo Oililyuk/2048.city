@@ -136,7 +136,7 @@
   color: #fff;
 }
 
-/* show submenu on hover / focus - 改进交互体验 */
+/* show submenu on hover / focus - improved interaction */
 .dropdownWrapper:hover .submenu,
 .dropdownWrapper:focus-within .submenu {
   display: block;
@@ -191,45 +191,51 @@
   position: fixed; 
   inset: 0; 
   background: rgba(0,0,0,0.5); 
-  z-index: 9998; 
+  z-index: 99998; 
   display: flex; 
-  justify-content: flex-start; 
+  justify-content: flex-start;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
 }
 .mobileMenu { 
   width: min(320px, 85vw); 
   height: 100%; 
-  background: rgba(15,15,20,0.98);
-  backdrop-filter: blur(20px) saturate(120%);
-  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  background: rgba(15,15,20,0.95);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   padding: 0;
-  box-shadow: 12px 0 40px rgba(0,0,0,0.6); 
+  box-shadow: 12px 0 48px rgba(0,0,0,0.5), 
+              inset 0 0 0 1px rgba(255,255,255,0.06); 
   overflow-y: auto; 
   -webkit-overflow-scrolling: touch;
-  z-index: 9999;
+  z-index: 99999;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
 }
 
 /* Menu link styling for both direct links and accordion items */
 .menuLink { 
   padding: 16px 20px; 
   font-size: 0.95rem; 
-  display: block !important;
-  color: #FFFFFF !important; 
+  display: block;
+  color: rgba(255,255,255,0.85); 
   text-decoration: none; 
   font-weight: 400;
   transition: all 0.2s ease;
   width: 100%;
   text-align: left;
-  background: rgba(255, 255, 0, 0.1) !important; /* DEBUG: yellow tint */
+  background: transparent;
   border: none;
   cursor: pointer;
-  min-height: 40px; /* DEBUG */
 }
 .menuLink:hover { 
-  background: rgba(255,255,255,0.05) !important; 
-  color: #fff !important;
+  background: rgba(255,255,255,0.06); 
+  color: #fff;
 }
 .menuLink:active { 
-  background: rgba(255,255,255,0.08) !important; 
+  background: rgba(255,255,255,0.1); 
 }
 
 /* Accessible tap targets */
@@ -293,40 +299,35 @@
   transition: transform 0.2s ease;
 }
 
-/* Accordion for mobile drawer - DEBUG VERSION */
+/* Accordion for mobile drawer - clean frosted glass design */
 .accordion { 
-  display: flex !important;
+  display: flex;
   flex-direction: column; 
   gap: 0;
   width: 100%;
   padding: 0;
   margin: 0;
-  background: rgba(255, 0, 0, 0.5) !important; /* DEBUG: strong red background */
-  min-height: 400px !important; /* DEBUG: force visible height */
 }
 .item { 
   width: 100%;
-  border: 3px solid rgba(0, 255, 0, 0.8) !important; /* DEBUG: thick green border */
-  display: block !important;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: block;
   position: relative;
-  background: rgba(0, 255, 0, 0.3) !important; /* DEBUG: strong green background */
-  min-height: 60px !important; /* DEBUG: ensure visible */
 }
 .title {
   width: 100%;
   padding: 16px 20px;
   text-align: left;
   border: none;
-  background: rgba(0, 0, 255, 0.5) !important; /* DEBUG: strong blue background */
-  color: rgba(255,255,255,0.9) !important;
-  font-size: 1.1rem !important; /* DEBUG: bigger font */
-  font-weight: 700 !important;
-  display: flex !important;
+  background: transparent;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-height: 60px !important; /* DEBUG: ensure visible */
 }
 .title:hover {
   background: rgba(255,255,255,0.03);

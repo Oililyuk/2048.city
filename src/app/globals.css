@@ -4,7 +4,7 @@
   padding: 0;
 }
 
-/* 支持iOS全屏 */
+/* Support iOS fullscreen */
 :root {
     --vh: 1vh;
 }
@@ -49,7 +49,7 @@ h2 {
 
 /* Dark mode handled by AnimatedBackground component */
 
-/* 浅色模式下的UI元素颜色 */
+/* UI element colors in light mode */
 @media (prefers-color-scheme: light) {
     h1 {
         color: rgba(255, 255, 255, 0.9);
@@ -57,7 +57,7 @@ h2 {
     }
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media screen and (max-width: 520px) {
     h1 {
         font-size: 26px;

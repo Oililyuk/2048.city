@@ -3,6 +3,7 @@ import Link from 'next/link';
 import styles from './MainMenu.module.css';
 
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { usePathname } from 'next/navigation';
 import LoginButton from '@/components/Auth/LoginButton';
 
@@ -21,7 +22,13 @@ export default function MainMenu() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [bestScore, setBestScore] = useState<number>(0);
   const [undoCountDisplay, setUndoCountDisplay] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+
+  // Ensure we only render portal on client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // read best score from localStorage and poll game undo count
   useEffect(() => {
@@ -47,15 +54,9 @@ export default function MainMenu() {
 
   // when openIndex changes, set the maxHeight on the actual DOM nodes for smooth transition
   useLayoutEffect(() => {
-    console.log('[DEBUG] useLayoutEffect triggered, openIndex:', openIndex);
-    console.log('[DEBUG] groupRefs.current:', groupRefs.current);
     groupRefs.current.forEach((el, idx) => {
-      if (!el) {
-        console.log(`[DEBUG] ref ${idx} is null`);
-        return;
-      }
+      if (!el) return;
       if (openIndex === idx) {
-        console.log(`[DEBUG] Opening accordion ${idx}, scrollHeight:`, el.scrollHeight);
         el.style.maxHeight = el.scrollHeight + 'px';
         el.style.opacity = '1';
       } else {
@@ -67,7 +68,6 @@ export default function MainMenu() {
 
   // lock background scroll when mobile drawer open
   useEffect(() => {
-    console.log('[DEBUG] mobileOpen changed to:', mobileOpen);
     if (mobileOpen) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
@@ -205,8 +205,8 @@ export default function MainMenu() {
         </button>
       </div>
 
-      {/* Mobile overlay / left drawer */}
-      {mobileOpen && (
+      {/* Mobile overlay / left drawer - rendered via Portal to escape z-index context */}
+      {mobileOpen && mounted && createPortal(
         <div className={styles.mobileOverlay} onClick={() => setMobileOpen(false)}>
           <div className={styles.mobileMenu} ref={mobileMenuRef} tabIndex={-1} onClick={(e) => e.stopPropagation()}>
             <div className={styles.mobileHeader}>
@@ -261,7 +261,8 @@ export default function MainMenu() {
               </div>
             </nav>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </nav>
   );
