@@ -47,9 +47,15 @@ export default function MainMenu() {
 
   // when openIndex changes, set the maxHeight on the actual DOM nodes for smooth transition
   useLayoutEffect(() => {
+    console.log('[DEBUG] useLayoutEffect triggered, openIndex:', openIndex);
+    console.log('[DEBUG] groupRefs.current:', groupRefs.current);
     groupRefs.current.forEach((el, idx) => {
-      if (!el) return;
+      if (!el) {
+        console.log(`[DEBUG] ref ${idx} is null`);
+        return;
+      }
       if (openIndex === idx) {
+        console.log(`[DEBUG] Opening accordion ${idx}, scrollHeight:`, el.scrollHeight);
         el.style.maxHeight = el.scrollHeight + 'px';
         el.style.opacity = '1';
       } else {
@@ -61,6 +67,7 @@ export default function MainMenu() {
 
   // lock background scroll when mobile drawer open
   useEffect(() => {
+    console.log('[DEBUG] mobileOpen changed to:', mobileOpen);
     if (mobileOpen) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = 'hidden';

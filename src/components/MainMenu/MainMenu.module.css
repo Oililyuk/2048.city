@@ -301,31 +301,32 @@
   width: 100%;
   padding: 0;
   margin: 0;
-  background: rgba(255, 0, 0, 0.1); /* DEBUG: red tint */
-  min-height: 200px; /* DEBUG: ensure visible */
+  background: rgba(255, 0, 0, 0.5) !important; /* DEBUG: strong red background */
+  min-height: 400px !important; /* DEBUG: force visible height */
 }
 .item { 
   width: 100%;
-  border-bottom: 1px solid rgba(255,255,255,0.3);
+  border: 3px solid rgba(0, 255, 0, 0.8) !important; /* DEBUG: thick green border */
   display: block !important;
   position: relative;
-  background: rgba(0, 255, 0, 0.1); /* DEBUG: green tint */
-  min-height: 50px; /* DEBUG: ensure visible */
+  background: rgba(0, 255, 0, 0.3) !important; /* DEBUG: strong green background */
+  min-height: 60px !important; /* DEBUG: ensure visible */
 }
 .title {
   width: 100%;
   padding: 16px 20px;
   text-align: left;
   border: none;
-  background: rgba(0, 0, 255, 0.1); /* DEBUG: blue tint */
+  background: rgba(0, 0, 255, 0.5) !important; /* DEBUG: strong blue background */
   color: rgba(255,255,255,0.9) !important;
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-size: 1.1rem !important; /* DEBUG: bigger font */
+  font-weight: 700 !important;
   display: flex !important;
   align-items: center;
   gap: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 60px !important; /* DEBUG: ensure visible */
 }
 .title:hover {
   background: rgba(255,255,255,0.03);
