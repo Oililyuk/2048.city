@@ -1,83 +1,370 @@
 /* ==========================================================================
-   Content Page Layout - For blog, about, FAQ, contact pages
-   Ensures proper layering and no interference with game elements
+   Content Page Layout - Modern, Futuristic Design
+   Uses cutting-edge CSS features for a stunning visual experience
    ========================================================================== */
 
 .contentPage {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding: var(--spacing-xl) var(--spacing-lg);
+  position: relative;
 }
 
-/* Typography */
+/* Animated gradient text for headings */
 .contentPage h1 {
-  color: var(--color-text-primary);
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin: 0 0 1.5rem 0;
-  text-shadow: var(--shadow-text);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin: 0 0 2rem 0;
+  background: linear-gradient(
+    135deg,
+    #fff 0%,
+    #4fd1c5 25%,
+    #7c3aed 50%,
+    #ec4899 75%,
+    #fff 100%
+  );
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 8s ease infinite;
+  position: relative;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Glow effect on hover */
+.contentPage h1::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  background: inherit;
+  background-clip: text;
+  -webkit-background-clip: text;
+  filter: blur(20px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.contentPage h1:hover::after {
+  opacity: 0.6;
+}
+
+/* Section headings with accent line */
 .contentPage h2 {
-  color: var(--color-text-primary);
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin: 2rem 0 1rem 0;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  margin: 3rem 0 1.5rem 0;
+  padding-bottom: 0.75rem;
+  position: relative;
+  letter-spacing: -0.01em;
+}
+
+.contentPage h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #4fd1c5, #7c3aed);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(79, 209, 197, 0.5);
 }
 
 .contentPage h3 {
-  color: var(--color-text-secondary);
-  font-size: 1.35rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
   font-weight: 600;
-  margin: 1.5rem 0 0.75rem 0;
+  margin: 2rem 0 1rem 0;
+  letter-spacing: -0.01em;
 }
 
+/* Paragraph with better readability */
 .contentPage p {
-  color: var(--color-text-secondary);
-  line-height: 1.7;
-  margin: 0.75rem 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  margin: 1rem 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* Fancy lists with custom markers */
 .contentPage ul, 
 .contentPage ol {
-  color: var(--color-text-secondary);
-  line-height: 1.7;
-  margin: 0.75rem 0;
-  padding-left: 1.5rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  margin: 1.5rem 0;
+  padding-left: 2rem;
 }
 
 .contentPage li {
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
+  position: relative;
+  padding-left: 0.5rem;
 }
 
+.contentPage ul li::before {
+  content: '▹';
+  position: absolute;
+  left: -1.5rem;
+  color: #4fd1c5;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Hover effect for links with underline animation */
 .contentPage a {
-  color: var(--color-accent);
+  color: #4fd1c5;
   text-decoration: none;
-  transition: all var(--transition-normal);
   font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+  background: linear-gradient(90deg, #4fd1c5, #7c3aed);
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: background-size 0.3s ease, color 0.3s ease;
 }
 
 .contentPage a:hover {
-  opacity: 0.8;
-  text-decoration: underline;
+  color: #7c3aed;
+  background-size: 100% 2px;
 }
 
+/* Strong emphasis with gradient */
 .contentPage strong, 
 .contentPage b {
-  color: var(--color-text-primary);
-  font-weight: 600;
+  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff, #4fd1c5);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Form elements */
+/* Modern form elements with neon glow */
+.contentPage input,
+.contentPage textarea {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(79, 209, 197, 0.3);
+  border-radius: 12px;
+  color: #fff;
+  padding: 1rem;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.contentPage input:focus,
+.contentPage textarea:focus {
+  outline: none;
+  border-color: #4fd1c5;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 0 0 3px rgba(79, 209, 197, 0.1),
+    0 0 20px rgba(79, 209, 197, 0.2);
+}
+
+.contentPage label {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.contentPage textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+/* Futuristic accordion/details */
+.contentPage details {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(79, 209, 197, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  transition: all 0.3s ease;
+}
+
+.contentPage details:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(79, 209, 197, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.contentPage details summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #4fd1c5;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.contentPage details summary::-webkit-details-marker {
+  display: none;
+}
+
+.contentPage details summary::before {
+  content: '▶';
+  margin-right: 1rem;
+  transition: transform 0.3s ease;
+  display: inline-block;
+  color: #4fd1c5;
+}
+
+.contentPage details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.contentPage details summary:hover {
+  color: #7c3aed;
+}
+
+.contentPage details[open] summary {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(79, 209, 197, 0.2);
+}
+
+.contentPage details div {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.8;
+}
+
+/* Code blocks with cyberpunk style */
+.contentPage code {
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 6px;
+  padding: 0.25em 0.5em;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+  color: #c4b5fd;
+  font-weight: 500;
+}
+
+.contentPage pre {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(79, 209, 197, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.contentPage pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+}
+
+/* Blockquote with neon accent */
+.contentPage blockquote {
+  position: relative;
+  padding-left: 2rem;
+  margin: 2rem 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+  font-size: 1.125rem;
+}
+
+.contentPage blockquote::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #4fd1c5, #7c3aed);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(79, 209, 197, 0.5);
+}
+
+/* Responsive Typography */
+@media screen and (max-width: 768px) {
+  .contentPage {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .contentPage {
+    padding: var(--spacing-md);
+  }
+  
+  .contentPage ul,
+  .contentPage ol {
+    padding-left: 1.5rem;
+  }
+  
+  .contentPage li {
+    padding-left: 0.25rem;
+  }
+  
+  .contentPage ul li::before {
+    left: -1.25rem;
+  }
+}
+
+/* Add scroll animations */
+@media (prefers-reduced-motion: no-preference) {
+  .contentPage > * {
+    animation: fadeInUp 0.6s ease-out backwards;
+  }
+  
+  .contentPage > *:nth-child(1) { animation-delay: 0.1s; }
+  .contentPage > *:nth-child(2) { animation-delay: 0.2s; }
+  .contentPage > *:nth-child(3) { animation-delay: 0.3s; }
+  .contentPage > *:nth-child(4) { animation-delay: 0.4s; }
+  .contentPage > *:nth-child(5) { animation-delay: 0.5s; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form inputs */
 .contentPage input,
 .contentPage textarea {
   background: var(--color-bg-secondary);
-  border: 1px solid var(--color-border-secondary);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius);
   color: var(--color-text-primary);
-  padding: 0.75rem;
-  font-family: var(--font-family);
+  padding: var(--spacing-sm) var(--spacing-md);
   font-size: 1rem;
   transition: all var(--transition-normal);
   width: 100%;

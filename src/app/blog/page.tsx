@@ -8,7 +8,6 @@ export const metadata: Metadata = {
   keywords: '2048 strategy, 2048 guide, how to win 2048, advanced 2048, 2048 AI, 2048 history, puzzle game blog, 2048 tips',
 };
 
-export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
 export const themeColor = '#000000';
 
 const posts = [
@@ -45,28 +44,28 @@ export default function BlogPage() {
       <p>
         Welcome to the official <b>2048.city Blog</b>! Here you’ll find expert strategies, in-depth guides, AI insights, and the latest news about 2048. Whether you’re a beginner or a puzzle master, our articles will help you improve your skills and enjoy the game even more.
       </p>
-      <section style={{ margin: '2rem 0' }}>
-        <h2 style={{ fontSize: '1.2rem', color: '#4fd1c5', marginBottom: 8 }}>Featured Articles</h2>
+      <section>
+        <h2>Featured Articles</h2>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {posts.map(post => (
-            <li key={post.slug} style={{ margin: '2rem 0', borderBottom: '1px solid #eee', paddingBottom: '1.5rem' }}>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.1rem' }}>
+            <li key={post.slug} style={{ margin: '2rem 0', paddingBottom: '1.5rem' }}>
+              <h3 style={{ margin: '0 0 0.5rem 0' }}>
                 <Link href={`/blog/${post.slug}`}>{post.title}</Link>
               </h3>
-              <div style={{ color: '#888', fontSize: 14 }}>{post.date}</div>
+              <div style={{ opacity: 0.7, fontSize: '0.9rem' }}>{post.date}</div>
               <p style={{ margin: '0.5rem 0 0 0' }}>{post.summary}</p>
-              <Link href={`/blog/${post.slug}`} style={{ color: '#0070f3', fontWeight: 500 }}>Read More →</Link>
+              <Link href={`/blog/${post.slug}`}>Read More →</Link>
             </li>
           ))}
         </ul>
       </section>
-      <section style={{ margin: '2rem 0' }}>
-        <h2 style={{ fontSize: '1.2rem', color: '#4fd1c5', marginBottom: 8 }}>Categories</h2>
-        <ul style={{ listStyle: 'none', padding: 0, display: 'flex', gap: 16 }}>
-          <li><Link href="/blog/how-to-win-2048" style={{ color: '#4fd1c5' }}>How to Win</Link></li>
-          <li><Link href="/blog/advanced-strategies" style={{ color: '#4fd1c5' }}>Advanced Strategies</Link></li>
-          <li><Link href="/blog/ai-vs-human" style={{ color: '#4fd1c5' }}>AI vs Human</Link></li>
-          <li><Link href="/blog/history-of-2048" style={{ color: '#4fd1c5' }}>History</Link></li>
+      <section>
+        <h2>Categories</h2>
+        <ul style={{ listStyle: 'none', padding: 0, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          <li><Link href="/blog/how-to-win-2048">How to Win</Link></li>
+          <li><Link href="/blog/advanced-strategies">Advanced Strategies</Link></li>
+          <li><Link href="/blog/ai-vs-human">AI vs Human</Link></li>
+          <li><Link href="/blog/history-of-2048">History</Link></li>
         </ul>
       </section>
       <section style={{ margin: '2rem 0' }}>

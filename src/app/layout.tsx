@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   authors: [{ name: '2048.city Team' }],
 };
 
-export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+export const viewport = 'width=device-width, initial-scale=1, viewport-fit=cover';
 export const themeColor = '#000000';
 
 export default function RootLayout({

@@ -7,7 +7,6 @@ export const metadata: Metadata = {
   keywords: 'about 2048, 2048.city team, puzzle game creators, online game community, technology stack, join us',
 };
 
-export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
 export const themeColor = '#000000';
 
 export default function AboutPage() {

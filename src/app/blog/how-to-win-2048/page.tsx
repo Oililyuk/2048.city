@@ -5,7 +5,6 @@ export const metadata: Metadata = {
   description: 'Master 2048 with proven strategies! Learn the corner technique, snake pattern, common mistakes, and advanced tactics. Step-by-step guide for beginners to experts.'
 };
 
-export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
 export const themeColor = '#000000';
 
 export default function HowToWin2048Page() {

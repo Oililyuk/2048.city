@@ -112,15 +112,17 @@ export default function GameBoard({ session, onScoreSubmit }: GameBoardProps) {
           <div className="game-message" id="game-message"></div>
         </div>
         
-        <div className="controls">
-          <button className="btn-new" onClick={() => { if (window.game) window.game.restart(); }}>New Game</button>
-          <button className="btn-undo" id="undo-btn" onClick={() => { if (window.game) window.game.undo(); }}>Undo (<span id="undo-count">3</span>)</button>
-        </div>
+        <div className="footer">
+          <div className="controls">
+            <button className="btn-new" onClick={() => { if (window.game) window.game.restart(); }}>New Game</button>
+            <button className="btn-undo" id="undo-btn" onClick={() => { if (window.game) window.game.undo(); }}>Undo (<span id="undo-count">3</span>)</button>
+          </div>
 
-        <div className="game-instructions">
-          <p className="instructions-text">
-            <strong>How to play:</strong> Use arrow keys or swipe anywhere on screen to move tiles. When two tiles with the same number touch, they merge into one!
-          </p>
+          <div className="game-instructions">
+            <p className="instructions-text">
+              <strong>How to play:</strong> Use arrow keys or swipe anywhere on screen to move tiles. When two tiles with the same number touch, they merge into one!
+            </p>
+          </div>
         </div>
       </div>
     </div>

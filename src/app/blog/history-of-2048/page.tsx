@@ -5,7 +5,6 @@ export const metadata: Metadata = {
   description: 'Discover the origins and evolution of 2048. Learn how the game became a global phenomenon and inspired countless variations.'
 };
 
-export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
 export const themeColor = '#000000';
 
 export default function HistoryOf2048Page() {

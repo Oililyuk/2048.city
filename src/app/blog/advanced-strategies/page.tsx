@@ -5,7 +5,6 @@ export const metadata: Metadata = {
   description: 'Discover advanced 2048 strategies, including tile management, pattern play, and expert tips to reach 4096 and beyond.'
 };
 
-export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
 export const themeColor = '#000000';
 
 export default function AdvancedStrategiesPage() {

@@ -7,7 +7,6 @@ export const metadata: Metadata = {
   keywords: '2048 FAQ, 2048 help, 2048.city questions, leaderboard, privacy, account, mobile, puzzle game support',
 };
 
-export const viewport = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
 export const themeColor = '#000000';
 
 const faqs = [
@@ -103,15 +102,15 @@ const faqs = [
 
 export default function FAQPage() {
   return (
-    <main style={{ maxWidth: 700, margin: '0 auto', padding: '2rem 1rem' }}>
+    <main className={styles.contentPage}>
       <h1>Frequently Asked Questions</h1>
       <p>Find answers to common questions about 2048.city, gameplay, accounts, and more.</p>
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {faqs.map((faq, idx) => (
           <li key={idx} style={{ marginBottom: '1.5rem' }}>
             <details>
-              <summary style={{ fontWeight: 600, fontSize: '1.1rem', cursor: 'pointer', color: '#4fd1c5' }}>{faq.q}</summary>
-              <div style={{ marginTop: 8, color: '#222', fontSize: '1rem' }}>{faq.a}</div>
+              <summary>{faq.q}</summary>
+              <div>{faq.a}</div>
             </details>
           </li>
         ))}
