@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import styles from '@/styles/ContentPage.module.css';
 
 export const metadata: Metadata = {
   title: 'Contact Us | 2048.city',
@@ -11,7 +12,7 @@ export const themeColor = '#000000';
 
 export default function ContactPage() {
   return (
-    <main style={{ maxWidth: 600, margin: '0 auto', padding: '2rem 1rem' }}>
+    <main className={styles.contentPage}>
       <h1>Contact Us</h1>
       <p>We value your feedback and are happy to answer any questions. You can email us at <a href="mailto:hello@2048.city">hello@2048.city</a> or use the form below:</p>
       <p style={{ marginTop: 16, color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>For quick support, please visit our <a href="/feedback" style={{ color: '#4fd1c5' }}>Feedback page</a> or email us directly at <a href="mailto:hello@2048.city" style={{ color: '#4fd1c5' }}>hello@2048.city</a>.</p>

@@ -1,0 +1,205 @@
+/* ==========================================================================
+   Content Page Layout - For blog, about, FAQ, contact pages
+   Ensures proper layering and no interference with game elements
+   ========================================================================== */
+
+.contentPage {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+/* Typography */
+.contentPage h1 {
+  color: var(--color-text-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  text-shadow: var(--shadow-text);
+}
+
+.contentPage h2 {
+  color: var(--color-text-primary);
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem 0;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+.contentPage h3 {
+  color: var(--color-text-secondary);
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem 0;
+}
+
+.contentPage p {
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin: 0.75rem 0;
+}
+
+.contentPage ul, 
+.contentPage ol {
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+}
+
+.contentPage li {
+  margin: 0.5rem 0;
+}
+
+.contentPage a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: all var(--transition-normal);
+  font-weight: 500;
+}
+
+.contentPage a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.contentPage strong, 
+.contentPage b {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* Form elements */
+.contentPage input,
+.contentPage textarea {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  padding: 0.75rem;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.contentPage input:focus,
+.contentPage textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: var(--color-bg-primary);
+  box-shadow: 0 0 0 3px rgba(79, 209, 197, 0.1);
+}
+
+.contentPage label {
+  color: var(--color-text-primary);
+  font-weight: 500;
+  display: block;
+  margin-bottom: var(--spacing-sm);
+}
+
+.contentPage textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Details/Summary elements (FAQ accordions) */
+.contentPage details {
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  margin: 1rem 0;
+  transition: all var(--transition-normal);
+}
+
+.contentPage details:hover {
+  background: var(--color-bg-secondary);
+}
+
+.contentPage details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-accent);
+  user-select: none;
+  list-style: none;
+}
+
+.contentPage details summary::-webkit-details-marker {
+  display: none;
+}
+
+.contentPage details[open] summary {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border-secondary);
+}
+
+.contentPage details div {
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+/* Code blocks */
+.contentPage code {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: 4px;
+  padding: 0.2em 0.4em;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+  color: var(--color-accent);
+}
+
+.contentPage pre {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.contentPage pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-text-secondary);
+}
+
+/* Responsive Typography */
+@media screen and (max-width: 768px) {
+  .contentPage {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  
+  .contentPage h1 {
+    font-size: 2rem;
+  }
+  
+  .contentPage h2 {
+    font-size: 1.5rem;
+  }
+  
+  .contentPage h3 {
+    font-size: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .contentPage {
+    padding: var(--spacing-md);
+  }
+  
+  .contentPage h1 {
+    font-size: 1.75rem;
+  }
+  
+  .contentPage h2 {
+    font-size: 1.35rem;
+  }
+  
+  .contentPage h3 {
+    font-size: 1.1rem;
+  }
+}

@@ -1,0 +1,179 @@
+/* ==========================================================================
+   Shared Component Styles - Reusable UI Components
+   ========================================================================== */
+
+/* Glass Button - iOS frosted glass effect */
+.glassButton {
+  font-family: var(--font-family);
+  color: var(--color-text-primary);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  outline: none;
+  white-space: nowrap;
+}
+
+.glassButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
+
+.glassButton:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.glassButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Glass Card - Container with frosted glass effect */
+.glassCard {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+}
+
+/* Content Container - Standard content wrapper */
+.contentContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+/* Link - Standard link styling */
+.link {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: opacity var(--transition-normal);
+  font-weight: 500;
+}
+
+.link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* Input - Form input styling */
+.input {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  padding: 0.75rem;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: var(--color-bg-primary);
+  box-shadow: 0 0 0 3px rgba(79, 209, 197, 0.1);
+}
+
+/* Textarea */
+.textarea {
+  composes: input;
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Label */
+.label {
+  color: var(--color-text-primary);
+  font-weight: 500;
+  display: block;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Section - Content section with spacing */
+.section {
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Heading styles */
+.heading1 {
+  color: var(--color-text-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  text-shadow: var(--shadow-text);
+}
+
+.heading2 {
+  color: var(--color-text-primary);
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem 0;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+.heading3 {
+  color: var(--color-text-secondary);
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem 0;
+}
+
+/* Text styles */
+.textPrimary {
+  color: var(--color-text-primary);
+  line-height: 1.7;
+}
+
+.textSecondary {
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+.textTertiary {
+  color: var(--color-text-tertiary);
+  line-height: 1.7;
+}
+
+/* Responsive Typography */
+@media screen and (max-width: 768px) {
+  .heading1 {
+    font-size: 2rem;
+  }
+  
+  .heading2 {
+    font-size: 1.5rem;
+  }
+  
+  .heading3 {
+    font-size: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .heading1 {
+    font-size: 1.75rem;
+  }
+  
+  .heading2 {
+    font-size: 1.35rem;
+  }
+  
+  .heading3 {
+    font-size: 1.1rem;
+  }
+}

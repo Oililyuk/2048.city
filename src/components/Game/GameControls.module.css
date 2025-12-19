@@ -1,0 +1,59 @@
+/* ==========================================================================
+   Game Controls - Buttons for New Game, Undo, etc.
+   ========================================================================== */
+
+.btnNew, 
+.btnUndo {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+  --ui-border-radius: 10px;
+  border-radius: var(--ui-border-radius);
+  overflow: hidden;
+  cursor: pointer;
+  min-width: 120px;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  transition: all 0.3s;
+}
+
+.btnNew:hover,
+.btnUndo:hover {
+  transform: translateY(-1px);
+}
+
+.btnUndo.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btnUndo.disabled:hover {
+  transform: none;
+}
+
+/* Light mode adjustments */
+@media (prefers-color-scheme: light) {
+  /* Adjustments handled by liquid glass component */
+}
+
+/* Touch device optimization */
+@media (hover: none) {
+  .btnNew:hover,
+  .btnUndo:hover {
+    transform: none;
+  }
+}
+
+/* Responsive design */
+@media screen and (max-width: 520px) {
+  .btnNew, 
+  .btnUndo {
+    margin-right: 5px;
+    --ui-border-radius: 8px;
+    min-width: 100px;
+  }
+}

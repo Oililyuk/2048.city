@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import styles from '@/styles/ContentPage.module.css';
 
 export const metadata: Metadata = {
   title: 'FAQ | 2048.city',

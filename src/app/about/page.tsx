@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import styles from '@/styles/ContentPage.module.css';
 
 export const metadata: Metadata = {
   title: 'About Us | 2048.city',
@@ -11,7 +12,7 @@ export const themeColor = '#000000';
 
 export default function AboutPage() {
   return (
-    <main style={{ maxWidth: 700, margin: '0 auto', padding: '2rem 1rem' }}>
+    <main className={styles.contentPage}>
       <h1>About 2048.city</h1>
       <p>Welcome to <b>2048.city</b>! We are passionate about creating the best online 2048 experience, blending beautiful design, fair competition, and a friendly global community.</p>
       <h2>Our Mission & Vision</h2>

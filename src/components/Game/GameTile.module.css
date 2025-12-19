@@ -1,0 +1,272 @@
+/* ==========================================================================
+   Game Tiles - Number tiles with animations and liquid glass effects
+   ========================================================================== */
+
+.tile {
+  position: absolute;
+  width: calc((100% - 30px) / 4);
+  height: calc((100% - 30px) / 4);
+  transition: 
+    top 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    left 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.08s ease-out,
+    border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+  
+  --tile-border-radius: 18px;
+  border-radius: var(--tile-border-radius);
+  
+  display: flex;
+  font-weight: 600;
+  overflow: hidden;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  line-height: 1;
+  
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Tile states */
+.tile.dragging {
+  transition: transform 0.05s linear !important;
+  will-change: transform;
+  z-index: 100;
+}
+
+.tile.moving {
+  transition: 
+    top 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    left 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+.tileContainer.draggingActive {
+  transition: opacity 0.2s ease;
+}
+
+/* Tile animations */
+.tileNew {
+  animation: appear 0.2s ease-in-out;
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.tileMerged {
+  animation: pop 0.2s ease-in-out;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.tileDisappear {
+  animation: disappear 0.15s ease-in-out;
+}
+
+@keyframes disappear {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.tileReappear {
+  animation: reappear 0.2s ease-in-out;
+}
+
+@keyframes reappear {
+  0% {
+    opacity: 0;
+    transform: scale(1.2) rotate(180deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.9) rotate(90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Tile inner layers - These are applied via JavaScript */
+:global(.liquidGlass-text) {
+  z-index: 3;
+  font-size: 55px;
+  font-weight: bold;
+  color: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  border-radius: var(--tile-border-radius);
+  transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+/* Tile colors by value - applied to .liquidGlass-tint layer */
+:global(.tile-2 .liquidGlass-tint) { background: rgba(238, 228, 218, 0.25); }
+:global(.tile-4 .liquidGlass-tint) { background: rgba(237, 224, 200, 0.25); }
+:global(.tile-8 .liquidGlass-tint) { background: rgba(242, 177, 121, 0.35); }
+:global(.tile-16 .liquidGlass-tint) { background: rgba(245, 149, 99, 0.45); }
+:global(.tile-32 .liquidGlass-tint) { background: rgba(246, 124, 95, 0.55); }
+:global(.tile-64 .liquidGlass-tint) { background: rgba(246, 94, 59, 0.65); }
+:global(.tile-128 .liquidGlass-tint) { background: rgba(237, 207, 114, 0.45); }
+:global(.tile-256 .liquidGlass-tint) { background: rgba(237, 204, 97, 0.55); }
+:global(.tile-512 .liquidGlass-tint) { background: rgba(237, 200, 80, 0.65); }
+:global(.tile-1024 .liquidGlass-tint) { background: rgba(237, 197, 63, 0.75); }
+:global(.tile-2048 .liquidGlass-tint) { background: rgba(237, 194, 46, 0.85); }
+
+/* Light text for higher value tiles */
+:global(.tile-8 .liquidGlass-text),
+:global(.tile-16 .liquidGlass-text),
+:global(.tile-32 .liquidGlass-text),
+:global(.tile-64 .liquidGlass-text),
+:global(.tile-128 .liquidGlass-text),
+:global(.tile-256 .liquidGlass-text),
+:global(.tile-512 .liquidGlass-text),
+:global(.tile-1024 .liquidGlass-text),
+:global(.tile-2048 .liquidGlass-text) {
+  color: #f9f6f2;
+}
+
+/* Font size adjustments for larger numbers */
+:global(.tile-128 .liquidGlass-text),
+:global(.tile-256 .liquidGlass-text),
+:global(.tile-512 .liquidGlass-text) {
+  font-size: 45px;
+}
+
+:global(.tile-1024 .liquidGlass-text),
+:global(.tile-2048 .liquidGlass-text) {
+  font-size: 35px;
+}
+
+/* Responsive design */
+@media screen and (max-width: 520px) {
+  .tile {
+    width: calc((100% - 24px) / 4);
+    height: calc((100% - 24px) / 4);
+    --tile-border-radius: 12px;
+  }
+  
+  .tile.dragging {
+    transition: none !important;
+  }
+  
+  :global(.liquidGlass-text) {
+    font-size: 35px;
+  }
+  
+  :global(.tile-128 .liquidGlass-text),
+  :global(.tile-256 .liquidGlass-text),
+  :global(.tile-512 .liquidGlass-text) {
+    font-size: 30px;
+  }
+  
+  :global(.tile-1024 .liquidGlass-text),
+  :global(.tile-2048 .liquidGlass-text) {
+    font-size: 25px;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    animation-play-state: paused !important;
+    transition: none !important;
+  }
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .tile {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+  }
+}
+
+/* Score addition animation */
+.scoreAddition {
+  position: absolute;
+  right: 20px;
+  color: #776e65;
+  font-size: 20px;
+  font-weight: bold;
+  animation: scoreAddition 0.8s ease-in-out;
+  z-index: 20;
+}
+
+@keyframes scoreAddition {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+/* Undo reward animation */
+.undoReward {
+  position: absolute;
+  right: 20px;
+  top: 80px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  animation: undoReward 1s ease-in-out;
+  z-index: 30;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes undoReward {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}

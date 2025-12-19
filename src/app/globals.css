@@ -1,146 +1,112 @@
+/* ==========================================================================
+   Global Base Styles - Only truly global resets and layout
+   Component-specific styles should use CSS Modules
+   ========================================================================== */
+
+/* Import CSS Variables */
+@import '../styles/variables.css';
+
+/* CSS Reset */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Support iOS fullscreen */
-:root {
-    --vh: 1vh;
-}
-
 html {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 
-/* body allows scrolling; add top padding to avoid fixed menu overlap */
+/* Global Layout - body handles scrolling and safe areas */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    background: #000;
-    color: #776e65;
-    font-size: 18px;
-    line-height: 1.42857143;
-    min-height: 100vh;
-    overflow: auto;
-    /* account for top fixed menu (64px) + safe area */
-    padding-top: calc(64px + env(safe-area-inset-top));
-    padding-bottom: env(safe-area-inset-bottom);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+  font-family: var(--font-family);
+  background: #000;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  min-height: 100vh;
+  overflow: auto;
+  /* Account for top fixed menu (64px) + safe area */
+  padding-top: calc(var(--header-height) + env(safe-area-inset-top));
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
-/* Background handled by AnimatedBackground component */
-
-h1 {
-    color: rgba(255, 255, 255, 0.92);
-    font-size: 36px;
-    font-weight: bold;
-    margin: 0 0 0.5em 0;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-h2 {
-    color: rgba(255, 255, 255, 0.88);
-    font-size: 28px;
-    font-weight: 600;
-    margin: 0 0 0.5em 0;
-    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
-}
-
-/* Dark mode handled by AnimatedBackground component */
-
-/* UI element colors in light mode */
-@media (prefers-color-scheme: light) {
-    h1 {
-        color: rgba(255, 255, 255, 0.9);
-        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    }
-}
-
-/* Responsive design */
-@media screen and (max-width: 520px) {
-    h1 {
-        font-size: 26px;
-    }
-    h2 {
-        font-size: 20px;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    h1 {
-        font-size: 22px;
-    }
-    h2 {
-        font-size: 17px;
-    }
-}
-
-/* Global button styling with frosted glass effect */
-button, .button, [role="button"], input[type="button"], input[type="submit"], .mainButton, .leaderboardButton {
-    font-family: inherit;
-    color: #fff;
-    background: rgba(255,255,255,0.12);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    outline: none;
-}
-button:hover, .button:hover, [role="button"]:hover, input[type="button"]:hover, input[type="submit"]:hover, .mainButton:hover, .leaderboardButton:hover {
-    background: rgba(255,255,255,0.2);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.22);
-}
-
-/* Content pages layout - ensure proper layering and no interference with game */
+/* Main content wrapper - ensure proper z-index layering */
 main {
-    position: relative;
-    z-index: 1;
-    /* Ensure content is above background but below header/menus */
+  position: relative;
+  z-index: var(--z-base);
+  min-height: calc(100vh - var(--header-height));
 }
 
-/* Links styling for content pages */
+/* Global Typography - Basic defaults only */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family);
+  color: var(--color-text-primary);
+}
+
+p, span, div, li, ul, ol, a, label {
+  font-family: var(--font-family);
+}
+
+/* Global Link Styling */
 a {
-    color: #4fd1c5;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: opacity var(--transition-normal);
 }
+
 a:hover {
-    opacity: 0.8;
-    text-decoration: underline;
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
-/* Visually hidden but accessible to screen readers */
+/* Global Button Styling with frosted glass effect */
+button, 
+input[type="button"], 
+input[type="submit"] {
+  font-family: var(--font-family);
+  color: var(--color-text-primary);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  outline: none;
+}
+
+button:hover, 
+input[type="button"]:hover, 
+input[type="submit"]:hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-lg);
+}
+
+button:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Accessibility - Visually hidden but accessible to screen readers */
 .visually-hidden {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
-}
-
-/* Global font and text color */
-body, html, h1, h2, h3, h4, h5, h6, p, span, div, li, ul, ol, a, label, input, textarea, button {
-    font-family: 'Segoe UI', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-    color: #fff;
-}
-
-/* Utility to keep content in the DOM for SEO but visually hidden */
-.visually-hidden {
-    position: absolute !important;
-    left: -9999px !important;
-    width: 1px !important;
-    height: 1px !important;
-    overflow: hidden !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 

@@ -1,0 +1,110 @@
+/* ==========================================================================
+   Game Grid - The 4x4 game board container
+   ========================================================================== */
+
+.gameContainer {
+  position: relative;
+  background: transparent;
+  border-radius: 20px;
+  width: 100%;
+  max-width: min(450px, 90vw, 80vh);
+  margin: 0 auto;
+  padding: 10px;
+  overflow: visible;
+  flex: 0 0 auto;
+  aspect-ratio: 1;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Glass effect layers */
+.gameContainer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.gameContainer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 20px;
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.2),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+}
+
+/* Grid container */
+.gridContainer {
+  position: relative;
+  background: transparent;
+  border-radius: 10px;
+  width: 100%;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px;
+  z-index: 3;
+}
+
+.gridRow {
+  display: contents;
+}
+
+.gridCell {
+  display: none;
+}
+
+/* Tile container for positioning */
+.tileContainer {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 4;
+}
+
+/* Light mode adjustments */
+@media (prefers-color-scheme: light) {
+  .gameContainer::before {
+    background: rgba(0, 0, 0, 0.08);
+  }
+  
+  .gameContainer::after {
+    box-shadow: 
+      inset 2px 2px 4px rgba(255, 255, 255, 0.5),
+      inset -2px -2px 4px rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* Responsive design */
+@media screen and (max-width: 520px) {
+  .gameContainer {
+    padding: 8px;
+  }
+  
+  .gridContainer {
+    gap: 8px;
+  }
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .gameContainer {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(30, 30, 30, 0.9) !important;
+  }
+}

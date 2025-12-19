@@ -1,0 +1,83 @@
+/* ==========================================================================
+   Game Message - Game over and victory overlays
+   ========================================================================== */
+
+.gameMessage {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 100;
+  text-align: center;
+  border-radius: 20px;
+  max-width: none;
+  max-height: none;
+}
+
+.gameMessage p {
+  font-size: 48px;
+  font-weight: bold;
+  height: 48px;
+  line-height: 48px;
+  margin-top: 200px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.gameWon {
+  background: rgba(237, 194, 46, 0.1);
+  backdrop-filter: blur(25px) saturate(160%);
+  -webkit-backdrop-filter: blur(25px) saturate(160%);
+  color: #ffd400;
+}
+
+.gameOver,
+.gameStuck {
+  background: rgba(30, 40, 60, 0.15);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.messageButtons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.restartButton {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 10px 30px;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 30px;
+  cursor: pointer;
+  font-size: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s;
+}
+
+.restartButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive design */
+@media screen and (max-width: 520px) {
+  .gameMessage p {
+    font-size: 32px;
+    margin-top: 150px;
+  }
+}

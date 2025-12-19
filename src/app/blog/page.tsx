@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import styles from '@/styles/ContentPage.module.css';
 
 export const metadata: Metadata = {
   title: '2048 Strategy Blog | 2048.city',
@@ -39,7 +40,7 @@ const posts = [
 
 export default function BlogPage() {
   return (
-    <main style={{ maxWidth: 700, margin: '0 auto', padding: '2rem 1rem' }}>
+    <main className={styles.contentPage}>
       <h1>2048 Blog & Guides</h1>
       <p>
         Welcome to the official <b>2048.city Blog</b>! Here you’ll find expert strategies, in-depth guides, AI insights, and the latest news about 2048. Whether you’re a beginner or a puzzle master, our articles will help you improve your skills and enjoy the game even more.
