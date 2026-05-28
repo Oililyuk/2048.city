@@ -17,16 +17,17 @@ export async function POST(request: Request) {
       gameDuration = 0,
       mode = 'classic',
       undoUsed = 0,
+      seed,
     } = await request.json();
 
     if (!score || !maxTile) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    if (mode !== 'classic' || undoUsed > 0) {
+    if ((mode !== 'classic' && mode !== 'daily') || undoUsed > 0) {
       return NextResponse.json({
         success: false,
-        message: 'Only Classic runs without undo are eligible for the global leaderboard.',
+        message: 'Only Classic or Daily runs without undo are eligible for the leaderboards.',
         leaderboardEligible: false,
       }, { status: 200 });
     }
@@ -52,13 +53,16 @@ export async function POST(request: Request) {
         maxTile,
         moves: Number.isFinite(Number(moves)) ? Math.max(0, Math.floor(Number(moves))) : 0,
         gameDuration: Number.isFinite(Number(gameDuration)) ? Math.max(0, Math.floor(Number(gameDuration))) : 0,
+        mode: mode || 'classic',
+        seed: seed ? String(seed) : null,
+        undoUsed: Number(undoUsed) || 0,
       },
     });
 
     // 限制每个用户只保留最近50局记录
     const MAX_HISTORY_PER_USER = 50;
     const userScores = await prisma.score.findMany({
-      where: { userId: session.user.id },
+      where: { userId: session.user.id, mode: mode || 'classic' },
       orderBy: { createdAt: 'desc' },
       select: { id: true },
     });
@@ -72,17 +76,18 @@ export async function POST(request: Request) {
       });
     }
 
-    // Check if it's a personal best
+    // Check if it's a personal best for this mode
     const previousBest = await prisma.score.findFirst({
       where: { 
         userId: session.user.id,
+        mode: mode || 'classic',
         id: { not: newScore.id }
       },
       orderBy: { score: 'desc' },
     });
 
-    // Send email if it's a new personal record
-    if (!previousBest || score > previousBest.score) {
+    // Send email if it's a new personal record in classic mode
+    if ((!previousBest || score > previousBest.score) && mode === 'classic') {
       const user = await prisma.user.findUnique({
         where: { id: session.user.id }
       });

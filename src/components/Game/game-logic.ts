@@ -1050,20 +1050,16 @@ class Game2048 {
     }
     
     getPosition(row, col) {
-        // 检查是否在小屏幕上（响应式）
-        const isSmallScreen = window.innerWidth <= 520;
-        const gap = isSmallScreen ? 8 : 10; // 响应式间隙
+        // Matches the CSS .grid-container gap (12px) exactly for perfect pixel alignment
+        const gap = 12;
         
-        // 计算每个格子的大小
+        // Calculate cell size based on 100% width minus all 3 gaps, divided by 4 cells
         const cellSize = `(100% - ${gap * 3}px) / 4`;
         
-        // 计算位置：格子大小 * 索引 + 间隙 * 索引
-        const position = {
+        return {
             top: `calc(${cellSize} * ${row} + ${gap}px * ${row})`,
             left: `calc(${cellSize} * ${col} + ${gap}px * ${col})`
         };
-        
-        return position;
     }
     
     checkWin() {
@@ -1146,7 +1142,7 @@ class Game2048 {
     }
 
     isLeaderboardEligible() {
-        return this.mode === 'classic' && this.undoUsed === 0;
+        return (this.mode === 'classic' || this.mode === 'daily') && this.undoUsed === 0;
     }
 
     buildAdvice() {

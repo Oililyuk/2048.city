@@ -29,11 +29,15 @@ model Score {
   maxTile      Int
   moves        Int
   gameDuration Int
+  mode         String   @default("classic")
+  seed         String?
+  undoUsed     Int      @default(0)
   createdAt    DateTime @default(now())
 
   @@index([userId])
   @@index([score])
   @@index([createdAt])
+  @@index([mode])
 }
 
 model Feedback {

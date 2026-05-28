@@ -1,6 +1,6 @@
 /* ==========================================================================
-   Global Base Styles - Only truly global resets and layout
-   Component-specific styles should use CSS Modules
+   Global Base Styles - Only truly global resets and layout (Swiss Rationalism)
+   Enforces consistent look and feel across all routes: Blog, FAQ, About, etc.
    ========================================================================== */
 
 /* Import CSS Variables */
@@ -16,88 +16,271 @@
 html {
   height: 100%;
   width: 100%;
+  background-color: var(--color-bg-primary);
 }
 
 /* Global Layout - body handles scrolling and safe areas */
 body {
   font-family: var(--font-family);
-  background: #000;
+  background-color: var(--color-bg-primary);
   color: var(--color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
   min-height: 100vh;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   /* Account for top fixed menu (64px) + safe area */
   padding-top: calc(var(--header-height) + env(safe-area-inset-top));
   padding-bottom: env(safe-area-inset-bottom);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
-/* Main content wrapper - ensure proper z-index layering */
+/* Main content wrapper */
 main {
   position: relative;
   z-index: var(--z-base);
   min-height: calc(100vh - var(--header-height));
+  width: 100%;
 }
 
-/* Global Typography - Basic defaults only */
+/* Global Typographic Authority - All headers inherit Space Grotesk */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-family);
+  font-family: var(--font-family-display);
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  letter-spacing: -1.5px;
+}
+
+h2 {
+  font-size: clamp(1.4rem, 3.5vw, 1.8rem);
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid var(--color-border-primary);
+  padding-bottom: 8px;
+}
+
+h3 {
+  font-size: clamp(1.15rem, 2.5vw, 1.35rem);
+  font-weight: 700;
+  margin-top: 1.8rem;
+  margin-bottom: 0.8rem;
+}
+
+p {
+  margin-bottom: 1.25rem;
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+}
+
+/* Lists and list items */
+ul, ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+/* Monospace code styling */
+code {
+  font-family: var(--font-family-mono);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-size: 0.9em;
+  color: var(--color-accent);
+}
+
+pre {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
   color: var(--color-text-primary);
 }
 
-p, span, div, li, ul, ol, a, label {
-  font-family: var(--font-family);
+/* Blockquotes */
+blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 16px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--color-text-primary);
+}
+
+/* Custom Minimalist Swiss Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 /* Global Link Styling */
 a {
   color: var(--color-accent);
   text-decoration: none;
-  transition: opacity var(--transition-normal);
+  font-weight: 600;
+  transition: color var(--transition-fast);
 }
 
 a:hover {
-  opacity: 0.8;
+  color: var(--color-accent-hover);
   text-decoration: underline;
 }
 
-/* Global Button Styling with frosted glass effect */
+/* Global Inputs & Form Controls */
+input[type="text"],
+input[type="email"],
+textarea,
+select {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  padding: 10px 16px;
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  width: 100%;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-accent);
+  background: var(--color-bg-tertiary);
+}
+
+label {
+  display: block;
+  font-family: var(--font-family-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  color: var(--color-text-primary);
+}
+
+/* Global Premium Button Defaults - Frosted Glass (Direction C) */
 button, 
 input[type="button"], 
 input[type="submit"] {
   font-family: var(--font-family);
-  color: var(--color-text-primary);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  transition: all var(--transition-normal);
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   outline: none;
+  transition: all var(--transition-normal);
+  
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-sm);
 }
 
-button:hover, 
-input[type="button"]:hover, 
+button:hover,
+input[type="button"]:hover,
 input[type="submit"]:hover {
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: var(--shadow-lg);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 button:disabled,
 input[type="button"]:disabled,
 input[type="submit"]:disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
-/* Accessibility - Visually hidden but accessible to screen readers */
+/* Details and Summaries (styled as beautiful disclosures globally) */
+details {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: all var(--transition-fast);
+}
+
+details:hover {
+  border-color: var(--color-accent);
+}
+
+details summary {
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  list-style: none;
+  outline: none;
+  user-select: none;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details[open] summary {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border-secondary);
+  color: var(--color-accent);
+}
+
+details div {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* Accessibility */
 .visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -110,3 +293,13 @@ input[type="submit"]:disabled {
   border: 0 !important;
 }
 
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

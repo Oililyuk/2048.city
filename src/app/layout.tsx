@@ -31,6 +31,9 @@ export default function RootLayout({
         <meta httpEquiv="Content-Language" content="en" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="canonical" href="https://2048.city" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body>
         <AnimatedBackground />

@@ -94,12 +94,15 @@ function formatShareSummary(summary: RunSummary) {
 
 export default function GameBoard({ session, initialMode = 'classic', onScoreSubmit }: GameBoardProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mode, setMode] = useState<GameMode>(() => {
-    if (typeof window === 'undefined') return initialMode;
-    if (initialMode !== 'classic') return initialMode;
+  const [mode, setMode] = useState<GameMode>(initialMode);
+
+  useEffect(() => {
     const storedMode = window.localStorage.getItem('2048.city.mode');
-    return isGameMode(storedMode) ? storedMode : initialMode;
-  });
+    if (isGameMode(storedMode) && initialMode === 'classic') {
+      setMode(storedMode);
+    }
+  }, [initialMode]);
+
   const [stats, setStats] = useState<RunStats | null>(null);
   const [endSummary, setEndSummary] = useState<RunSummary | null>(null);
   const [submitStatus, setSubmitStatus] = useState<string | null>(null);
@@ -137,12 +140,12 @@ export default function GameBoard({ session, initialMode = 'classic', onScoreSub
           setShareStatus(null);
 
           if (!summary.isLeaderboardEligible) {
-            setSubmitStatus('Local run saved. Classic no-undo runs qualify for the global leaderboard.');
+            setSubmitStatus('Local run saved. Classic and Daily runs without undo qualify for leaderboards.');
             return;
           }
 
           if (!session?.user) {
-            setSubmitStatus('Sign in to save this Classic score.');
+            setSubmitStatus(`Sign in to save this ${summary.mode === 'daily' ? 'Daily' : 'Classic'} score.`);
             return;
           }
 
@@ -304,17 +307,11 @@ export default function GameBoard({ session, initialMode = 'classic', onScoreSub
 
         <div className="footer">
           <div className="controls">
-            <button className="btn-new liquidGlass-wrapper" onClick={() => { if (window.game) window.game.restart(); }}>
-              <span className="liquidGlass-effect"></span>
-              <span className="liquidGlass-tint"></span>
-              <span className="liquidGlass-shine"></span>
-              <span className="liquidGlass-content"><RefreshCcw size={16} aria-hidden="true" /> New</span>
+            <button className="btn-new" onClick={() => { if (window.game) window.game.restart(); }}>
+              <RefreshCcw size={16} aria-hidden="true" /> New Game
             </button>
-            <button className="btn-undo liquidGlass-wrapper" id="undo-btn" onClick={() => { if (window.game) window.game.undo(); }}>
-              <span className="liquidGlass-effect"></span>
-              <span className="liquidGlass-tint"></span>
-              <span className="liquidGlass-shine"></span>
-              <span className="liquidGlass-content"><Undo2 size={16} aria-hidden="true" /> Undo (<span id="undo-count">3</span>)</span>
+            <button className="btn-undo" id="undo-btn" onClick={() => { if (window.game) window.game.undo(); }}>
+              <Undo2 size={16} aria-hidden="true" /> Undo (<span id="undo-count">3</span>)
             </button>
           </div>
 

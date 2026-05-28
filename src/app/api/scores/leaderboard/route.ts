@@ -4,12 +4,18 @@ import { prisma } from '@/lib/db';
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+    const mode = searchParams.get('mode') || 'classic'; // 'classic' or 'daily'
     const period = searchParams.get('period') || 'all'; // 'all' or 'today'
     const limit = parseInt(searchParams.get('limit') || '100');
 
-    const where = period === 'today' 
-      ? { createdAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } }
-      : {};
+    const where: any = {
+      mode: mode,
+      undoUsed: 0,
+    };
+
+    if (period === 'today' || mode === 'daily') {
+      where.createdAt = { gte: new Date(new Date().setHours(0, 0, 0, 0)) };
+    }
 
     // Get all scores first
     const allScores = await prisma.score.findMany({

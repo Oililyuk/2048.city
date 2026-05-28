@@ -1,1399 +1,683 @@
+/* ==========================================================================
+   2048.city - Game Global Styles (Direction C: Cinematic Liquid Glass)
+   ========================================================================== */
+
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* 支持iOS全屏 */
 :root {
-    --vh: 1vh;
+  --vh: 1vh;
 }
 
-/* .game-root: local root for game board layout, avoids global html/body overrides */
+/* Base Game Layout Container */
 .game-root {
-    min-height: calc(100vh - 64px);
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    position: relative;
-    width: 100%;
-    padding-top: 20px;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  padding-top: 20px;
 }
 
-/* SVG滤镜容器 */
+/* SVG filters (Hide as they are handled in backend) */
 .svg-filters {
-    position: absolute;
-    width: 0;
-    height: 0;
-    pointer-events: none;
-}
-
-/* Note: global background is controlled by src/app/globals.css; avoid overriding body/background here */
-
-/* 浅色模式下的UI元素颜色 */
-@media (prefers-color-scheme: light) {
-    h1 {
-        color: rgba(0, 0, 0, 0.85);
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    
-    .score-label {
-        color: rgba(0, 0, 0, 0.6);
-    }
-    
-    .score, .best-score {
-        color: rgba(0, 0, 0, 0.85);
-        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    }
-    
-    .score-box .liquidGlass-tint {
-        background: rgba(0, 0, 0, 0.06);
-    }
-    
-    .btn-new .liquidGlass-tint,
-    .btn-undo .liquidGlass-tint {
-        background: rgba(0, 0, 0, 0.06);
-    }
-    
-    .btn-new .liquidGlass-content,
-    .btn-undo .liquidGlass-content {
-        color: rgba(0, 0, 0, 0.85);
-        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    }
-    
-    .btn-new:hover .liquidGlass-tint,
-    .btn-undo:hover .liquidGlass-tint {
-        background: rgba(0, 0, 0, 0.1);
-    }
-    
-    .btn-undo.disabled .liquidGlass-tint {
-        background: rgba(0, 0, 0, 0.03);
-    }
-    
-    .btn-undo.disabled:hover .liquidGlass-tint {
-        background: rgba(0, 0, 0, 0.03);
-    }
-    
-    .game-container::before {
-        background: rgba(0, 0, 0, 0.08);
-    }
-    
-    .game-container::after {
-        box-shadow: 
-            inset 2px 2px 4px rgba(255, 255, 255, 0.5),
-            inset -2px -2px 4px rgba(0, 0, 0, 0.05);
-    }
-    
-    .instructions {
-        color: rgba(0, 0, 0, 0.6);
-        background: rgba(0, 0, 0, 0.04);
-        border: 1px solid rgba(0, 0, 0, 0.08);
-    }
-    
-    .liquidGlass-shine {
-        box-shadow: 
-            inset 0 1px 1px rgba(255, 255, 255, 0.8),
-            inset 1px 0 1px rgba(255, 255, 255, 0.8),
-            inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.3);
-    }
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
 }
 
 .container {
-    width: 100%;
-    max-width: 100vw;
-    height: 100%;
-    padding: 20px;
-    padding-left: max(20px, env(safe-area-inset-left));
-    padding-right: max(20px, env(safe-area-inset-right));
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: visualFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.main-content {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative; /* 用于game-message定位 */
+@keyframes visualFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 12px;
-}
-
+/* Mode Switch - Segmented Frosted Glass Tab Bar */
 .mode-switch {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-    margin-bottom: 14px;
-    padding: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 4px;
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .mode-button {
-    min-height: 38px;
-    padding: 0 10px;
-    border-radius: 8px;
-    border: 1px solid transparent;
-    background: transparent;
-    box-shadow: none;
-    color: rgba(255, 255, 255, 0.74);
-    font-size: 14px;
-    font-weight: 700;
+  min-height: 38px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition: all var(--transition-normal);
 }
 
-.mode-button:hover,
+.mode-button:hover {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Active Mode Selector - Vibrant Neon Mint with Soft Glow */
 .mode-button.active {
-    color: rgba(20, 24, 28, 0.92);
-    background: #f2d36b;
-    border-color: rgba(255, 255, 255, 0.28);
-    box-shadow: 0 8px 24px rgba(242, 211, 107, 0.18);
-    text-decoration: none;
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #02070a !important;
+  box-shadow: 0 4px 15px var(--color-accent-glow);
 }
 
-.run-panel {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
-    width: 100%;
-    margin-bottom: 12px;
+/* Heading & Score HUD Section */
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
-.run-panel > div {
-    min-width: 0;
-    padding: 8px 10px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-}
-
-.run-panel span,
-.result-grid span,
-.panel-kicker {
-    display: block;
-    color: rgba(255, 255, 255, 0.56);
-    font-size: 11px;
-    line-height: 1.2;
-}
-
-.run-panel strong,
-.result-grid strong {
-    display: block;
-    margin-top: 3px;
-    color: rgba(255, 255, 255, 0.94);
-    font-size: 15px;
-    line-height: 1.1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    flex-shrink: 0;
-    padding: 0 10px; /* 为header添加一些内边距 */
-}
-
-.header .score-container {
-    flex-grow: 1;
-    display: flex;
-    justify-content: flex-end; /* 将分数框推到右边 */
-    gap: 15px;
-}
-
-.footer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    flex-shrink: 0; /* 防止footer被压缩 */
-}
-
-.footer .controls {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    width: 100%;
-}
-
-.footer .btn-new, 
-.footer .btn-undo {
-    margin-right: 0; /* 移除旧的右边距 */
-}
-
-h1, .game-title {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 60px;
-    font-weight: bold;
-    margin: 0;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    flex-shrink: 0;
-}
-
-.header .btn-new {
-    flex-shrink: 0;
+.game-title {
+  font-family: var(--font-family-display);
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 40%, #4fd1c5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1.5px;
+  line-height: 1;
+  text-shadow: 0 2px 20px rgba(79, 209, 197, 0.15);
 }
 
 .score-container {
-    display: flex;
-    gap: 15px;
-    align-items: flex-start;
+  display: flex;
+  gap: 10px;
 }
 
-.score-box {
-    display: block;
-    position: relative;
-    margin-left: 0;
-    --ui-border-radius: 10px;
-    border-radius: var(--ui-border-radius);
-    overflow: hidden;
-    /* 设置固定宽度确保两个分数框大小一致 */
-    width: 120px;
-    /* 移除旧样式 */
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border: none;
-    padding: 0;
-    box-shadow: none;
-}
-
-/* 分数框的液态玻璃层样式 */
-.score-box .liquidGlass-effect {
-    border-radius: var(--ui-border-radius);
-}
-
-.score-box .liquidGlass-tint {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: var(--ui-border-radius);
-}
-
-.score-box .liquidGlass-shine {
-    border-radius: var(--ui-border-radius);
-}
-
-.score-box .liquidGlass-content {
-    position: relative;
-    z-index: 3;
-    padding: 10px 20px;
-    text-align: center;
-}
-
-.score-label {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.7);
-    text-transform: none;
-    font-weight: 500;
-}
-
-/* Game instructions in footer */
-.game-instructions {
-    width: 100%;
-    margin-top: 20px;
-    padding: 0 10px;
-}
-
-.instructions-text {
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 14px;
-    line-height: 1.6;
-    margin: 0;
-    text-align: center;
-}
-
-.instructions-text strong {
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 600;
-}
-
-.score, .best-score {
-    font-size: 25px;
-    font-weight: bold;
-    color: white;
-    margin-top: 5px;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-}
-
-.controls {
-    /* keep default hidden for unrelated contexts; game controls are shown via .game-root .controls */
-    display: none; /* legacy global rule kept for backward compatibility */
-}
-
-/* Show controls inside the game root (New Game / Undo / Leaderboard) */
-.game-root .controls {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 12px;
-    z-index: 5;
-}
-
-.btn-new, .btn-undo {
-    position: relative;
-    display: inline-block;
-    margin-right: 10px;
-    --ui-border-radius: 10px;
-    border-radius: var(--ui-border-radius);
-    overflow: hidden;
-    cursor: pointer;
-    /* 设置最小宽度确保两个按钮大小一致 */
-    min-width: 120px;
-    /* 移除旧样式 */
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border: none;
-    padding: 0;
-    box-shadow: none;
-    transition: all 0.3s;
-}
-
-/* 修复：按钮使用inline-flex而不是flex，以保持水平排列 */
-.btn-new.liquidGlass-wrapper, 
-.btn-undo.liquidGlass-wrapper {
-    display: inline-flex;
-}
-
-/* 按钮的液态玻璃层样式 */
-.btn-new .liquidGlass-effect,
-.btn-undo .liquidGlass-effect {
-    border-radius: var(--ui-border-radius);
-}
-
-.btn-new .liquidGlass-tint,
-.btn-undo .liquidGlass-tint {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: var(--ui-border-radius);
-    transition: background 0.3s;
-}
-
-.btn-new .liquidGlass-shine,
-.btn-undo .liquidGlass-shine {
-    border-radius: var(--ui-border-radius);
-}
-
-.btn-new .liquidGlass-content,
-.btn-undo .liquidGlass-content {
-    position: relative;
-    z-index: 3;
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    padding: 10px 20px;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 600;
-    font-size: 16px;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-}
-
-.btn-new:hover .liquidGlass-tint,
-.btn-undo:hover .liquidGlass-tint {
-    background: rgba(255, 255, 255, 0.12);
-}
-
-.btn-new:hover,
-.btn-undo:hover {
-    transform: translateY(-1px);
-}
-
-.btn-undo.disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-.btn-undo.disabled .liquidGlass-tint {
-    background: rgba(255, 255, 255, 0.03);
-}
-
-.btn-undo.disabled:hover {
-    transform: none;
-}
-
-.btn-undo.disabled:hover .liquidGlass-tint {
-    background: rgba(255, 255, 255, 0.03);
-}
-
-.daily-seed {
-    color: rgba(255, 255, 255, 0.58);
-    font-size: 12px;
-    line-height: 1.2;
-}
-
-.post-game-panel {
-    width: 100%;
-    margin-top: 18px;
-    padding: 16px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    background: rgba(12, 16, 20, 0.72);
-    backdrop-filter: blur(18px) saturate(150%);
-    -webkit-backdrop-filter: blur(18px) saturate(150%);
-    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
-}
-
-.post-game-header {
-    display: flex;
-    justify-content: space-between;
-    gap: 14px;
-    align-items: flex-start;
-}
-
-.post-game-header h2 {
-    margin: 3px 0 0;
-    color: rgba(255, 255, 255, 0.96);
-    font-size: 22px;
-    line-height: 1.1;
-}
-
-.share-run-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 36px;
-    padding: 0 12px;
-    border-radius: 8px;
-    background: rgba(242, 211, 107, 0.18);
-    border: 1px solid rgba(242, 211, 107, 0.34);
-    color: #ffe58a;
-    box-shadow: none;
-    white-space: nowrap;
-}
-
-.result-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
-    margin: 14px 0;
-}
-
-.result-grid > div {
-    min-width: 0;
-    padding: 9px 10px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.analysis-list {
-    display: grid;
-    gap: 8px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.analysis-list li {
-    color: rgba(255, 255, 255, 0.76);
-    font-size: 14px;
-    line-height: 1.45;
-}
-
-.analysis-list li::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    margin-right: 8px;
-    border-radius: 999px;
-    background: #f2d36b;
-    vertical-align: 2px;
-}
-
-.run-status {
-    margin: 12px 0 0;
-    color: rgba(255, 229, 138, 0.86);
-    font-size: 13px;
-    line-height: 1.4;
-}
-
-/* 游戏容器 - 液态玻璃效果 */
-.game-container {
-    position: relative;
-    background: transparent;
-    border-radius: 20px;
-    width: 100%;
-    /* 高度和宽度都与可用空间的较小值相关，确保是正方形并尽可能大 */
-    max-width: min(450px, 90vw, max(300px, calc(100vh - 390px)));
-    margin: 0 auto;
-    padding: 10px;
-    overflow: visible;
-    flex: 0 0 auto;
-    aspect-ratio: 1; /* 保持1:1的宽高比 */
-}
-
-/* 移除旧的液态玻璃效果层 */
-.liquid-glass-effect {
-    display: none;
-}
-
-/* 游戏容器的玻璃外框 */
-.game-container::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    pointer-events: none;
-}
-
-/* 游戏容器的光泽效果 */
-.game-container::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    border-radius: 20px;
-    box-shadow: 
-        inset 2px 2px 4px rgba(255, 255, 255, 0.2),
-        inset -2px -2px 4px rgba(0, 0, 0, 0.1);
-    pointer-events: none;
-}
-
-/* 游戏网格容器 */
-.grid-container {
-    position: relative;
-    background: transparent;
-    border-radius: 10px;
-    width: 100%;
-    aspect-ratio: 1;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: 10px;
-    padding: 10px;
-    z-index: 3;  /* 在液态效果层之上 */
-}
-
-.grid-row {
-    display: contents;
-}
-
-/* 游戏格子背景 */
-.grid-cell {
-    display: none;
-}
-
-/* 方块容器 */
-.tile-container {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    z-index: 4;  /* 在网格之上 */
-}
-
-/* 统一的液态玻璃容器样式 */
+/* Base Unified Liquid Glass Wrapper Layout (CRITICAL FOR BUTTON RENDERING) */
 .liquidGlass-wrapper {
-    position: relative;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    padding: 0;
-    box-shadow: none;
-    transition: all 0.3s;
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  transition: all var(--transition-normal);
 }
 
-/* 统一的内部图层样式 */
 .liquidGlass-wrapper > .liquidGlass-effect,
 .liquidGlass-wrapper > .liquidGlass-tint,
 .liquidGlass-wrapper > .liquidGlass-shine,
 .liquidGlass-wrapper > .liquidGlass-content {
-    position: absolute;
-    inset: 0;
-    border-radius: var(--ui-border-radius, 10px);
+  position: absolute;
+  inset: 0;
 }
 
 .liquidGlass-wrapper > .liquidGlass-effect {
-    z-index: 0;
-    backdrop-filter: blur(5px) saturate(120%);
-    -webkit-backdrop-filter: blur(5px) saturate(120%);
-    filter: url(#glass-distortion);
+  z-index: 0;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .liquidGlass-wrapper > .liquidGlass-tint {
-    z-index: 1;
-    background: rgba(255, 255, 255, 0.08);
-    transition: background 0.3s;
+  z-index: 1;
 }
 
 .liquidGlass-wrapper > .liquidGlass-shine {
-    z-index: 2;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), inset 1px 0 1px rgba(255, 255, 255, 0.6), inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.15);
+  z-index: 2;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    inset 1px 0 1px rgba(255, 255, 255, 0.25),
+    inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.05);
 }
 
 .liquidGlass-wrapper > .liquidGlass-content {
-    position: relative;
-    z-index: 3;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 20px;
-}
-
-.btn-new.liquidGlass-wrapper > .liquidGlass-content,
-.btn-undo.liquidGlass-wrapper > .liquidGlass-content {
-    flex-direction: row;
-    gap: 8px;
-}
-
-/* 移除旧的、分散的样式 */
-.score-box, .btn-new, .btn-undo {
-    /* 样式已由 .liquidGlass-wrapper 统一处理 */
-}
-.score-box .liquidGlass-effect, .score-box .liquidGlass-tint, .score-box .liquidGlass-shine, .score-box .liquidGlass-content,
-.btn-new .liquidGlass-effect, .btn-new .liquidGlass-tint, .btn-new .liquidGlass-shine, .btn-new .liquidGlass-content,
-.btn-undo .liquidGlass-effect, .btn-undo .liquidGlass-tint, .btn-undo .liquidGlass-shine, .btn-undo .liquidGlass-content {
-    /* 不再需要单独定义 */
-}
-
-/* 数字方块样式 - 严格按照示例结构 */
-.tile {
-    position: absolute;
-    width: calc((100% - 30px) / 4);
-    height: calc((100% - 30px) / 4);
-    /* 分离不同属性的过渡效果 */
-    transition: 
-        top 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        left 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        transform 0.08s ease-out,
-        border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
-    
-    /* 定义并使用CSS变量来统一控制圆角 */
-    --tile-border-radius: 18px;
-    border-radius: var(--tile-border-radius);
-    
-    /* 继承自 liquidGlass-wrapper 的样式 */
-    display: flex;
-    font-weight: 600;
-    overflow: hidden;
-    cursor: pointer;
-    /* 移除外部阴影，更贴近iOS设计 */
-    /* box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1); */
-
-    /* 移除旧样式 */
-    background: transparent;
-    border: none;
-    line-height: 1; /* 确保flex生效 */
-    
-    /* 启用硬件加速 */
-    will-change: transform;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-}
-
-/* 拖动时的特殊样式 */
-.tile.dragging {
-    transition: transform 0.05s linear !important;
-    will-change: transform;
-}
-
-/* 移动时的特殊样式 - 使用与键盘操作相同的时间 */
-.tile.moving {
-    transition: 
-        top 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        left 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-}
-
-/* 拖动状态下的容器效果 */
-.tile-container.dragging-active {
-    transition: opacity 0.2s ease;
-}
-
-/* 移动设备上的性能优化 */
-@media (max-width: 520px) {
-    /* 在移动设备上简化动画 */
-    .tile.dragging {
-        transition: none !important;
-    }
-    
-    /* 移除拖动时的阴影效果 */
-    .tile.dragging .liquidGlass-effect {
-        filter: url(#glass-distortion);
-    }
-}
-
-/* 移除拖动时的透明效果 - 保持所有砖块外观一致 */
-/* .tile-container.dragging-active .tile:not(.dragging) {
-    opacity: 0.7;
-} */
-
-/* 为拖动的砖块添加阴影效果 */
-.tile.dragging {
-    z-index: 100;
-}
-
-.tile.dragging .liquidGlass-effect {
-    filter: url(#glass-distortion) drop-shadow(0 8px 20px rgba(0, 0, 0, 0.3));
-}
-
-.tile.dragging .liquidGlass-shine {
-    box-shadow: 
-        inset 0 1px 2px rgba(255, 255, 255, 0.8),
-        inset 1px 0 2px rgba(255, 255, 255, 0.8),
-        inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.3);
-}
-
-/* 游戏方块的内部图层样式 */
-.tile .liquidGlass-effect {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  filter: url(#glass-distortion);
-  overflow: hidden;
-  isolation: isolate;
-  display: block !important;
-  border-radius: var(--tile-border-radius);
-  transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
-}
-
-.tile .liquidGlass-tint {
-  z-index: 1;
-  position: absolute;
-  inset: 0;
-  border-radius: var(--tile-border-radius);
-  transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
-}
-
-.tile .liquidGlass-shine {
-  position: absolute;
-  inset: 0; /* Changed back to 0 to ensure full coverage */
-  z-index: 2;
-  overflow: hidden;
-  /* Asymmetrical highlight mimicking a top-left light source */
-  box-shadow: 
-    /* Separate highlights for top and left edges for better corner rendering */
-    inset 0 1px 1px rgba(255, 255, 255, 0.6), /* Top edge highlight */
-    inset 1px 0 1px rgba(255, 255, 255, 0.6), /* Left edge highlight */
-    /* Faint highlight from bottom-right */
-    inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.15);
-  border-radius: var(--tile-border-radius);
-  transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
-}
-
-/* This gradient conflicts with the new asymmetrical lighting, so it's removed. */
-.tile .liquidGlass-shine::before {
-  display: none;
-}
-
-.tile .liquidGlass-text {
   z-index: 3;
-  font-size: 55px;
-  font-weight: bold;
-  color: white;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-  border-radius: var(--tile-border-radius);
-  transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
 }
 
-/* 移除悬停效果 */
-/*
-.tile:hover {
-    transform: scale(1.05);
-    --tile-border-radius: 24px;
-}
-*/
-
-/* 移除所有旧的方块样式 */
-.tile::before,
-.tile::after {
-    display: none;
+/* Score Box Styling */
+.score-box {
+  width: 90px;
+  height: 52px;
 }
 
-/* 不同数字的颜色 - 只应用到 tint 层 */
-.tile-2 .liquidGlass-tint { background: rgba(238, 228, 218, 0.25); }
-.tile-4 .liquidGlass-tint { background: rgba(237, 224, 200, 0.25); }
-.tile-8 .liquidGlass-tint { background: rgba(242, 177, 121, 0.35); }
-.tile-16 .liquidGlass-tint { background: rgba(245, 149, 99, 0.45); }
-.tile-32 .liquidGlass-tint { background: rgba(246, 124, 95, 0.55); }
-.tile-64 .liquidGlass-tint { background: rgba(246, 94, 59, 0.65); }
-.tile-128 .liquidGlass-tint { background: rgba(237, 207, 114, 0.45); }
-.tile-256 .liquidGlass-tint { background: rgba(237, 204, 97, 0.55); }
-.tile-512 .liquidGlass-tint { background: rgba(237, 200, 80, 0.65); }
-.tile-1024 .liquidGlass-tint { background: rgba(237, 197, 63, 0.75); }
-.tile-2048 .liquidGlass-tint { background: rgba(237, 194, 46, 0.85); }
-
-/* 为高数值方块设置浅色文字 */
-.tile-8 .liquidGlass-text,
-.tile-16 .liquidGlass-text,
-.tile-32 .liquidGlass-text,
-.tile-64 .liquidGlass-text,
-.tile-128 .liquidGlass-text,
-.tile-256 .liquidGlass-text,
-.tile-512 .liquidGlass-text,
-.tile-1024 .liquidGlass-text,
-.tile-2048 .liquidGlass-text {
-    color: #f9f6f2;
+.score-box > .liquidGlass-effect,
+.score-box > .liquidGlass-tint,
+.score-box > .liquidGlass-shine,
+.score-box > .liquidGlass-content {
+  border-radius: 12px;
 }
 
-/* 调整字体大小 */
-.tile-128 .liquidGlass-text,
-.tile-256 .liquidGlass-text,
-.tile-512 .liquidGlass-text {
-    font-size: 45px;
-}
-.tile-1024 .liquidGlass-text,
-.tile-2048 .liquidGlass-text {
-    font-size: 35px;
+.score-box > .liquidGlass-tint {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
 }
 
-/* 移除旧的颜色定义 */
-.tile-2, .tile-4, .tile-8, .tile-16, .tile-32, .tile-64,
-.tile-128, .tile-256, .tile-512, .tile-1024, .tile-2048 {
-    background: none;
-    color: transparent; /* 文字颜色由 .liquidGlass-text 控制 */
-    text-shadow: none;
+.score-label {
+  display: block;
+  font-family: var(--font-family-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+  margin-bottom: 2px;
 }
 
-/* 新增方块动画 */
+.score, .best-score {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+}
+
+/* Run Statistics HUD Panel */
+.run-panel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.run-panel > div {
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  text-align: center;
+}
+
+.run-panel span,
+.result-grid span,
+.panel-kicker {
+  display: block;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-family-display);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.run-panel strong,
+.result-grid strong {
+  display: block;
+  margin-top: 3px;
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Tactile Frosted Glass Game Board Container
+   ========================================================================== */
+.game-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 12px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  z-index: 5;
+}
+
+.grid-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.grid-row {
+  display: contents;
+}
+
+/* Empty Grid Slots - Elegant Recessed Physical Indentations */
+.grid-cell {
+  background: rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.tile-container {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+}
+
+/* ==========================================================================
+   Highly Visual Glowing Capsule Buttons (SOLVES MISSING BUTTONS)
+   ========================================================================== */
+.controls {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+}
+
+.btn-new, .btn-undo {
+  flex: 1;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 14px;
+  font-family: var(--font-family-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  padding: 0 16px;
+}
+
+/* Primary CTA - Glowing Neon Mint Capsule */
+.btn-new {
+  background: var(--color-accent) !important;
+  border: 1px solid var(--color-accent) !important;
+  color: #02070a !important;
+  box-shadow: 0 4px 15px var(--color-accent-glow) !important;
+}
+
+.btn-new:hover {
+  transform: translateY(-1.5px);
+  filter: brightness(1.08);
+  box-shadow: 0 8px 25px rgba(79, 209, 197, 0.45) !important;
+}
+
+.btn-new:active {
+  transform: translateY(0);
+}
+
+/* Secondary Action - Modern Frosted Glass Outlined Capsule */
+.btn-undo {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  color: var(--color-text-primary) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.btn-undo:hover:not(:disabled):not(.disabled) {
+  transform: translateY(-1.5px);
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.btn-undo:disabled,
+.btn-undo.disabled {
+  opacity: 0.25 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: var(--glass-border) !important;
+  color: var(--color-text-primary) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.daily-seed {
+  font-family: var(--font-family-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Floating Frosted Glass Keycap Tiles (Backlit UI keys)
+   ========================================================================== */
+.tile {
+  position: absolute;
+  width: calc((100% - 36px) / 4);
+  height: calc((100% - 36px) / 4);
+  /* Smooth elastic merges */
+  transition: 
+    top 0.12s cubic-bezier(0.16, 1, 0.3, 1),
+    left 0.12s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.08s ease-out;
+  
+  border-radius: 16px;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.tile > .liquidGlass-effect,
+.tile > .liquidGlass-tint,
+.tile > .liquidGlass-shine,
+.tile > .liquidGlass-text {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+}
+
+.tile > .liquidGlass-effect {
+  z-index: 0;
+  backdrop-filter: blur(8px) saturate(130%);
+  -webkit-backdrop-filter: blur(8px) saturate(130%);
+}
+
+.tile > .liquidGlass-tint {
+  z-index: 1;
+}
+
+.tile > .liquidGlass-shine {
+  z-index: 2;
+  box-shadow: 
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.4),
+    inset 1.5px 0 1.5px rgba(255, 255, 255, 0.4),
+    inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.1);
+}
+
+.tile > .liquidGlass-text {
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-display);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+/* Beautiful Curated Glass Fills per Tile value */
+.tile-2 > .liquidGlass-tint { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.08); }
+.tile-2 > .liquidGlass-text { color: var(--color-text-primary); }
+
+.tile-4 > .liquidGlass-tint { background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.15); }
+.tile-4 > .liquidGlass-text { color: #ffffff; }
+
+.tile-8 > .liquidGlass-tint { background: rgba(237, 137, 54, 0.25); border: 1px solid rgba(237, 137, 54, 0.35); }
+.tile-8 > .liquidGlass-text { color: #fbd38d; }
+
+.tile-16 > .liquidGlass-tint { background: rgba(245, 101, 101, 0.3); border: 1px solid rgba(245, 101, 101, 0.4); }
+.tile-16 > .liquidGlass-text { color: #feb2b2; }
+
+.tile-32 > .liquidGlass-tint { background: rgba(72, 187, 120, 0.3); border: 1px solid rgba(72, 187, 120, 0.4); }
+.tile-32 > .liquidGlass-text { color: #9ae6b4; }
+
+.tile-64 > .liquidGlass-tint { background: rgba(49, 151, 149, 0.35); border: 1px solid rgba(49, 151, 149, 0.45); }
+.tile-64 > .liquidGlass-text { color: #81e6d9; }
+
+.tile-128 > .liquidGlass-tint { background: rgba(66, 153, 225, 0.35); border: 1px solid rgba(66, 153, 225, 0.45); }
+.tile-128 > .liquidGlass-text { color: #90cdf4; font-size: 1.8rem; }
+
+.tile-256 > .liquidGlass-tint { background: rgba(102, 126, 234, 0.4); border: 1px solid rgba(102, 126, 234, 0.5); }
+.tile-256 > .liquidGlass-text { color: #a3bbf1; font-size: 1.8rem; }
+
+.tile-512 > .liquidGlass-tint { background: rgba(159, 122, 234, 0.45); border: 1px solid rgba(159, 122, 234, 0.55); }
+.tile-512 > .liquidGlass-text { color: #d6bcfa; font-size: 1.8rem; }
+
+.tile-1024 > .liquidGlass-tint { background: rgba(237, 100, 166, 0.5); border: 1px solid rgba(237, 100, 166, 0.6); }
+.tile-1024 > .liquidGlass-text { color: #fbb6ce; font-size: 1.5rem; }
+
+/* The Ultimate 2048 Block - Deep Golden Glass with Neon Halo */
+.tile-2048 > .liquidGlass-tint { 
+  background: rgba(242, 211, 107, 0.65); 
+  border: 1.5px solid rgba(242, 211, 107, 0.85); 
+  box-shadow: 0 0 25px rgba(242, 211, 107, 0.45);
+}
+.tile-2048 > .liquidGlass-text { 
+  color: #ffffff; 
+  font-size: 1.5rem; 
+  font-weight: 800; 
+}
+
 .tile-new {
-    animation: appear 0.2s ease-in-out;
+  animation: tileAppear 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
 
-@keyframes appear {
-    0% {
-        opacity: 0;
-        transform: scale(0.5);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+@keyframes tileAppear {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-/* 合并方块动画 */
 .tile-merged {
-    animation: pop 0.2s ease-in-out;
+  animation: tileMerge 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
 
-@keyframes pop {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.15);
-    }
-    100% {
-        transform: scale(1);
-    }
+@keyframes tileMerge {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
-/* 撤销动画 - 方块消失 */
-.tile-disappear {
-    animation: disappear 0.15s ease-in-out;
+/* ==========================================================================
+   Luxury Post-Game Dashboard Card
+   ========================================================================== */
+.post-game-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 24px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 12px;
+  box-shadow: var(--shadow-md);
 }
 
-@keyframes disappear {
-    0% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(0.5);
-    }
+.post-game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 12px;
 }
 
-/* 撤销动画 - 方块重新出现（分裂效果） */
-.tile-reappear {
-    animation: reappear 0.2s ease-in-out;
+.post-game-header h2 {
+  font-family: var(--font-family-display);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.5px;
+  margin-top: 4px;
 }
 
-@keyframes reappear {
-    0% {
-        opacity: 0;
-        transform: scale(1.2) rotate(180deg);
-    }
-    50% {
-        opacity: 0.8;
-        transform: scale(0.9) rotate(90deg);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-    }
+.share-run-button {
+  background: var(--color-accent) !important;
+  border: 1px solid var(--color-accent) !important;
+  color: #02070a !important;
+  border-radius: 12px !important;
+  padding: 8px 16px !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  transition: all var(--transition-normal) !important;
+  box-shadow: 0 2px 8px var(--color-accent-glow) !important;
 }
 
-/* 游戏结束/通关画面 */
+.share-run-button:hover {
+  filter: brightness(1.08) !important;
+  box-shadow: 0 4px 12px var(--color-accent-glow) !important;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.result-grid > div {
+  text-align: center;
+}
+
+.analysis-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.analysis-list li {
+  font-size: 0.92rem;
+  color: var(--color-text-secondary);
+  position: relative;
+  padding-left: 16px;
+  line-height: 1.5;
+}
+
+.analysis-list li::before {
+  content: '✦';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-size: 0.8rem;
+}
+
+.run-status {
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  text-align: center;
+}
+
+/* ==========================================================================
+   Overlay screen (Game Over / Game Won)
+   ========================================================================== */
 .game-message {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    z-index: 100;
-    text-align: center;
-    border-radius: 20px;
-    max-width: none; /* 移除最大宽度限制 */
-    max-height: none; /* 移除最大高度限制 */
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(2, 7, 10, 0.95);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  border-radius: 24px;
+  animation: visualFadeIn 0.2s linear both;
 }
 
 .game-message p {
-    font-size: 48px;
-    font-weight: bold;
-    line-height: 1.05;
-    margin: 0 0 20px;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  font-family: var(--font-family-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #ffffff 40%, #4fd1c5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.game-message.game-won {
-    background: rgba(237, 194, 46, 0.1); /* 更淡的金色 */
-    backdrop-filter: blur(25px) saturate(160%);
-    -webkit-backdrop-filter: blur(25px) saturate(160%);
-    color: #ffd400;
-}
-
-.game-message.game-over,
-.game-message.game-stuck {
-    background: rgba(30, 40, 60, 0.15); /* 更淡的深色背景 */
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.game-message.game-stuck .restart-button {
-    display: inline-block; /* 确保按钮可见 */
+.game-message.game-won p {
+  background: linear-gradient(135deg, #ffffff 30%, var(--color-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .message-buttons {
-    display: flex;
-    gap: 15px; /* 按钮之间的间距 */
-    margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
 }
 
 .restart-button {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    padding: 10px 30px;
-    color: rgba(255, 255, 255, 0.9);
-    text-decoration: none;
-    font-weight: 600;
-    margin-top: 30px;
-    cursor: pointer;
-    font-size: 18px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s;
+  flex: 1;
+  background: var(--color-accent) !important;
+  border: 1px solid var(--color-accent) !important;
+  color: #02070a !important;
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+  transition: all var(--transition-normal) !important;
+  box-shadow: 0 4px 15px var(--color-accent-glow) !important;
 }
 
 .restart-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+  filter: brightness(1.08) !important;
+  box-shadow: 0 8px 25px rgba(79, 209, 197, 0.45) !important;
 }
 
-.instructions {
-    margin-top: 20px;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 16px;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    padding: 15px;
-    flex-shrink: 0; /* 不要收缩 */
+/* Mobile responsive adjustments */
+@media (max-width: 520px) {
+  .container {
+    padding: 16px 12px 48px;
+    gap: 12px;
+  }
+  
+  .game-title {
+    font-size: 2.2rem;
+  }
+  
+  .tile > .liquidGlass-text {
+    font-size: 1.8rem;
+  }
+  .tile-128 > .liquidGlass-text,
+  .tile-256 > .liquidGlass-text,
+  .tile-512 > .liquidGlass-text {
+    font-size: 1.5rem;
+  }
+  .tile-1024 > .liquidGlass-text,
+  .tile-2048 > .liquidGlass-text {
+    font-size: 1.3rem;
+  }
 }
-
-/* 响应式设计 */
-@media screen and (max-width: 520px) {
-    .container {
-        padding: 10px;
-        padding-left: max(10px, env(safe-area-inset-left));
-        padding-right: max(10px, env(safe-area-inset-right));
-    }
-    
-    .header {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-    }
-    
-    h1 {
-        font-size: 35px; /* 进一步减小标题字体 */
-    }
-    
-    .score-container {
-        gap: 8px; /* 减小分数框之间的间距 */
-    }
-    
-    .score-box {
-        margin-left: 0;
-        --ui-border-radius: 8px;
-        width: 85px; /* 减小分数框宽度 */
-    }
-    
-    .score-box .liquidGlass-content {
-        padding: 6px 10px; /* 减小内边距 */
-    }
-    
-    .score-label {
-        font-size: 10px; /* 减小标签字体 */
-    }
-    
-    .score, .best-score {
-        font-size: 18px; /* 减小分数字体 */
-    }
-
-    .mode-switch {
-        gap: 6px;
-        margin-bottom: 10px;
-    }
-
-    .mode-button {
-        min-height: 34px;
-        font-size: 12px;
-        padding: 0 6px;
-    }
-
-    .run-panel,
-    .result-grid {
-        gap: 6px;
-    }
-
-    .run-panel > div,
-    .result-grid > div {
-        padding: 7px 6px;
-    }
-
-    .run-panel span,
-    .result-grid span,
-    .panel-kicker {
-        font-size: 10px;
-    }
-
-    .run-panel strong,
-    .result-grid strong {
-        font-size: 13px;
-    }
-    
-    .controls {
-        margin-bottom: 15px; /* 减小底部间距 */
-    }
-    
-    .btn-new, .btn-undo {
-        margin-right: 5px;
-        --ui-border-radius: 8px;
-        min-width: 100px;
-    }
-    
-    .btn-new .liquidGlass-content,
-    .btn-undo .liquidGlass-content {
-        padding: 8px 15px;
-        font-size: 14px;
-    }
-    
-    .game-container {
-        padding: 8px;
-    }
-    
-    .grid-container {
-        gap: 8px;
-    }
-    
-    .tile {
-        width: calc((100% - 24px) / 4);
-        height: calc((100% - 24px) / 4);
-        /* 在移动端使用较小的圆角 */
-        --tile-border-radius: 12px;
-    }
-    
-    .liquidGlass-text {
-        font-size: 35px;
-    }
-    
-    .tile-128 .liquidGlass-text,
-    .tile-256 .liquidGlass-text,
-    .tile-512 .liquidGlass-text {
-        font-size: 30px;
-    }
-    
-    .tile-1024 .liquidGlass-text,
-    .tile-2048 .liquidGlass-text {
-        font-size: 25px;
-    }
-    
-    .game-message p {
-        font-size: 32px;
-        margin: 0 0 16px;
-    }
-
-    .post-game-panel {
-        padding: 12px;
-        margin-top: 14px;
-    }
-
-    .post-game-header h2 {
-        font-size: 18px;
-    }
-
-    .share-run-button {
-        min-height: 34px;
-        padding: 0 10px;
-        font-size: 13px;
-    }
-
-    .analysis-list li {
-        font-size: 13px;
-    }
-    
-    .instructions {
-        font-size: 13px;
-        padding: 10px;
-        margin-top: 15px;
-    }
-    
-    /* 在更小的屏幕上隐藏游戏说明 */
-    @media screen and (max-height: 700px) {
-        .instructions {
-            display: none;
-        }
-    }
-}
-
-/* 针对iPhone等更小屏幕的特殊优化 */
-@media screen and (max-width: 400px) {
-    h1 {
-        font-size: 32px;
-    }
-    
-    .score-box {
-        width: 80px;
-    }
-    
-    .score-box .liquidGlass-content {
-        padding: 5px 8px;
-    }
-    
-    .score-label {
-        font-size: 9px;
-    }
-    
-    .score, .best-score {
-        font-size: 16px;
-    }
-}
-
-/* 触摸设备优化 */
-@media (hover: none) {
-    .btn-new:hover .liquidGlass-tint,
-    .btn-undo:hover .liquidGlass-tint {
-        background: rgba(255, 255, 255, 0.08);
-    }
-    
-    .btn-new:hover,
-    .btn-undo:hover {
-        transform: none;
-    }
-}
-
-/* 不支持backdrop-filter的浏览器降级方案 */
-@supports not (backdrop-filter: blur(1px)) {
-    .tile {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        background: rgba(255, 255, 255, 0.15) !important;
-    }
-    
-    .score-box .liquidGlass-tint,
-    .btn-new .liquidGlass-tint,
-    .btn-undo .liquidGlass-tint {
-        background: rgba(30, 30, 30, 0.9) !important;
-    }
-    
-    .game-container,
-    .instructions {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        background: rgba(30, 30, 30, 0.9) !important;
-    }
-}
-
-/* 减少动画模式 */
-@media (prefers-reduced-motion: reduce) {
-    .tile {
-        animation-play-state: paused !important;
-        transition: none !important;
-    }
-}
-
-/* 防止文本选择 */
-.game-container {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-}
-
-/* 分数增加动画 */
-.score-addition {
-    position: absolute;
-    right: 20px;
-    color: #776e65;
-    font-size: 20px;
-    font-weight: bold;
-    animation: score-addition 0.8s ease-in-out;
-    z-index: 20;
-}
-
-@keyframes score-addition {
-    0% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-50px);
-    }
-}
-
-/* 撤销奖励动画 */
-.undo-reward {
-    position: absolute;
-    right: 20px;
-    top: 80px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.9);
-    padding: 8px 16px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    animation: undo-reward 1s ease-in-out;
-    z-index: 30;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-@keyframes undo-reward {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    20% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    80% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-}
-
-/* 合并动画 - 不再使用液化效果 */
-@keyframes liquidMerge {
-    0% {
-        transform: scale(1) rotate(0deg);
-    }
-    50% {
-        transform: scale(1.3) rotate(180deg);
-    }
-    100% {
-        transform: scale(1) rotate(360deg);
-    }
-}
-
-/* LIQUID GLASS STYLES - 为UI元素创建独立的wrapper */
-.ui-liquid-wrapper {
-    position: relative;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    padding: 0;
-    box-shadow: none;
-    transition: all 0.3s;
-}
-
-.ui-liquid-wrapper > .liquidGlass-effect,
-.ui-liquid-wrapper > .liquidGlass-tint,
-.ui-liquid-wrapper > .liquidGlass-shine,
-.ui-liquid-wrapper > .liquidGlass-content {
-    position: absolute;
-    inset: 0;
-    border-radius: var(--ui-border-radius, 10px);
-}
-
-.ui-liquid-wrapper > .liquidGlass-effect {
-    z-index: 0;
-    backdrop-filter: blur(5px) saturate(120%);
-    -webkit-backdrop-filter: blur(5px) saturate(120%);
-    filter: url(#glass-distortion);
-}
-
-.ui-liquid-wrapper > .liquidGlass-tint {
-    z-index: 1;
-    background: rgba(255, 255, 255, 0.08);
-    transition: background 0.3s;
-}
-
-.ui-liquid-wrapper > .liquidGlass-shine {
-    z-index: 2;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), inset 1px 0 1px rgba(255, 255, 255, 0.6), inset -0.5px -0.5px 1px rgba(255, 255, 255, 0.15);
-}
-
-.ui-liquid-wrapper > .liquidGlass-content {
-    position: relative;
-    z-index: 3;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 20px;
-}
-
-/* 恢复游戏方块的原始样式 */
-.tile.liquidGlass-wrapper {
-    /* 保持原来的样式 */
-} 

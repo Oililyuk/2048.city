@@ -18,14 +18,15 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
   const [isOpen, setIsOpen] = useState(autoOpen || false);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedMode, setSelectedMode] = useState<'classic' | 'daily'>('classic');
 
   const fetchLeaderboard = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/scores/leaderboard');
+      const response = await fetch(`/api/scores/leaderboard?mode=${selectedMode}`);
       if (response.ok) {
         const data = await response.json();
-        setLeaderboard(data);
+        setLeaderboard(Array.isArray(data) ? data : []);
       }
     } catch (error) {
       console.error('Failed to fetch leaderboard:', error);
@@ -38,21 +39,45 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
     if (isOpen) {
       fetchLeaderboard();
     }
-  }, [isOpen]);
+  }, [isOpen, selectedMode]);
 
   // Auto-fetch when autoOpen is true
   useEffect(() => {
     if (autoOpen) {
       fetchLeaderboard();
     }
-  }, [autoOpen]);
+  }, [autoOpen, selectedMode]);
 
   // When autoOpen is true, render as page content without button or modal wrapper
   if (autoOpen) {
     return (
       <div className={styles.content} style={{ maxWidth: '900px', margin: '0 auto' }}>
+        {/* Toggle between Classic and Daily */}
+        <div className={styles.modeSelector} role="tablist">
+          <button
+            className={`${styles.modeTab} ${selectedMode === 'classic' ? styles.modeTabActive : ''}`}
+            onClick={() => setSelectedMode('classic')}
+            role="tab"
+            aria-selected={selectedMode === 'classic'}
+          >
+            🏆 Classic Rankings
+          </button>
+          <button
+            className={`${styles.modeTab} ${selectedMode === 'daily' ? styles.modeTabActive : ''}`}
+            onClick={() => setSelectedMode('daily')}
+            role="tab"
+            aria-selected={selectedMode === 'daily'}
+          >
+            📅 Daily Challenge
+          </button>
+        </div>
+
         <div style={{ marginBottom: 16, color: 'rgba(255, 255, 255, 0.7)', fontWeight: 400, fontSize: '1.05rem' }}>
-          <span>Top scores are ranked by highest tile and total points. Only signed-in Classic runs without undo are submitted.</span>
+          {selectedMode === 'classic' ? (
+            <span>Top scores are ranked by highest tile and total points. Only signed-in Classic runs without undo are submitted.</span>
+          ) : (
+            <span>Today's rankings for the Daily Challenge! Everyone competes on the exact same board seed. Only signed-in runs without undo qualify.</span>
+          )}
           <br />
           <span>See <a href="/faq" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>FAQ</a> for details.</span>
         </div>
@@ -96,8 +121,8 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
             <div className={styles.ctaContent}>
               <h4>Compete with Players Worldwide!</h4>
               <p>
-                Sign in with Google to save Classic scores and climb the leaderboard. 
-                Practice and Daily runs stay local in this version.
+                Sign in with Google or create a quick Guest Nickname to save scores and climb the leaderboards! 
+                Practice runs are tracked locally only.
               </p>
             </div>
           </div>
@@ -139,7 +164,7 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
         <div className={styles.overlay} onClick={() => setIsOpen(false)}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.header}>
-              <h2>🏆 Leaderboard</h2>
+              <h2>🏆 Leaderboards</h2>
               <button
                 className={styles.closeButton}
                 onClick={() => setIsOpen(false)}
@@ -150,10 +175,34 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
             </div>
 
             <div className={styles.content}>
+              {/* Toggle between Classic and Daily */}
+              <div className={styles.modeSelector} role="tablist">
+                <button
+                  className={`${styles.modeTab} ${selectedMode === 'classic' ? styles.modeTabActive : ''}`}
+                  onClick={() => setSelectedMode('classic')}
+                  role="tab"
+                  aria-selected={selectedMode === 'classic'}
+                >
+                  🏆 Classic Rankings
+                </button>
+                <button
+                  className={`${styles.modeTab} ${selectedMode === 'daily' ? styles.modeTabActive : ''}`}
+                  onClick={() => setSelectedMode('daily')}
+                  role="tab"
+                  aria-selected={selectedMode === 'daily'}
+                >
+                  📅 Daily Challenge
+                </button>
+              </div>
+
               <div style={{ marginBottom: 16, color: '#4fd1c5', fontWeight: 500, fontSize: '1.05rem' }}>
-                <span>Top scores are ranked by highest tile and total points. Only signed-in Classic runs without undo are submitted.</span>
+                {selectedMode === 'classic' ? (
+                  <span>Top scores are ranked by highest tile and total points. Only signed-in Classic runs without undo are submitted.</span>
+                ) : (
+                  <span>Today's rankings for the Daily Challenge! Everyone competes on the exact same board seed. Only signed-in runs without undo qualify.</span>
+                )}
                 <br />
-                <span>See <a href="/faq" style={{ color: '#0070f3' }}>FAQ</a> for details.</span>
+                <span>See <a href="/faq" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>FAQ</a> for details.</span>
               </div>
               {loading ? (
                 <div className={styles.loading}>Loading...</div>
@@ -196,8 +245,8 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
                   <div className={styles.ctaContent}>
                     <h4>Compete with Players Worldwide!</h4>
                     <p>
-                      Sign in with Google to save Classic scores and climb the leaderboard. 
-                      Practice and Daily runs stay local in this version.
+                      Sign in with Google or create a quick Guest Nickname to save scores and climb the leaderboards! 
+                      Practice runs are tracked locally only.
                     </p>
                   </div>
                 </div>
@@ -215,7 +264,7 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
                   </a>
                 </div>
                 <div style={{ marginTop: 16, color: '#888', fontSize: 13 }}>
-                  <span>Leaderboard is updated in real time. For privacy and rules, see <a href="/faq" style={{ color: '#0070f3' }}>FAQ</a>.</span>
+                  <span>Leaderboard is updated in real time. For privacy and rules, see <a href="/faq" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>FAQ</a>.</span>
                 </div>
               </div>
             </div>

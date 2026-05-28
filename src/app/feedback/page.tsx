@@ -1,26 +1,33 @@
-"use client";
+'use client';
+
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useToast } from '@/components/Toast/ToastProvider';
+import { MessageSquare, Send, User } from 'lucide-react';
+import styles from '@/styles/AboutPage.module.css';
 
-const glass = {
-  background: 'rgba(255,255,255,0.12)',
-  backdropFilter: 'blur(12px) saturate(180%)',
-  WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-  border: '1px solid rgba(255,255,255,0.18)',
-  borderRadius: 12,
-  boxShadow: '0 2px 16px rgba(0,0,0,0.18)',
-};
+interface Comment {
+  id: string;
+  content: string;
+  user: string;
+  createdAt: string;
+}
 
 export default function FeedbackPage() {
-  const [comments, setComments] = useState<Array<{id: string; content: string; user: string; createdAt: string}>>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [form, setForm] = useState({ content: '' });
   const [loading, setLoading] = useState(false);
   const { addToast } = useToast();
 
   async function fetchComments() {
-    const res = await fetch('/api/feedback');
-    const data = await res.json();
-    setComments(data);
+    try {
+      const res = await fetch('/api/feedback');
+      if (res.ok) {
+        const data = await res.json();
+        setComments(data);
+      }
+    } catch (e) {
+      console.error('Failed to fetch comments', e);
+    }
   }
 
   useEffect(() => {
@@ -45,11 +52,10 @@ export default function FeedbackPage() {
         const err = await res.json().catch(() => ({ error: 'Unknown error' }));
         addToast('Failed to submit: ' + (err.error || res.statusText), 'error');
       } else {
-        // optimistic fetch update
         const created = await res.json();
         setComments(prev => [created, ...prev]);
         setForm({ content: '' });
-        addToast('Feedback submitted — thanks!', 'success');
+        addToast('Feedback submitted — thank you!', 'success');
       }
     } catch (error) {
       console.error('Submit error', error);
@@ -57,37 +63,79 @@ export default function FeedbackPage() {
     } finally {
       setLoading(false);
     }
-    // ensure list refreshed from server
     fetchComments();
   };
 
   return (
-    <main style={{ maxWidth: 600, margin: '0 auto', padding: '2rem 1rem' }}>
-      <h1 style={{ fontSize: 28, fontWeight: 700, color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.3)', marginBottom: 8 }}>Feedback</h1>
-      <p style={{ color: '#fff', fontSize: 16, marginBottom: 18 }}>Share your thoughts, suggestions, or bug reports. Comments are public and support discussion!</p>
-      <form onSubmit={handleSubmit} style={{ ...glass, display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '2rem', padding: '1.2rem' }}>
-        <label style={{ color: '#fff', fontWeight: 500 }}>
-          Comment (required)
-          <textarea name="content" rows={4} required value={form.content} onChange={handleChange} style={{ width: '100%', padding: '0.5rem', marginTop: 4, ...glass, color: '#fff', fontSize: 15, resize: 'vertical', minHeight: 60, outline: 'none' }} />
-        </label>
-        <button type="submit" style={{ ...glass, padding: '0.75rem 2rem', fontWeight: 600, color: '#fff', fontSize: 16, cursor: 'pointer', border: 'none', transition: 'background 0.2s, box-shadow 0.2s' }} disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
-      </form>
-      <section style={{ marginTop: 32 }}>
-        <h2 style={{ fontSize: '1.1rem', color: '#4fd1c5', marginBottom: 12 }}>Comments</h2>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1>Feedback & Discussions</h1>
+        <p>
+          Help us build the absolute best home for 2048 puzzle enthusiasts. Share your bug reports, feature suggestions, or general comments.
+        </p>
+      </header>
+
+      {/* Comment Form Section */}
+      <section className={styles.spotlightCard} style={{ marginBottom: 40 }}>
+        <div className={styles.spotlightHeader}>
+          <MessageSquare size={20} />
+          <h2>Submit a Comment</h2>
+        </div>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
+          <div>
+            <label htmlFor="content-textarea">Comment Content (required)</label>
+            <textarea
+              id="content-textarea"
+              name="content"
+              rows={4}
+              required
+              placeholder="What can we improve? E.g., tiles colors, strategic overlays, replay log validations..."
+              value={form.content}
+              onChange={handleChange}
+              style={{ minHeight: '100px', resize: 'vertical' }}
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button
+              type="submit"
+              className={styles.ctaButton}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+              disabled={loading}
+            >
+              <Send size={14} /> {loading ? 'Submitting...' : 'Submit Comment'}
+            </button>
+          </div>
+        </form>
+      </section>
+
+      {/* Community Comments Feed */}
+      <section>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 24 }}>Recent Discussions</h2>
         {comments.length === 0 ? (
-          <p style={{ color: '#ccc' }}>No comments yet. Be the first to share!</p>
+          <div className={styles.teamCard} style={{ padding: '40px 20px', color: 'var(--color-text-tertiary)' }}>
+            <p>No discussions posted yet. Be the first to share your thoughts!</p>
+          </div>
         ) : (
-          <ul style={{ listStyle: 'none', padding: 0 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {comments.map((c) => (
-              <li key={c.id} style={{ ...glass, marginBottom: 16, padding: '1em', color: '#fff', position: 'relative' }}>
-                <div style={{ fontWeight: 600, marginBottom: 4, color: '#fff' }}>{c.user} <span style={{ fontWeight: 400, fontSize: 12, color: '#aaa' }}>{new Date(c.createdAt).toLocaleString()}</span></div>
-                <div style={{ color: '#fff', fontSize: 15, wordBreak: 'break-word' }}>{c.content}</div>
-              </li>
+              <article key={c.id} className={styles.techCard} style={{ display: 'block', padding: '20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', borderBottom: '1px solid var(--color-border-secondary)', paddingBottom: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, color: 'var(--color-text-primary)', fontSize: '0.92rem' }}>
+                    <span style={{ color: 'var(--color-accent)', display: 'flex' }}><User size={14} /></span>
+                    {c.user}
+                  </div>
+                  <time style={{ fontFamily: 'var(--font-family-mono)', fontSize: '0.75rem', color: 'var(--color-text-tertiary)' }}>
+                    {new Date(c.createdAt).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' })}
+                  </time>
+                </div>
+                <p style={{ margin: 0, fontSize: '0.95rem', color: 'var(--color-text-secondary)', wordBreak: 'break-word', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+                  {c.content}
+                </p>
+              </article>
             ))}
-          </ul>
+          </div>
         )}
       </section>
-      {/* Toasts are provided globally by ToastProvider */}
-    </main>
+    </div>
   );
 }
