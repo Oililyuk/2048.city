@@ -1050,8 +1050,9 @@ class Game2048 {
     }
     
     getPosition(row, col) {
-        // Matches the CSS .grid-container gap (12px) exactly for perfect pixel alignment
-        const gap = 12;
+        // Matches the CSS gap dynamically based on screen width for 100% pixel-perfect tile alignment!
+        const isSmallScreen = window.innerWidth <= 520;
+        const gap = isSmallScreen ? 8 : 12;
         
         // Calculate cell size based on 100% width minus all 3 gaps, divided by 4 cells
         const cellSize = `(100% - ${gap * 3}px) / 4`;

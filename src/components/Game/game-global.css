@@ -657,27 +657,154 @@
   box-shadow: 0 8px 25px rgba(79, 209, 197, 0.45) !important;
 }
 
-/* Mobile responsive adjustments */
+/* Mobile responsive adjustments - Cinematic, high-contrast, fully viewport-aware */
 @media (max-width: 520px) {
+  .game-root {
+    min-height: calc(100vh - 64px);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .container {
-    padding: 16px 12px 48px;
-    gap: 12px;
+    padding: 8px 12px;
+    gap: 10px;
+    max-width: 100%;
+    height: auto;
   }
-  
+
+  /* Compact Mode Switch */
+  .mode-switch {
+    gap: 4px;
+    padding: 2px;
+    border-radius: 12px;
+  }
+
+  .mode-button {
+    min-height: 32px;
+    font-size: 0.82rem;
+    border-radius: 9px;
+  }
+
+  /* Heading area */
+  .heading {
+    margin-bottom: 0px;
+  }
+
   .game-title {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
+    letter-spacing: -1px;
+  }
+
+  .score-container {
+    gap: 6px;
+  }
+
+  .score-box {
+    width: 76px;
+    height: 42px;
+  }
+
+  .score-box > .liquidGlass-tint,
+  .score-box > .liquidGlass-shine,
+  .score-box > .liquidGlass-content {
+    border-radius: 9px;
+  }
+
+  .score-label {
+    font-size: 0.6rem;
+  }
+
+  .score, .best-score {
+    font-size: 0.9rem;
+  }
+
+  /* Compact HUD run panel */
+  .run-panel {
+    gap: 4px;
+  }
+
+  .run-panel > div {
+    padding: 4px 6px;
+    border-radius: 9px;
+  }
+
+  .run-panel span {
+    font-size: 0.58rem;
+  }
+
+  .run-panel strong {
+    font-size: 0.8rem;
+    margin-top: 1px;
+  }
+
+  /* SCALES DOWN game board dynamically to fit on short screens! */
+  .game-container {
+    border-radius: 18px;
+    padding: 8px;
+    max-width: min(390px, 82vw) !important;
+    margin: 0 auto !important;
+  }
+
+  .grid-container {
+    gap: 8px;
+  }
+
+  .grid-cell {
+    border-radius: 12px;
+  }
+
+  .tile-container {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+  }
+
+  /* Matches the JavaScript getPosition gap exactly */
+  .tile {
+    width: calc((100% - 24px) / 4);
+    height: calc((100% - 24px) / 4);
+    border-radius: 12px;
+  }
+
+  .tile > .liquidGlass-effect,
+  .tile > .liquidGlass-tint,
+  .tile > .liquidGlass-shine,
+  .tile > .liquidGlass-text {
+    border-radius: 12px;
+  }
+
+  .tile > .liquidGlass-text {
+    font-size: 1.6rem;
   }
   
-  .tile > .liquidGlass-text {
-    font-size: 1.8rem;
-  }
   .tile-128 > .liquidGlass-text,
   .tile-256 > .liquidGlass-text,
   .tile-512 > .liquidGlass-text {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
   }
   .tile-1024 > .liquidGlass-text,
   .tile-2048 > .liquidGlass-text {
-    font-size: 1.3rem;
+    font-size: 1.15rem;
+  }
+
+  /* Buttons */
+  .footer {
+    gap: 6px;
+    margin-top: 0px;
+  }
+
+  .controls {
+    gap: 8px;
+  }
+
+  .btn-new, .btn-undo {
+    height: 38px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    padding: 0 10px;
   }
 }
