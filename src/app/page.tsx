@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import GameBoard from '@/components/Game/GameBoard';
-import LoginButton from '@/components/Auth/LoginButton';
 import CookieConsent from '@/components/CookieConsent/CookieConsent';
 
 export const metadata: Metadata = {
@@ -48,7 +47,7 @@ export default async function Home() {
     <>
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '0', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh' }}>
         {/* header area removed — login is handled in the main menu */}
-        <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0', padding: '0' }}>
+        <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', margin: '0', padding: '0' }}>
           <GameBoard session={session} />
         </div>
         <div className="visually-hidden" style={{ textAlign: 'center', margin: '32px 0 0 0', color: '#4fd1c5', fontWeight: 500, fontSize: 18 }}>

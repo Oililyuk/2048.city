@@ -87,7 +87,7 @@ export default function HowToPlay() {
               <ul>
                 <li><strong>Desktop:</strong> Arrow keys (↑ ↓ ← →) or W, A, S, D keys</li>
                 <li><strong>Mobile:</strong> Swipe in any direction</li>
-                <li><strong>Undo:</strong> Use the Undo button to reverse your last move (limited uses)</li>
+                <li><strong>Undo:</strong> Use Practice mode to reverse recent moves with limited undo charges</li>
                 <li><strong>New Game:</strong> Start fresh anytime with the New Game button</li>
               </ul>
             </div>
@@ -172,8 +172,8 @@ export default function HowToPlay() {
 
               <h3>How many undo moves do I get?</h3>
               <p>
-                You start with 3 undo moves. You can earn more by creating tiles with values of 256 or higher. 
-                The maximum number of undo moves you can accumulate is 10.
+                Practice mode starts with 3 undo moves. You can earn more by creating tiles with values of 256 or higher. 
+                Classic and Daily runs do not use undo so their results stay comparable.
               </p>
 
               <h3>Is 2048 free to play?</h3>
@@ -190,8 +190,7 @@ export default function HowToPlay() {
 
               <h3>How does the leaderboard work?</h3>
               <p>
-                Sign in with Google to submit your scores to the global leaderboard. Your best score will 
-                be displayed, and you can compete with players worldwide!
+                Sign in with Google to submit eligible Classic scores to the global leaderboard. Practice and Daily runs are tracked locally in this version.
               </p>
 
               <h3>What's the highest possible tile?</h3>

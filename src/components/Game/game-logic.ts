@@ -45,19 +45,37 @@ class Game2048 {
     touchMoveThrottle: number;
     dragPreviewEnabled: boolean;
     keydownHandler?: (e: KeyboardEvent) => void;
-    onGameEnd?: (score: number, won: boolean) => void;
+    onGameEnd?: (summary: any) => void;
     onScoreUpdate?: (score: number, bestScore: number) => void;
+    onStatsUpdate?: (stats: any) => void;
+    onRestart?: () => void;
 
-    constructor() {
+    constructor(options = {}) {
         this.size = 4;
         this.grid = [];
         this.score = 0;
-        this.bestScore = localStorage.getItem('bestScore') || 0;
+        this.mode = options.mode || 'classic';
+        this.dailyKey = options.dailyKey || null;
+        this.modeStorageKey = this.dailyKey
+            ? `2048.city.active.${this.mode}.${this.dailyKey}`
+            : `2048.city.active.${this.mode}`;
+        this.bestScoreKey = `bestScore:${this.mode}`;
+        this.bestScore = localStorage.getItem(this.bestScoreKey) || localStorage.getItem('bestScore') || 0;
+        this.onGameEnd = options.onGameEnd;
+        this.onStatsUpdate = options.onStatsUpdate;
+        this.onRestart = options.onRestart;
+        this.eventController = new AbortController();
+        this.statsTimer = null;
+        this.hasWon = false;
+        this.gameEnded = false;
+        this.moves = 0;
+        this.undoUsed = 0;
+        this.startedAt = Date.now();
         
         // 撤销系统
         this.stateHistory = []; // 历史状态栈
         this.maxHistorySize = 100; // 最多保存100个历史状态
-        this.initialUndoCount = 3; // 初始撤销次数
+        this.initialUndoCount = this.mode === 'practice' ? 3 : 0; // Practice keeps undo; competitive modes do not.
         this.undoCount = this.initialUndoCount; // 当前可用撤销次数
         this.maxUndoCount = 10; // 最大累计撤销次数
         this.undoRewardValue = 256; // 每合成256的倍数获得撤销次数
@@ -76,7 +94,7 @@ class Game2048 {
         this.tileId = 0; // 用于生成唯一的方块ID
         
         // 随机数生成器
-        this.randomSeed = Date.now(); // 初始种子
+        this.randomSeed = options.seed || Date.now(); // 初始种子
         this.random = this.createSeededRandom(this.randomSeed);
         
         // 动画状态标志
@@ -112,6 +130,7 @@ class Game2048 {
         
         this.setup();
         this.updateDisplay();
+        this.startStatsTimer();
         
         // 防止页面滚动
         this.preventPageScroll();
@@ -138,8 +157,124 @@ class Game2048 {
         setVH();
         
         // 监听窗口大小变化
-        window.addEventListener('resize', setVH);
-        window.addEventListener('orientationchange', setVH);
+        window.addEventListener('resize', setVH, { signal: this.eventController.signal });
+        window.addEventListener('orientationchange', setVH, { signal: this.eventController.signal });
+    }
+
+    restoreSavedRun() {
+        try {
+            const raw = localStorage.getItem(this.modeStorageKey);
+            if (!raw) return false;
+
+            const saved = JSON.parse(raw);
+            if (!saved || saved.mode !== this.mode) return false;
+            if (this.dailyKey && saved.dailyKey !== this.dailyKey) return false;
+            if (!Array.isArray(saved.grid) || saved.grid.length !== this.size) return false;
+            if (saved.gameEnded) return false;
+
+            this.grid = saved.grid;
+            this.score = saved.score || 0;
+            this.undoCount = typeof saved.undoCount === 'number' ? saved.undoCount : this.initialUndoCount;
+            this.undoUsed = saved.undoUsed || 0;
+            this.moves = saved.moves || 0;
+            this.hasWon = Boolean(saved.hasWon);
+            this.tileId = saved.tileId || this.nextTileIdFromGrid(saved.grid);
+            this.stateHistory = Array.isArray(saved.stateHistory) ? saved.stateHistory : [];
+            this.randomSeed = saved.initialSeed || this.randomSeed;
+            this.random = this.createSeededRandom(saved.randomSeed || this.randomSeed);
+            this.startedAt = Date.now() - Math.max(0, saved.duration || 0) * 1000;
+            return true;
+        } catch (error) {
+            console.warn('Could not restore saved 2048 run:', error);
+            return false;
+        }
+    }
+
+    persistRun(gameEnded = false) {
+        try {
+            const payload = {
+                mode: this.mode,
+                dailyKey: this.dailyKey,
+                grid: this.grid,
+                score: this.score,
+                undoCount: this.undoCount,
+                undoUsed: this.undoUsed,
+                moves: this.moves,
+                duration: this.getDuration(),
+                randomSeed: this.random.getSeed(),
+                initialSeed: this.randomSeed,
+                tileId: this.tileId,
+                hasWon: this.hasWon,
+                gameEnded,
+                stateHistory: this.stateHistory.slice(-this.maxHistorySize),
+            };
+            localStorage.setItem(this.modeStorageKey, JSON.stringify(payload));
+        } catch (error) {
+            console.warn('Could not save 2048 run:', error);
+        }
+    }
+
+    clearSavedRun() {
+        try {
+            localStorage.removeItem(this.modeStorageKey);
+        } catch (error) {
+            console.warn('Could not clear saved 2048 run:', error);
+        }
+    }
+
+    rebuildTilesFromGrid() {
+        this.tileContainer.innerHTML = '';
+        this.tiles = {};
+        for (let row = 0; row < this.size; row++) {
+            for (let col = 0; col < this.size; col++) {
+                if (this.grid[row][col]) {
+                    this.createTileElement(row, col, this.grid[row][col], false, false);
+                }
+            }
+        }
+    }
+
+    nextTileIdFromGrid(grid) {
+        let maxId = 0;
+        for (let row = 0; row < this.size; row++) {
+            for (let col = 0; col < this.size; col++) {
+                const tile = grid[row]?.[col];
+                if (tile && tile.id >= maxId) maxId = tile.id + 1;
+            }
+        }
+        return maxId;
+    }
+
+    getDuration() {
+        return Math.max(0, Math.floor((Date.now() - this.startedAt) / 1000));
+    }
+
+    startStatsTimer() {
+        this.notifyStats();
+        this.statsTimer = window.setInterval(() => this.notifyStats(), 1000);
+    }
+
+    notifyStats() {
+        if (!this.onStatsUpdate) return;
+        this.onStatsUpdate({
+            mode: this.mode,
+            score: this.score,
+            bestScore: Number(this.bestScore) || 0,
+            maxTile: this.getMaxTile(),
+            moves: this.moves,
+            duration: this.getDuration(),
+            undoCount: this.undoCount,
+            undoUsed: this.undoUsed,
+            seed: this.randomSeed,
+            dailyKey: this.dailyKey || undefined,
+            isLeaderboardEligible: this.isLeaderboardEligible(),
+        });
+    }
+
+    destroy() {
+        this.persistRun(this.gameEnded);
+        this.eventController.abort();
+        if (this.statsTimer) window.clearInterval(this.statsTimer);
     }
     
     setup() {
@@ -150,13 +285,19 @@ class Game2048 {
                 this.grid[i][j] = null;
             }
         }
-        
-        // 添加两个初始方块
-        this.addNewTile();
-        this.addNewTile();
-        
-        // 保存初始状态
-        this.saveState();
+
+        const restored = this.restoreSavedRun();
+
+        if (!restored) {
+            // 添加两个初始方块
+            this.addNewTile();
+            this.addNewTile();
+            
+            // 保存初始状态
+            this.saveState();
+        } else {
+            this.rebuildTilesFromGrid();
+        }
         
         // 设置事件监听器
         this.setupEventListeners();
@@ -212,6 +353,16 @@ class Game2048 {
                     this.move(direction);
                 }
 
+                if (e.keyCode === 78) { // N
+                    e.preventDefault();
+                    this.restart();
+                }
+
+                if (e.keyCode === 85) { // U
+                    e.preventDefault();
+                    this.undo();
+                }
+
                 // 测试快捷键
                 if (e.keyCode === 57) { // "9" key
                     e.preventDefault();
@@ -226,7 +377,7 @@ class Game2048 {
         
         // 移除可能存在的旧监听器，然后添加新的
         document.removeEventListener('keydown', this.keydownHandler);
-        document.addEventListener('keydown', this.keydownHandler);
+        document.addEventListener('keydown', this.keydownHandler, { signal: this.eventController.signal });
         
         // 触摸事件 - 实现拖动预览效果
         document.addEventListener('touchstart', (e) => {
@@ -258,7 +409,7 @@ class Game2048 {
             
             // 添加拖动状态类到游戏容器
             this.tileContainer.classList.add('dragging-active');
-        }, { passive: true });
+        }, { passive: true, signal: this.eventController.signal });
         
         document.addEventListener('touchmove', (e) => {
             if (!this.isDragging || this.isAnimating) return;
@@ -305,7 +456,7 @@ class Game2048 {
                     this.updateDragPreview(diffX, diffY);
                 }
             }
-        }, { passive: false });
+        }, { passive: false, signal: this.eventController.signal });
         
         document.addEventListener('touchend', (e) => {
             if (!this.isDragging) return;
@@ -352,7 +503,7 @@ class Game2048 {
                     this.resetTileTransforms();
                 }
             }
-        }, { passive: true });
+        }, { passive: true, signal: this.eventController.signal });
         
         // 处理触摸取消事件
         document.addEventListener('touchcancel', (e) => {
@@ -361,7 +512,7 @@ class Game2048 {
                 this.tileContainer.classList.remove('dragging-active');
                 this.resetTileTransforms();
             }
-        }, { passive: true });
+        }, { passive: true, signal: this.eventController.signal });
         
         // 鼠标事件支持（桌面端）
         let mouseDown = false;
@@ -385,7 +536,7 @@ class Game2048 {
             // 确保所有砖块都在正确的位置
             this.forceResetAllTiles();
             this.tileContainer.classList.add('dragging-active');
-        });
+        }, { signal: this.eventController.signal });
         
         document.addEventListener('mousemove', (e) => {
             if (!mouseDown || !this.isDragging || this.isAnimating) return;
@@ -410,7 +561,7 @@ class Game2048 {
                 
                 this.updateDragPreview(diffX, diffY);
             }
-        });
+        }, { signal: this.eventController.signal });
         
         document.addEventListener('mouseup', (e) => {
             if (!mouseDown) return;
@@ -455,7 +606,7 @@ class Game2048 {
                     this.resetTileTransforms();
                 }
             }
-        });
+        }, { signal: this.eventController.signal });
     }
     
     handleSwipe() {
@@ -544,6 +695,7 @@ class Game2048 {
         if (moved) {
             // 设置动画标志
             this.isAnimating = true;
+            this.moves++;
             
             // 更新网格
             this.grid = newGrid;
@@ -560,27 +712,37 @@ class Game2048 {
                 // 清除动画标志
                 this.isAnimating = false;
                 
-                // 游戏状态检查
-                if (this.checkWin()) {
-                    this.showMessage('You Win!', 'game-won');
-                } else if (this.checkGameOver()) {
-                    // 只有在没有撤销次数时才真正结束游戏
-                    if (this.undoCount === 0) {
-                        this.showMessage('Game Over', 'game-over');
-                        // 触发游戏结束回调
-                        if (this.onGameEnd) {
-                            this.onGameEnd(this.score, false);
-                        }
-                    } else {
-                        // 如果还有撤销次数，给用户提示
-                        this.showMessage('Game Over', 'game-stuck');
-                        // 也触发游戏结束回调提交分数
-                        if (this.onGameEnd) {
-                            this.onGameEnd(this.score, false);
-                        }
-                    }
-                }
+                this.afterTurn();
             });
+        }
+    }
+
+    afterTurn() {
+        this.persistRun();
+        this.notifyStats();
+
+        if (!this.hasWon && this.checkWin()) {
+            this.hasWon = true;
+            this.persistRun();
+            this.showMessage('2048 reached', 'game-won');
+            return;
+        }
+
+        if (this.checkGameOver()) {
+            if (this.undoCount === 0) {
+                this.endGame(false);
+            } else {
+                this.showMessage('No moves', 'game-stuck');
+            }
+        }
+    }
+
+    endGame(won = false) {
+        this.gameEnded = true;
+        this.persistRun(true);
+        this.showMessage(won ? '2048 reached' : 'Game over', won ? 'game-won' : 'game-over');
+        if (this.onGameEnd) {
+            this.onGameEnd(this.buildSummary(won));
         }
     }
     
@@ -751,7 +913,10 @@ class Game2048 {
             if (this.score > this.bestScore) {
                 this.bestScore = this.score;
                 this.bestScoreDisplay.textContent = this.bestScore;
-                localStorage.setItem('bestScore', this.bestScore);
+                localStorage.setItem(this.bestScoreKey, this.bestScore);
+                if (this.mode === 'classic') {
+                    localStorage.setItem('bestScore', this.bestScore);
+                }
             }
             
             // 再等待一小段时间后执行回调
@@ -797,9 +962,11 @@ class Game2048 {
         
         // 更新撤销按钮状态
         this.updateUndoButton();
+        this.notifyStats();
     }
     
     earnUndoReward() {
+        if (this.mode !== 'practice') return;
         if (this.undoCount < this.maxUndoCount) {
             this.undoCount++;
             this.showUndoReward();
@@ -811,7 +978,7 @@ class Game2048 {
         const reward = document.createElement('div');
         reward.className = 'undo-reward';
         reward.textContent = '+1 Undo';
-        document.querySelector('.score-container').appendChild(reward);
+        document.querySelector('.score-container')?.appendChild(reward);
         
         // 1秒后移除提示
         setTimeout(() => {
@@ -828,13 +995,6 @@ class Game2048 {
             if (undoCountSpan) {
                 undoCountSpan.textContent = String(this.undoCount);
             }
-            
-            // 同时更新 liquidGlass-content 中的文本（如果存在）
-            const contentSpan = undoButton.querySelector('.liquidGlass-content');
-            if (contentSpan) {
-                contentSpan.textContent = `Undo (${this.undoCount})`;
-            }
-            
             // 修复：当历史记录大于1时就应该启用撤销
             if (this.undoCount > 0 && this.stateHistory.length > 1) {
                 undoButton.disabled = false;
@@ -948,6 +1108,93 @@ class Game2048 {
         
         return true;
     }
+
+    getBoardValues() {
+        return this.grid.map(row => row.map(tile => tile ? tile.value : 0));
+    }
+
+    getMaxTile() {
+        let maxTile = 0;
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                const tile = this.grid[i][j];
+                if (tile && tile.value > maxTile) maxTile = tile.value;
+            }
+        }
+        return maxTile;
+    }
+
+    getEmptyCellCount() {
+        let count = 0;
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                if (!this.grid[i][j]) count++;
+            }
+        }
+        return count;
+    }
+
+    isHighestTileInCorner() {
+        const maxTile = this.getMaxTile();
+        const corners = [
+            this.grid[0][0],
+            this.grid[0][this.size - 1],
+            this.grid[this.size - 1][0],
+            this.grid[this.size - 1][this.size - 1],
+        ];
+        return corners.some(tile => tile?.value === maxTile);
+    }
+
+    isLeaderboardEligible() {
+        return this.mode === 'classic' && this.undoUsed === 0;
+    }
+
+    buildAdvice() {
+        const advice = [];
+        const maxTile = this.getMaxTile();
+        const emptyCells = this.getEmptyCellCount();
+
+        if (!this.isHighestTileInCorner()) {
+            advice.push('Your highest tile finished away from a corner. Locking it into one corner makes the late board much easier to control.');
+        }
+
+        if (emptyCells <= 2) {
+            advice.push('The board got tight near the end. Make space before chasing the next large merge.');
+        }
+
+        if (maxTile < 512) {
+            advice.push('Build one stable edge earlier. Small scattered tiles are usually what end low-tile runs.');
+        } else if (maxTile >= 2048) {
+            advice.push('Strong control run. The next jump is keeping the 2048 edge ordered while feeding it 512 and 1024 tiles.');
+        } else {
+            advice.push('Good base. Focus on keeping the largest row descending so merges stay predictable.');
+        }
+
+        if (this.undoUsed > 0) {
+            advice.push('Undo helped this run, so keep it in Practice until the same pattern works cleanly in Classic.');
+        }
+
+        return advice.slice(0, 3);
+    }
+
+    buildSummary(won = false) {
+        return {
+            mode: this.mode,
+            score: this.score,
+            bestScore: Number(this.bestScore) || 0,
+            maxTile: this.getMaxTile(),
+            moves: this.moves,
+            duration: this.getDuration(),
+            undoCount: this.undoCount,
+            undoUsed: this.undoUsed,
+            seed: this.randomSeed,
+            dailyKey: this.dailyKey || undefined,
+            isLeaderboardEligible: this.isLeaderboardEligible(),
+            won,
+            board: this.getBoardValues(),
+            advice: this.buildAdvice(),
+        };
+    }
     
     saveState() {
         // 保存当前状态到历史栈
@@ -956,7 +1203,10 @@ class Game2048 {
             score: this.score,
             undoCount: this.undoCount,
             randomSeed: this.random.getSeed(), // 保存随机种子
-            tileId: this.tileId // 保存方块ID计数器
+            tileId: this.tileId, // 保存方块ID计数器
+            moves: this.moves,
+            undoUsed: this.undoUsed,
+            hasWon: this.hasWon
         };
         
         // 检查是否与最后一个状态相同（避免重复保存）
@@ -1002,6 +1252,8 @@ class Game2048 {
                 // 动画完成后，更新游戏状态
                 this.grid = JSON.parse(JSON.stringify(previousState.grid));
                 this.score = previousState.score;
+                this.moves = previousState.moves || Math.max(0, this.moves - 1);
+                this.hasWon = Boolean(previousState.hasWon);
                 
                 // 恢复随机种子和方块ID
                 this.random.setSeed(previousState.randomSeed);
@@ -1009,10 +1261,14 @@ class Game2048 {
                 
                 // 减少撤销次数
                 this.undoCount--;
+                this.undoUsed++;
                 
                 // 更新显示
                 this.updateDisplay();
                 this.updateUndoButton();
+                this.hideMessage();
+                this.persistRun();
+                this.notifyStats();
                 
                 // 清除动画标志
                 this.isAnimating = false;
@@ -1144,6 +1400,9 @@ class Game2048 {
     }
     
     restart() {
+        this.onRestart?.();
+        this.clearSavedRun();
+
         // 清空方块
         this.tileContainer.innerHTML = '';
         this.tiles = {};
@@ -1152,14 +1411,34 @@ class Game2048 {
         this.score = 0;
         this.stateHistory = [];
         this.undoCount = this.initialUndoCount;
+        this.undoUsed = 0;
+        this.moves = 0;
+        this.hasWon = false;
+        this.gameEnded = false;
         this.tileId = 0;
+        this.startedAt = Date.now();
         
         // 重置随机数生成器
-        this.randomSeed = Date.now();
+        if (this.mode !== 'daily') {
+            this.randomSeed = Date.now();
+        }
         this.random = this.createSeededRandom(this.randomSeed);
         
         this.hideMessage();
-        this.setup();
+        for (let i = 0; i < this.size; i++) {
+            this.grid[i] = [];
+            for (let j = 0; j < this.size; j++) {
+                this.grid[i][j] = null;
+            }
+        }
+
+        this.addNewTile();
+        this.addNewTile();
+        this.saveState();
+        this.updateDisplay();
+        this.updateUndoButton();
+        this.persistRun();
+        this.notifyStats();
     }
     
     showMessage(text, className) {
@@ -1187,23 +1466,40 @@ class Game2048 {
             const restartButton = document.createElement('button');
             restartButton.className = 'restart-button';
             restartButton.textContent = 'Try Again';
-            restartButton.onclick = () => game.restart();
+            restartButton.onclick = () => this.restart();
             
             buttonContainer.appendChild(undoButton);
             buttonContainer.appendChild(restartButton);
             this.messageContainer.appendChild(buttonContainer);
 
-        } else if (className !== 'game-won' && className !== 'game-over') {
+        } else if (className === 'game-won') {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'message-buttons';
+
+            const continueButton = document.createElement('button');
+            continueButton.className = 'restart-button';
+            continueButton.textContent = 'Continue';
+            continueButton.onclick = () => this.hideMessage();
+
+            const restartButton = document.createElement('button');
+            restartButton.className = 'restart-button';
+            restartButton.textContent = 'New Game';
+            restartButton.onclick = () => this.restart();
+
+            buttonContainer.appendChild(continueButton);
+            buttonContainer.appendChild(restartButton);
+            this.messageContainer.appendChild(buttonContainer);
+        } else if (className !== 'game-over') {
             const restartButton = document.createElement('button');
             restartButton.className = 'restart-button';
             restartButton.textContent = 'Try Again';
-            restartButton.onclick = () => game.restart();
+            restartButton.onclick = () => this.restart();
             this.messageContainer.appendChild(restartButton);
         } else {
              const restartButton = document.createElement('button');
             restartButton.className = 'restart-button';
             restartButton.textContent = 'Try Again';
-            restartButton.onclick = () => game.restart();
+            restartButton.onclick = () => this.restart();
             this.messageContainer.appendChild(restartButton);
         }
 
@@ -1585,14 +1881,6 @@ class Game2048 {
             tile.classList.remove('dragging');
         });
         
-        // 保存当前所有砖块的transform状态
-        const currentTransforms = {};
-        Object.keys(this.tiles).forEach(id => {
-            const element = this.tiles[id];
-            const transform = window.getComputedStyle(element).transform;
-            currentTransforms[id] = transform;
-        });
-        
         // 立即执行游戏逻辑，但暂时不更新显示
         const movements = [];
         const merges = [];
@@ -1643,6 +1931,8 @@ class Game2048 {
         }
         
         if (moved) {
+            this.moves++;
+
             // 更新网格
             this.grid = newGrid;
             
@@ -1653,17 +1943,7 @@ class Game2048 {
                 this.saveState();
                 this.updateDisplay();
                 this.isAnimating = false;
-                
-                // 游戏状态检查
-                if (this.checkWin()) {
-                    this.showMessage('你赢了!', 'game-won');
-                } else if (this.checkGameOver()) {
-                    if (this.undoCount === 0) {
-                        this.showMessage('游戏结束', 'game-over');
-                    } else {
-                        this.showMessage('无路可走!', 'game-stuck');
-                    }
-                }
+                this.afterTurn();
             });
         } else {
             // 如果没有移动，确保重置所有砖块的transform
@@ -1765,7 +2045,10 @@ class Game2048 {
             if (this.score > this.bestScore) {
                 this.bestScore = this.score;
                 this.bestScoreDisplay.textContent = this.bestScore;
-                localStorage.setItem('bestScore', this.bestScore);
+                localStorage.setItem(this.bestScoreKey, this.bestScore);
+                if (this.mode === 'classic') {
+                    localStorage.setItem('bestScore', this.bestScore);
+                }
             }
             
             // 确保所有砖块的transform都被重置

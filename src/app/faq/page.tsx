@@ -32,11 +32,11 @@ const faqs = [
   },
   {
     q: 'How do I submit my score to the leaderboard?',
-    a: 'First, sign in with your Google account. After finishing a game, click the "Submit Score" button. Your highest score and best tile will be displayed on the global leaderboard. Note: You can only submit completed games (when the board is full and no moves are possible).'
+    a: 'Sign in with your Google account and finish a Classic run without using undo. Eligible completed runs are submitted automatically when the board has no moves left.'
   },
   {
     q: 'How does the leaderboard ranking work?',
-    a: 'Scores are ranked first by the highest tile achieved, then by total score. For example, a player with a 4096 tile ranks higher than someone with a 2048 tile, regardless of the total score. Daily challenges have separate leaderboards that reset every 24 hours.'
+    a: 'Scores are ranked first by the highest tile achieved, then by total score. For example, a player with a 4096 tile ranks higher than someone with a 2048 tile. Practice and Daily runs stay local until their own competitive rules are added.'
   },
   {
     q: 'What is the highest possible tile?',
@@ -52,7 +52,7 @@ const faqs = [
   },
   {
     q: 'How do daily challenges work?',
-    a: 'Daily challenges provide a unique starting board configuration each day. All players worldwide play the same challenge, allowing for fair competition. Results are posted to a separate daily leaderboard. Challenges reset at midnight UTC.'
+    a: 'Daily challenges use the same deterministic seed for every player each UTC day. In this version they are local challenge runs, with a dedicated daily leaderboard planned next.'
   },
   {
     q: 'What are the best strategies to win?',

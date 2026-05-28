@@ -13,10 +13,11 @@
 .game-root {
     min-height: calc(100vh - 64px);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     position: relative;
     width: 100%;
+    padding-top: 20px;
 }
 
 /* SVG滤镜容器 */
@@ -125,6 +126,80 @@
     align-items: center;
     width: 100%;
     margin-bottom: 12px;
+}
+
+.mode-switch {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+}
+
+.mode-button {
+    min-height: 38px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.mode-button:hover,
+.mode-button.active {
+    color: rgba(20, 24, 28, 0.92);
+    background: #f2d36b;
+    border-color: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 8px 24px rgba(242, 211, 107, 0.18);
+    text-decoration: none;
+}
+
+.run-panel {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.run-panel > div {
+    min-width: 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.run-panel span,
+.result-grid span,
+.panel-kicker {
+    display: block;
+    color: rgba(255, 255, 255, 0.56);
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+.run-panel strong,
+.result-grid strong {
+    display: block;
+    margin-top: 3px;
+    color: rgba(255, 255, 255, 0.94);
+    font-size: 15px;
+    line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .header {
@@ -319,6 +394,9 @@ h1, .game-title {
 .btn-undo .liquidGlass-content {
     position: relative;
     z-index: 3;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
     padding: 10px 20px;
     color: rgba(255, 255, 255, 0.9);
     font-weight: 600;
@@ -353,6 +431,100 @@ h1, .game-title {
     background: rgba(255, 255, 255, 0.03);
 }
 
+.daily-seed {
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.post-game-panel {
+    width: 100%;
+    margin-top: 18px;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(12, 16, 20, 0.72);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+}
+
+.post-game-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.post-game-header h2 {
+    margin: 3px 0 0;
+    color: rgba(255, 255, 255, 0.96);
+    font-size: 22px;
+    line-height: 1.1;
+}
+
+.share-run-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    background: rgba(242, 211, 107, 0.18);
+    border: 1px solid rgba(242, 211, 107, 0.34);
+    color: #ffe58a;
+    box-shadow: none;
+    white-space: nowrap;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin: 14px 0;
+}
+
+.result-grid > div {
+    min-width: 0;
+    padding: 9px 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.analysis-list {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.analysis-list li {
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.analysis-list li::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 8px;
+    border-radius: 999px;
+    background: #f2d36b;
+    vertical-align: 2px;
+}
+
+.run-status {
+    margin: 12px 0 0;
+    color: rgba(255, 229, 138, 0.86);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
 /* 游戏容器 - 液态玻璃效果 */
 .game-container {
     position: relative;
@@ -360,7 +532,7 @@ h1, .game-title {
     border-radius: 20px;
     width: 100%;
     /* 高度和宽度都与可用空间的较小值相关，确保是正方形并尽可能大 */
-    max-width: min(450px, 90vw, 80vh);
+    max-width: min(450px, 90vw, max(300px, calc(100vh - 390px)));
     margin: 0 auto;
     padding: 10px;
     overflow: visible;
@@ -482,6 +654,12 @@ h1, .game-title {
     justify-content: center;
     align-items: center;
     padding: 10px 20px;
+}
+
+.btn-new.liquidGlass-wrapper > .liquidGlass-content,
+.btn-undo.liquidGlass-wrapper > .liquidGlass-content {
+    flex-direction: row;
+    gap: 8px;
 }
 
 /* 移除旧的、分散的样式 */
@@ -790,9 +968,8 @@ h1, .game-title {
 .game-message p {
     font-size: 48px;
     font-weight: bold;
-    height: 48px;
-    line-height: 48px;
-    margin-top: 200px;
+    line-height: 1.05;
+    margin: 0 0 20px;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -899,6 +1076,38 @@ h1, .game-title {
     .score, .best-score {
         font-size: 18px; /* 减小分数字体 */
     }
+
+    .mode-switch {
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+
+    .mode-button {
+        min-height: 34px;
+        font-size: 12px;
+        padding: 0 6px;
+    }
+
+    .run-panel,
+    .result-grid {
+        gap: 6px;
+    }
+
+    .run-panel > div,
+    .result-grid > div {
+        padding: 7px 6px;
+    }
+
+    .run-panel span,
+    .result-grid span,
+    .panel-kicker {
+        font-size: 10px;
+    }
+
+    .run-panel strong,
+    .result-grid strong {
+        font-size: 13px;
+    }
     
     .controls {
         margin-bottom: 15px; /* 减小底部间距 */
@@ -948,7 +1157,26 @@ h1, .game-title {
     
     .game-message p {
         font-size: 32px;
-        margin-top: 150px;
+        margin: 0 0 16px;
+    }
+
+    .post-game-panel {
+        padding: 12px;
+        margin-top: 14px;
+    }
+
+    .post-game-header h2 {
+        font-size: 18px;
+    }
+
+    .share-run-button {
+        min-height: 34px;
+        padding: 0 10px;
+        font-size: 13px;
+    }
+
+    .analysis-list li {
+        font-size: 13px;
     }
     
     .instructions {

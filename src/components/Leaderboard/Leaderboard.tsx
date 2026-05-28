@@ -52,7 +52,7 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
     return (
       <div className={styles.content} style={{ maxWidth: '900px', margin: '0 auto' }}>
         <div style={{ marginBottom: 16, color: 'rgba(255, 255, 255, 0.7)', fontWeight: 400, fontSize: '1.05rem' }}>
-          <span>Top scores are ranked by highest tile and total points. Only logged-in users can submit scores. Daily challenges have their own leaderboard.</span>
+          <span>Top scores are ranked by highest tile and total points. Only signed-in Classic runs without undo are submitted.</span>
           <br />
           <span>See <a href="/faq" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>FAQ</a> for details.</span>
         </div>
@@ -96,8 +96,8 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
             <div className={styles.ctaContent}>
               <h4>Compete with Players Worldwide!</h4>
               <p>
-                Sign in with Google to save your scores and climb the leaderboard. 
-                Your best score is automatically submitted when you finish a game.
+                Sign in with Google to save Classic scores and climb the leaderboard. 
+                Practice and Daily runs stay local in this version.
               </p>
             </div>
           </div>
@@ -151,7 +151,7 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
 
             <div className={styles.content}>
               <div style={{ marginBottom: 16, color: '#4fd1c5', fontWeight: 500, fontSize: '1.05rem' }}>
-                <span>Top scores are ranked by highest tile and total points. Only logged-in users can submit scores. Daily challenges have their own leaderboard.</span>
+                <span>Top scores are ranked by highest tile and total points. Only signed-in Classic runs without undo are submitted.</span>
                 <br />
                 <span>See <a href="/faq" style={{ color: '#0070f3' }}>FAQ</a> for details.</span>
               </div>
@@ -196,8 +196,8 @@ export default function Leaderboard({ inline, autoOpen }: { inline?: boolean; au
                   <div className={styles.ctaContent}>
                     <h4>Compete with Players Worldwide!</h4>
                     <p>
-                      Sign in with Google to save your scores and climb the leaderboard. 
-                      Your best score is automatically submitted when you finish a game.
+                      Sign in with Google to save Classic scores and climb the leaderboard. 
+                      Practice and Daily runs stay local in this version.
                     </p>
                   </div>
                 </div>

@@ -10,10 +10,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { score, maxTile, moves = 0, gameDuration = 0 } = await request.json();
+    const { 
+      score, 
+      maxTile, 
+      moves = 0, 
+      gameDuration = 0,
+      mode = 'classic',
+      undoUsed = 0,
+    } = await request.json();
 
     if (!score || !maxTile) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    if (mode !== 'classic' || undoUsed > 0) {
+      return NextResponse.json({
+        success: false,
+        message: 'Only Classic runs without undo are eligible for the global leaderboard.',
+        leaderboardEligible: false,
+      }, { status: 200 });
     }
 
     // 设定提交阈值：至少达到512 tile 或 2000分
@@ -35,8 +50,8 @@ export async function POST(request: Request) {
         userId: session.user.id,
         score,
         maxTile,
-        moves,
-        gameDuration,
+        moves: Number.isFinite(Number(moves)) ? Math.max(0, Math.floor(Number(moves))) : 0,
+        gameDuration: Number.isFinite(Number(gameDuration)) ? Math.max(0, Math.floor(Number(gameDuration))) : 0,
       },
     });
 
@@ -52,7 +67,7 @@ export async function POST(request: Request) {
       const scoresToDelete = userScores.slice(MAX_HISTORY_PER_USER);
       await prisma.score.deleteMany({
         where: {
-          id: { in: scoresToDelete.map(s => s.id) }
+          id: { in: scoresToDelete.map((s: { id: string }) => s.id) }
         }
       });
     }
